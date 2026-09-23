@@ -53,6 +53,27 @@ The plateau geometry was verified rather than assumed. A transect north along 14
 
 The consequence for the model is direct. A domain confined to the harbours contains no resonator in the band and cannot produce the signal under study. It could only receive that signal through its open boundary, and the available boundary product, CMEMS MED-MFC at hourly resolution, carries no energy in the band. Such a domain would have to be driven by the Portomaso record, which is a single coastal station outside both basins, and validating the harbour response against a signal imposed from a neighbouring gauge is close to circular.
 
+### Robustness of the estimate
+
+Two objections could overturn the reasoning above, and both were tested.
+
+**The quarter-wave formula may be the wrong idealisation.** A basin connected to the sea by a mouth that is narrow relative to its own width behaves as a Helmholtz resonator rather than as an open pipe, and a Helmholtz mode is the lower of the two. Were the Grand Harbour such a resonator its period could fall into the observed band and the interpretation would reverse. Evaluating T = 2π√(L_c A / g a) for a mouth 400 m wide and 15 m deep over a channel length of 500 to 1000 m returns 12.4 to 17.5 minutes, and for Marsamxett 13.3 to 17.8 minutes. The two idealisations bracket the same answer, so the conclusion does not depend on the choice.
+
+**The harbours might still be excited appreciably below their own frequency.** Treating a basin as a forced oscillator without damping, the amplification of the response relative to the imposed sea level is 1/|1 − (ω/ω₀)²|.
+
+| Forcing | ω/ω₀ | Amplification |
+|---|---|---|
+| 0.20 cph, lower edge of the band | 0.06 | 1.00 |
+| 0.38 cph, plateau quarter wave | 0.11 | 1.01 |
+| 0.77 cph, plateau half wave | 0.22 | 1.05 |
+| 1.24 cph, near plateau | 0.36 | 1.14 |
+| 2.00 cph, upper edge of the band | 0.57 | 1.49 |
+| 3.49 cph, the harbour mode itself | 1.00 | unbounded |
+
+Across most of the observed band the harbours amplify by less than a tenth. They fill and empty in near equilibrium with the water outside, which is the quantitative statement of the claim that they respond rather than resonate. Appreciable gain appears only at the upper edge of the band, which is where a spectrum of sea level inside the basins would be most informative.
+
+The estimate remains first-order. Irregular planform, the branching of the inlets and radiation damping at the mouth all shift real modes, and only an eigenvalue analysis or the model itself will place them properly. The margin here is wide enough that the ordering is unlikely to reverse, but the figures should be read as orders of magnitude.
+
 ### The extent costs almost nothing
 
 | Domain | Extent | Area | Cells | Longest resonator it holds |
