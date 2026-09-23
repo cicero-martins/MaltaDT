@@ -27,6 +27,10 @@ Planning documents. [docs/malta_valletta_model_plan.md](docs/malta_valletta_mode
 
 The two differ by approximately 197 m at Malta, some 20 cells at 10 m. Overlaying either on the other without a datum transformation produces no error and a displaced result.
 
+**The aligned working pair is in geographic WGS84 (EPSG:4326)**, following the FM convention that the mesh and the roughness assignment file share a coordinate system. Use `data/processed/mepa_4036_merged_10m_wgs84.tif` with `data/processed/malta_coastline_wgs84.gpkg`, not the raw files. Registration is 99.33% land and water agreement with a median disagreement of one cell, and no water lies inside the land polygons beyond 500 m from the coast, which is the test a systematic offset would fail.
+
+Two caveats attach. PROJ offers no accurate ED50 to WGS84 operation over Malta, the default declaring 10 m and the Malta-specific one 44 m, so the declared uncertainty is a floor on co-registration even though the empirical result is better. And **Filfla is present in the bathymetry and absent from the coastline**, which does not affect the Valletta domain but bears on island-wide use.
+
 **Vertical datum. The files declare ETRS89 ellipsoidal and the data are orthometric.** Both `prj.adf` files carry `Zunits METERS /* ETRS_1989 - VCS# = 115701` and the `peXml` WKT carries the matching `VERTCS`. That declaration is a mislabel. Control points at Valletta and Floriana, and a median of +0.00 m sampled along the coastline, establish that the values are heights above a surface approximating mean sea level. **No geoid correction is to be applied.** What remains open is the relation between this zero and the tide gauge zeros used for validation.
 
 **The open boundary must be weakly reflective (Riemann), not a prescribed water level.** A prescribed level reflects outgoing long waves back into the domain and contaminates the seiche signal while producing plausible output. This is the principal configuration departure from StagnoneDT. A synthetic long-wave pulse test is required before any production run.
