@@ -15,14 +15,22 @@ within a single datum, and therefore exact. Reaching it from the bathymetry
 requires a datum transformation, which is performed once in
 `build_merged_bathymetry.py --to-wgs84` rather than repeatedly here.
 
-On the accuracy of that datum transformation. PROJ offers no ED50 to WGS84
-operation of high accuracy over Malta. The operation it selects by default
-declares 10 m but its area of use is a list of northern and western European
-states. The operation declared specifically for Malta carries an accuracy of
-44 m. The registration achieved empirically is better than either figure
-would suggest, the median disagreement along the coast being one cell, but
-the declared uncertainty remains a floor on how well the two datasets can be
-co-registered and is reported by this script for that reason.
+On the choice of datum transformation. The bathymetry is reprojected with
+ED50 to WGS 84 (12), the operation whose area of use names Malta, rather than
+with the operation PROJ selects by default. The default, ED50 to WGS 84 (1),
+declares the better accuracy of 10 m against 44 m, but that figure describes
+the residual of its parameters over a list of northern and western European
+states which does not include Malta. Accuracy declarations rank operations
+within their own area of use and not across areas.
+
+The choice was tested rather than assumed. Under operation (12) the
+registration reported below improves from 99.33 to 99.51 per cent and the
+count of disagreeing cells falls by 27 per cent, and the elevation sampled
+along the coastline concentrates more tightly on zero. The two operations
+differ by 19.4 m at Valletta, close to two cells, so the choice is not
+cosmetic. The declared 44 m nonetheless remains a floor on how well the two
+datasets can be co-registered, and the candidates are reported by this script
+for that reason.
 
 Usage:
     python prepare_coastline.py
@@ -63,7 +71,8 @@ def report_transformation_accuracy() -> None:
                   and aoi.south <= malta[1] and aoi.north >= malta[3])
         named = "malta" in (aoi.name or "").lower()
         if covers or named:
-            flag = "named for Malta" if named else "bounding box covers Malta"
+            flag = ("named for Malta, USED" if named
+                    else "bounding box covers Malta, PROJ default, not used")
             print(f"  accuracy {t.accuracy} m, {flag}")
             print(f"    {aoi.name[:90]}")
 
