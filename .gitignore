@@ -1,0 +1,37 @@
+# Dados brutos e derivados: regeneraveis, grandes
+data/raw/**
+data/processed/**
+data/external/**
+!data/raw/**/README.md
+!data/**/.gitkeep
+
+# Saidas de modelo
+model/**/DFM_OUTPUT_*/
+model/**/*_0*_*
+model/**/diag/
+model/**/*.dia
+model/**/hot_*.nc
+model/**/com.nc
+model/**/TMP_ESMF_*.nc
+
+# Rascunhos
+scripts/_*
+notebooks/_*
+*.bak
+*.tmp
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Credenciais
+.env
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
