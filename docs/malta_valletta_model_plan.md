@@ -58,6 +58,7 @@ The availability of observations is the principal justification for the site. Th
 | **HF radar**, 4 stations over the Malta Channel | Surface currents and waves | Validation of modelled surface currents |
 | **Tide gauges**: Portomaso (MedGLOSS, real time since 2001), Ċirkewwa (IDSL, NEAMTWS), Transport Malta at Marsaxlokk and Mġarr | Sea level | Independent sea level and long records for the seiche climatology |
 | **CDI `4036_MEPA`**, a coastal survey encircling the islands, contributed by the host group (EDMO 708) | Bathymetry at 10 m over the whole coastal domain | Obtained 22 September 2026. See [mepa_4036_dataset.md](mepa_4036_dataset.md) |
+| **`MaltaCoastline.shp`**, 26 polygons, 315.4 km2, WGS84 / UTM 33N | Land and water boundary for the Maltese Islands | Obtained 23 September 2026. See [coastline_dataset.md](coastline_dataset.md) |
 | **BathMalta**, University of Malta, Sentinel-2 and Sentinel-3 nearshore satellite-derived bathymetry | Satellite bathymetry over the Maltese nearshore | Appropriate destination for the classifier and SDB line, outside the harbours |
 | **ocean.mt/bluedata** portal | Public live charts and automated bulletins | Existing dissemination route. Portal work becomes integration rather than construction |
 
@@ -211,7 +212,7 @@ Three working days remain. Each item below has a lead time exceeding them, which
 | Status | Action | Justification |
 |---|---|---|
 | **Completed 22 Sep** | Request CDI `4036_MEPA` at native resolution from Prof. Gauci | Met the same day. Two grids at 10 m. See Section 6.3 |
-| Wed 23 | Establish the **vertical datum** of `4036_MEPA`, together with the availability of the 2 m products, the existence of a Part 2 of the December 2012 vessel survey, and the licensing terms | The vertical datum is now the principal unknown about the dataset and is material to a study whose main variable is water level |
+| Wed 23 | Establish the **levelling datum of `ContoursMalta`** and its offset against the tide gauge zeros, together with the availability of the 2 m products, the existence of a Part 2 of the December 2012 vessel survey, and the licensing terms for both datasets | The vertical reference is established as orthometric. Its relation to the gauges is what a water-level study requires |
 | Wed 23 | Enquire as to **interior data** in any form, including historic ADCP records, student dissertations, port engineering surveys and Water Framework Directive monitoring, and as to alternative routes through the port operators | Section 5 turns on the answer, which determines what the manuscript may claim |
 | Wed 23 | Confirm the **sampling interval of the PORTO sea level stations** | Should it prove coarser than the seiche band the study is rescoped, and establishing this now is preferable to establishing it in March |
 | Thu 24 | Obtain **data access terms in writing** for BLUE, PORTO, the HF radar and the tide gauges, covering archive extent, formats, latency and licensing for publication | A verbal agreement will not satisfy a journal data availability statement |
@@ -242,9 +243,9 @@ The calendar is unchanged. The content of each block is revised.
 
 ## 11. Risks
 
-**Vertical datum of the bathymetry.** Now the principal risk attaching to the bathymetry, the resolution constraint having been removed. The dataset metadata records no vertical datum, and chart datum, mean sea level and the ED50 ellipsoid differ by amounts material to a water-level study. Enquiry is scheduled for 23 September. In the absence of an answer the model could be calibrated against a systematically offset bed, with the error absorbed into the boundary offset and misattributed.
+**Relation between the bathymetric zero and the tide gauge zeros.** The vertical datum question is partly resolved. The files declare ETRS89 ellipsoidal height, that declaration is a mislabel, and the values are orthometric, established by control points and by a median of +0.00 m sampled along the independently supplied coastline. What remains is the relation between that zero and the zeros of the gauges used for validation. Should the two differ by an unquantified amount, the model could be calibrated against a systematically offset bed with the error absorbed into the boundary offset and misattributed. Pursued through the `ContoursMalta` source dataset.
 
-**Coordinate reference system of the bathymetry.** The source grids are ED50 / UTM 33N without the datum encoded in the file. Substitution of WGS84 displaces the field by 197 m, approximately 20 cells, without raising an error. Mitigated by explicit assignment in `scripts/build_merged_bathymetry.py` and by verification against seven control points, and recorded in the project CLAUDE.md so that it survives into later sessions.
+**Coordinate reference systems of the supplied datasets.** The bathymetric grids are ED50 / UTM 33N without the datum encoded in the file, and the coastline is WGS84 / UTM 33N with the datum encoded correctly. The two differ by approximately 197 m at Malta, some 20 cells at 10 m, and neither may be overlaid on the other without a datum transformation. No error is raised in either direction. Mitigated by explicit assignment in `scripts/build_merged_bathymetry.py`, by verification of the bathymetry against seven control points and of the coastline against the land and water agreement test, and recorded in the project CLAUDE.md so that it survives into later sessions.
 
 **Sampling interval of the coastal sea level stations.** Should it prove too coarse for the seiche band, the model would have no observational target within its own frequency range. Enquiry is scheduled for 23 September. The fallback is the long Portomaso record together with comparison of modal periods against those published by Drago.
 
@@ -260,12 +261,12 @@ The calendar is unchanged. The content of each block is revised.
 
 Most are for the host group. The first three determine what the study can be.
 
-1. **What is the vertical datum of `4036_MEPA`?** Not recorded in the metadata, and material to a study of water level. This supersedes the former first question, which concerned obtaining the dataset and is now closed.
+1. **What is the levelling datum of the `ContoursMalta` dataset, and how does its zero relate to the tide gauge zeros?** The vertical datum of the bathymetry is established as orthometric rather than ellipsoidal, the declaration in the file being a mislabel. The remaining question concerns the realisation, and above all the offset against the gauges used for validation. See [coastline_dataset.md](coastline_dataset.md) and Section 3 of [mepa_4036_dataset.md](mepa_4036_dataset.md).
 2. **Does any interior record exist, in any form?** Historic ADCP, student dissertations, port engineering or dredging surveys, Water Framework Directive monitoring of the two heavily modified water bodies, or operational data held by the port operators, the ferries, the cruise terminal or the shipyard. Section 5.
 3. **What is the sampling interval of the PORTO sea level stations?** Should the band 0.2 to 2 cph be resolved, the absence of dedicated instruments is of limited consequence.
 4. Confirmation that the BLUE archive commences on 4 July 2025 and is continuous. Fourteen months of ten-minute data would already span a complete milgħuba season, which is what renders the G1 climatology feasible.
 5. Whether the eight port-area weather stations referred to at the BLUE launch are the same as the seven PORTO meteorological stations or an additional set, and which of them lie within the harbours.
-6. Whether an agreed coastline product exists for the Maltese Islands, and at what resolution. The coastline is required to distinguish unmapped water from land within the bathymetry gaps.
+6. Licensing and attribution for the coastline, whose metadata template is unfilled, and whether the modification recorded in 2017 altered geometry or metadata alone.
 7. Availability of the 2 m source mosaics, the existence of a Part 2 of the December 2012 vessel survey, and the survey accuracy. Detailed in [mepa_4036_dataset.md](mepa_4036_dataset.md).
 8. Lead time through Transport Malta, Ports and Yachting Directorate, should a limited deployment subsequently prove necessary.
 9. The nature of the Westrade collaboration, unspecified since the preceding plan.

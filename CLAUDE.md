@@ -11,7 +11,8 @@ All generated text, in documents, code comments and commit messages, is written 
 ## Current state
 
 - **Site fixed** 2026-09-22 with Prof. Adam Gauci. The Valletta harbours.
-- **Bathymetry obtained** 2026-09-22. CDI `4036_MEPA`, 10 m LiDAR and sonar grids covering the Maltese Islands. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md).
+- **Bathymetry obtained** 2026-09-22. CDI `4036_MEPA`, 10 m LiDAR and sonar grids covering the Maltese Islands. Merged product in `data/processed/`. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md).
+- **Coastline obtained** 2026-09-23. 26 polygons, 315.4 km2, WGS84 / UTM 33N. See [docs/coastline_dataset.md](docs/coastline_dataset.md).
 - **No field campaign planned.** The study proceeds on existing observations. Deferred rather than cancelled.
 - **No model built yet.** Mesh construction is scheduled for B3, 27 October to 21 November.
 
@@ -19,7 +20,14 @@ Planning documents. [docs/malta_valletta_model_plan.md](docs/malta_valletta_mode
 
 ## Critical configuration facts
 
-**Bathymetry is EPSG:23033 (ED50 / UTM 33N) and the file does not say so.** GDAL reports "unnamed, Unknown datum based upon the International 1924 ellipsoid". Treating it as EPSG:32633 displaces the data by 197 m, approximately 20 cells, without raising an error. The CRS must be assigned explicitly on every read.
+**The bathymetry and the coastline are in different datums, and both declarations must be handled deliberately.**
+
+- Bathymetry `4036_MEPA` is **EPSG:23033** (ED50 / UTM 33N) and the file does not say so. GDAL reports "unnamed, Unknown datum based upon the International 1924 ellipsoid". The CRS must be assigned explicitly on every read.
+- Coastline `MaltaCoastline.shp` is **EPSG:32633** (WGS84 / UTM 33N), and that declaration is correct, verified at 99.26% land and water agreement against 94.54% under the alternative.
+
+The two differ by approximately 197 m at Malta, some 20 cells at 10 m. Overlaying either on the other without a datum transformation produces no error and a displaced result.
+
+**Vertical datum. The files declare ETRS89 ellipsoidal and the data are orthometric.** Both `prj.adf` files carry `Zunits METERS /* ETRS_1989 - VCS# = 115701` and the `peXml` WKT carries the matching `VERTCS`. That declaration is a mislabel. Control points at Valletta and Floriana, and a median of +0.00 m sampled along the coastline, establish that the values are heights above a surface approximating mean sea level. **No geoid correction is to be applied.** What remains open is the relation between this zero and the tide gauge zeros used for validation.
 
 **The open boundary must be weakly reflective (Riemann), not a prescribed water level.** A prescribed level reflects outgoing long waves back into the domain and contaminates the seiche signal while producing plausible output. This is the principal configuration departure from StagnoneDT. A synthetic long-wave pulse test is required before any production run.
 

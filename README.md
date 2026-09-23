@@ -17,7 +17,8 @@ The governing question is whether the framework, forced by observed atmospheric 
 | Component | State |
 |---|---|
 | Site selection | Fixed 22 September 2026 with the host group |
-| Bathymetry | Obtained. CDI `4036_MEPA`, 10 m LiDAR and sonar, Maltese Islands. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md) |
+| Bathymetry | Obtained. CDI `4036_MEPA`, 10 m LiDAR and sonar, Maltese Islands. Merged. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md) |
+| Coastline | Obtained. 26 polygons, 315.4 km2, WGS84 / UTM 33N, verified against the bathymetry. See [docs/coastline_dataset.md](docs/coastline_dataset.md) |
 | Observational basis | Identified. BLUE buoy, PORTO network, HF radar, Portomaso tide gauge. Access terms pending |
 | Field campaign | Not planned. The study proceeds on existing observations |
 | Mesh | Not started. Scheduled for late October |
@@ -43,6 +44,7 @@ reference/         third-party material
 - [docs/malta_valletta_model_plan.md](docs/malta_valletta_model_plan.md), the operative plan: scientific question, model configuration, block allocation, risks
 - [docs/malta_period_plan_2026-2027.md](docs/malta_period_plan_2026-2027.md), the block calendar and the parallel commitments at UNIPA
 - [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md), assessment of the bathymetric dataset
+- [docs/coastline_dataset.md](docs/coastline_dataset.md), assessment of the coastline, including the inference establishing the vertical datum
 - [CLAUDE.md](CLAUDE.md), working context and critical configuration facts
 
 ## Tooling

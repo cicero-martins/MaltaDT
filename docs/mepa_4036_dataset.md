@@ -40,7 +40,41 @@ The coordinate reference system must therefore be assigned explicitly as EPSG:23
 
 ---
 
-## 3. Resolution relative to the public product
+## 3. Vertical datum
+
+The vertical reference is recorded in the files, contrary to an earlier assessment in this document which stated that it was absent. The earlier statement was based on a search using FGDC element names against metadata written in the ESRI schema, and it missed the declaration.
+
+Both `prj.adf` files carry the reference in a trailing comment:
+
+```
+Zunits        METERS /* ETRS_1989 - VCS# = 115701
+```
+
+and the `peXml` element of each `metadata.xml` carries it in full within the WKT:
+
+```
+VERTCS["ETRS_1989",
+       DATUM["D_ETRS_1989",SPHEROID["GRS_1980",6378137.0,298.257222101]],
+       PARAMETER["Vertical_Shift",0.0],
+       PARAMETER["Direction",1.0],
+       UNIT["Meter",1.0]]
+```
+
+with `VCSWKID` 115701. The declaration is therefore **ETRS89 ellipsoidal height**, referenced to the GRS80 ellipsoid with no vertical shift.
+
+**The declaration is inconsistent with the data and should not be acted upon.** Ellipsoidal heights in the central Mediterranean exceed orthometric heights by several tens of metres, the geoid lying well above the ellipsoid in this region. Were the values ellipsoidal, the sea surface would occupy a positive elevation of that order and the emerged terrain would be correspondingly displaced. Two independent tests establish that they are not.
+
+**Control points.** The peninsula of Valletta returns +57.6 m against an actual elevation of approximately 50 to 56 m above mean sea level, and Floriana returns +36.4 m against approximately 40 m. Both are consistent with orthometric heights and neither admits the addition of a geoid separation.
+
+**Agreement with the coastline.** The elevation of the merged product was sampled at 11,884 points along the coastline supplied separately by the host group, which is itself the zero contour of a terrestrial contour dataset. The median elevation along that boundary is **+0.00 m**. Were the two referenced to different vertical surfaces the median would be displaced by the difference between them. The test is set out in [coastline_dataset.md](coastline_dataset.md).
+
+The values are therefore orthometric, referenced to a surface approximating mean sea level, and the declared VERTCS is an inherited ArcGIS default rather than a description of the data. The practical consequence is that the field may be used directly against water levels referenced to mean sea level, and that no geoid correction is to be applied.
+
+**What remains to be established** is which realisation of mean sea level is involved, and specifically how the zero of this surface relates to the zero of the tide gauges against which the model will be validated. That relationship, rather than the identity of the datum in the abstract, is what a water-level study requires. The question is now addressed to the source contour dataset `ContoursMalta`, identified through the coastline provenance.
+
+---
+
+## 4. Resolution relative to the public product
 
 EMODnet publishes the same survey resampled to a grid of 1/16 by 1/16 arc-minute, approximately 115 m. The difference in the number of resolved water cells over the two harbours is given below, together with the representation of creek widths.
 
@@ -55,7 +89,7 @@ The creeks constitute the resonating elements of the harbour system. At 115 m th
 
 ---
 
-## 4. Processing lineage
+## 5. Processing lineage
 
 The ArcGIS processing history recorded in the respective `metadata.xml` files documents the derivation of both grids.
 
@@ -79,19 +113,19 @@ Processing was performed under ArcGIS 10.0 on Windows Server 2008 R2, placing th
 
 ---
 
-## 5. Limitations
+## 6. Limitations
 
 **Residual coverage gaps.** The merged product leaves 14.0% of the Grand Harbour window and 24.8% of the Marsamxett window without data in either grid. A substantial proportion of this lies inland, beyond the coastal strip covered by the LiDAR survey, and is immaterial. A further proportion is not: gaps are visible at the inner extremity of Marsamxett in the vicinity of Msida and Pietà. Prior to mesh construction the gaps must be intersected with an independent coastline so that unmapped water is distinguished from ordinary land, after which the need for and extent of interpolation can be established.
 
-**Resampling method.** Nearest-neighbour resampling from 2 m preserves individual values rather than averaging them, so isolated extremes present in the source mosaics propagate unchanged into the 10 m product. A despiking pass was tested and is **not** applied to the merged product, for reasons given in Section 7.
+**Resampling method.** Nearest-neighbour resampling from 2 m preserves individual values rather than averaging them, so isolated extremes present in the source mosaics propagate unchanged into the 10 m product. A despiking pass was tested and is **not** applied to the merged product, for reasons given in Section 8.
 
 **Depth extremes.** The Grand Harbour extraction window reaches 53 m and the full sonar grid reaches 262 m, both attributable to water beyond the harbour entrances. Windows must be clipped to the basins before any summary statistic is computed, since otherwise the resulting values describe the open shelf rather than the harbour.
 
 ---
 
-## 6. Outstanding queries for the host group
+## 7. Outstanding queries for the host group
 
-1. **Vertical datum.** The metadata does not record one. Chart datum, mean sea level and the ED50 ellipsoid are all plausible and the differences between them are material to a study whose principal variable is water level. This is the most consequential remaining unknown about the dataset.
+1. **Levelling datum of the source contours.** Section 3 establishes that the values are orthometric and that the declared ETRS89 ellipsoidal VERTCS is a mislabel. What remains is the identity of the levelling datum, approached through the `ContoursMalta` dataset from which the coastline was derived, and above all its relation to the zero of the tide gauges used for validation.
 2. **Availability of the 2 m products**, from which both supplied grids were resampled.
 3. **Existence of a Part 2** of the December 2012 vessel survey, and of any resurvey undertaken since.
 4. **Survey accuracy**, in the horizontal and the vertical, and the depth penetration limit achieved by the LiDAR survey in these waters.
@@ -99,7 +133,7 @@ Processing was performed under ArcGIS 10.0 on Windows Server 2008 R2, placing th
 
 ---
 
-## 7. Merged product
+## 8. Merged product
 
 The two components were combined by `scripts/build_merged_bathymetry.py` into `data/processed/mepa_4036_merged_10m.tif`, with a geographic counterpart `mepa_4036_merged_10m_wgs84.tif`. Sonar is given precedence and LiDAR fills the remainder, contributing 770,412 cells. The union grid is 4098 by 3727 cells at 10 m in EPSG:23033, of which 31.7% carry data, comprising 4,233,597 submerged and 613,271 emerged cells.
 
@@ -109,4 +143,4 @@ Coverage over the two harbours in the merged product is 86.1% for the Grand Harb
 
 **Despiking was tested and rejected.** A pass replacing cells departing from a 5 by 5 local median by more than 5 m flags 70,989 of 4,846,868 valid cells. The flagged population has a median local gradient of 49.5% against 7.1% for the remainder, and 7.2% of all emerged cells are flagged against approximately 1% of cells in water shallower than 20 m. The criterion is therefore identifying the coastal cliffs and the Valletta bastions, which are genuine features of the terrain, rather than artefacts of the nearest-neighbour resampling. The archival product is accordingly left unfiltered. Should despiking prove necessary, it belongs at mesh construction, restricted to the model domain and governed by a slope-aware rather than an absolute criterion.
 
-**Depth extremes persist in the harbour windows.** The merged windows reach 74 m, which originates in water beyond the entrances included by the rectangular extraction. The requirement to clip to the basins before computing summary statistics, stated in Section 5, is unchanged.
+**Depth extremes persist in the harbour windows.** The merged windows reach 74 m, which originates in water beyond the entrances included by the rectangular extraction. The requirement to clip to the basins before computing summary statistics, stated in Section 6, is unchanged.
