@@ -74,13 +74,13 @@ Two consequences follow.
 
 **Domain.** A single Delft3D FM domain encompassing the Grand Harbour and Marsamxett together, since the two share the Valletta peninsula and open onto the same stretch of coast, extended offshore beyond the BLUE mooring so that the buoy constitutes an interior validation point rather than a boundary. The open boundary is taken from CMEMS MED-MFC further offshore. Nested SWAN grids follow the Stagnone configuration.
 
-**Mesh.** The creeks constitute the resonating elements, so resolution follows them in preference to the open water. On the Grand Harbour side these are Marsa, French Creek, Dockyard Creek, Kalkara and Rinella; on the Marsamxett side, Msida, Pietà, Lazzaretto and Sliema. Under-resolution of a creek removes its mode from the solution, a failure mode that produces no diagnostic message. Quay walls and the St Elmo breakwater require explicit treatment as thin dams or fixed weirs.
+**Mesh.** The inlets constitute the resonating elements, so resolution follows them in preference to the open water. On the Grand Harbour side these are French Creek, Dockyard Creek, Kalkara Creek and Rinella Creek, together with the head of the harbour at Marsa. On the Marsamxett side they are Sliema Creek, Lazzaretto Creek, Msida Creek and Pietà Creek. The word creek carries here its British nautical sense of a narrow tidal inlet, these being arms of a drowned river valley rather than watercourses. Under-resolution of an inlet removes its mode from the solution, a failure mode that produces no diagnostic message. Quay walls and the St Elmo breakwater require explicit treatment as thin dams or fixed weirs.
 
 **Open boundary specification, the principal technical departure.** A prescribed water level boundary reflects outgoing long waves back into the domain and contaminates the signal under study. A weakly reflective or Riemann boundary is required, which the Stagnone configuration never was. Time must be allocated to establishing it correctly, and it must be verified with a synthetic long-wave pulse before any seiche result is relied upon.
 
 **Output intervals.** The seiche band of 0.2 to 2 cph corresponds to periods between 30 minutes and 5 hours. History output at stations therefore requires approximately one-minute resolution. Map output may remain coarse. An incorrect setting aliases the entire target signal.
 
-**Vertical discretisation.** The setting is deep and potentially stratified rather than sub-metre and wind-sheared, and wetting and drying largely ceases to be a consideration. Whether sigma layers remain appropriate or z-layers are preferable is an open configuration question for block B3. Stratification is most likely to be material in the inner creeks at Marsa.
+**Vertical discretisation.** The setting is deep and potentially stratified rather than sub-metre and wind-sheared, and wetting and drying largely ceases to be a consideration. Whether sigma layers remain appropriate or z-layers are preferable is an open configuration question for block B3. Stratification is most likely to be material at Marsa, at the head of the Grand Harbour.
 
 **Configuration constraints transferring unchanged.** Explicit `ComInterval`, `ncFormat=3` for the SWAN HDF re-open, `uxuyadvectionvelocitybnd` for offshore stability, and `bedLevType=3`. The catalogue at `../../StagnoneDT/docs/fm_2026_gotchas.md` transfers in its entirety, and that transfer constitutes evidence for the reuse claim.
 
@@ -94,11 +94,11 @@ Two consequences follow.
 
 The decision constitutes a deferral rather than a cancellation. Should the work reach a point at which an interior measurement is demonstrably the limiting factor, a limited deployment may be requested at that stage, on evidence of what is missing rather than in anticipation of it.
 
-**The interior gap is a question for the host group rather than a settled loss.** No current record within the harbours, stratification record for the inner creeks, or measurement of the mouth-to-head amplification of the seiche is presently published, and the nearest sea level station, Portomaso, lies in St Julian's outside both basins. Before that is treated as a fixed constraint, three enquiries are warranted, in order.
+**The interior gap is a question for the host group rather than a settled loss.** No current record within the harbours, stratification record for the inner inlets, or measurement of the mouth-to-head amplification of the seiche is presently published, and the nearest sea level station, Portomaso, lies in St Julian's outside both basins. Before that is treated as a fixed constraint, three enquiries are warranted, in order.
 
 1. **Whether interior data exist in some form.** Historic ADCP deployments, student dissertations, port engineering or dredging surveys, water quality monitoring, or material gathered in connection with the status of the two harbours as heavily modified water bodies under the Water Framework Directive.
 2. **Whether an alternative route exists.** Transport Malta, the port operators, the cruise terminal, the ferry operators and the shipyard may hold operational records. A sensor already moored for another purpose may admit of a secondary use.
-3. **Whether a limited deployment would be feasible subsequently.** Two or three pressure loggers at the creek heads constitute a considerably smaller request than a full campaign, and may be raised once the model has identified where the uncertainty is consequential.
+3. **Whether a limited deployment would be feasible subsequently.** Two or three pressure loggers at the heads of the inlets constitute a considerably smaller request than a full campaign, and may be raised once the model has identified where the uncertainty is consequential.
 
 Pending those answers the plan proceeds as though interior validation were unavailable, and Section 8 states the implications. The assumption is intended to be revisited rather than inherited.
 
@@ -135,7 +135,7 @@ An interrogation of three EMODnet services was conducted on 22 September 2026 us
 | Water width per row | 7 to 13 cells in the main body, 25 at the entrance | 4 to 8 cells, several rows at 1 to 4 |
 | Depth | mean 18.4 m, maximum 36.0 m | mean 14.3 m, maximum 32.3 m |
 
-The main basin of the Grand Harbour was therefore marginally resolvable at 7 to 13 cells across, which is crude but adequate for a basin-scale mode. Marsamxett was not. The creeks in both were represented by 1 to 3 cells and were absent as resonating elements.
+The main basin of the Grand Harbour was therefore marginally resolvable at 7 to 13 cells across, which is crude but adequate for a basin-scale mode. Marsamxett was not. The inlets in both were represented by 1 to 3 cells and were absent as resonating elements.
 
 A transect across the Marsamxett entrance, from the Tignè side to St Elmo, returned a sequence of cells at elevations between -0.04 and -1.08 m with no associated source record, situated between cells of -25 to -29 m. Meshed as supplied, those cells constitute a near-closing sill across the entrance, or a wetting and drying front where a channel exceeding ten metres in depth is present. Either outcome removes the exchange on which the seiche depends. The artefact arises from gridding and coastline registration rather than from survey failure, and it is the feature most likely to compromise a model constructed directly from the public product without detection.
 
@@ -158,9 +158,9 @@ Requesting the dataset at native resolution therefore constituted a request serv
 
 ### 6.3 Outcome
 
-The request was made on 22 September 2026 and met the same day. The dataset comprises two grids at **10 m**, LiDAR and sonar, covering Malta, Gozo and Comino, derived from 2 m mosaics. Over the harbours it resolves between 174 and 256 times more water cells than the public product, and creeks of 100 m width are represented by 10 cells rather than by fewer than one.
+The request was made on 22 September 2026 and met the same day. The dataset comprises two grids at **10 m**, LiDAR and sonar, covering Malta, Gozo and Comino, derived from 2 m mosaics. Over the harbours it resolves between 174 and 256 times more water cells than the public product, and inlets of 100 m width are represented by 10 cells rather than by fewer than one.
 
-**The resolution constraint described in Section 6.1 is accordingly removed.** Marsamxett is retained within the modelled domain, the creek-scale modes return to scope, and the reduced scope that the constraint had imposed is no longer required. A merged product has been constructed and is documented, together with the coordinate reference system hazard attaching to the source files, in [mepa_4036_dataset.md](mepa_4036_dataset.md).
+**The resolution constraint described in Section 6.1 is accordingly removed.** Marsamxett is retained within the modelled domain, the inlet-scale modes return to scope, and the reduced scope that the constraint had imposed is no longer required. A merged product has been constructed and is documented, together with the coordinate reference system hazard attaching to the source files, in [mepa_4036_dataset.md](mepa_4036_dataset.md).
 
 The UKHO contributions and the Admiralty electronic navigational charts remain relevant as an independent check on the harbour entrances, which is where the gridded product was shown to fail.
 
@@ -231,7 +231,7 @@ The calendar is unchanged. The content of each block is revised.
 
 - **G1, 27 September to 6 October.** Submission of Stagnone Paper 1, which remains the priority. Retrieval of the Portomaso, PORTO and BLUE archives and characterisation of the observed seiche climatology in advance of any modelling, since that analysis defines what the model is required to reproduce and requires no model to conduct. Construction of the merged bathymetry over the model domain and intersection of its gaps with a coastline. Retrieval of CMEMS and ERA5 forcing for the Maltese domain.
 - **B2, 7 to 17 October.** Released by the decision against a campaign, and best directed to work benefiting from the presence of the host group. Completion of the seiche climatology in collaboration with them, given their familiarity with the events and with the instrumentation. Verification of the harbour planform against local knowledge. First mesh. Resolution of whatever Sections 5 and 6 leave outstanding after block B1.
-- **B3, 27 October to 21 November.** Model construction. Mesh with creek-following resolution, a Riemann boundary verified by synthetic long-wave pulse before any other work, depth-field sensitivity applied to the modal periods, an FM-only run, then SWAN coupling, then a first comparison against the coastal sea level records and BLUE.
+- **B3, 27 October to 21 November.** Model construction. Mesh with inlet-following resolution, a Riemann boundary verified by synthetic long-wave pulse before any other work, depth-field sensitivity applied to the modal periods, an FM-only run, then SWAN coupling, then a first comparison against the coastal sea level records and BLUE.
 - **G3, 22 to 30 November.** Extended runs. Review of the GEE manuscript should the referee reports arrive.
 - **B4, 1 to 19 December.** Seiche validation against the coastal stations, and comparison of modelled modal periods against those reported by Drago and against the analytical estimate. HF radar surface current comparison. Agreement of the structure of the joint manuscript.
 - **G4, 20 December to 18 January.** Background runs, holidays, commitments at UNIPA.

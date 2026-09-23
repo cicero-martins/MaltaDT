@@ -37,7 +37,7 @@ Two caveats attach. PROJ offers no accurate ED50 to WGS84 operation over Malta, 
 
 **History output at approximately 1 minute.** The milgħuba seiche band is 0.2 to 2 cph. Coarser output aliases the target signal. Map output may remain coarse.
 
-**Mesh resolution follows the creeks.** Marsa, French, Dockyard, Kalkara and Rinella in the Grand Harbour; Msida, Pietà, Lazzaretto and Sliema in Marsamxett. The creeks are the resonating elements and an under-resolved creek loses its mode silently.
+**Mesh resolution follows the inlets.** French Creek, Dockyard Creek, Kalkara Creek and Rinella Creek in the Grand Harbour, with the head at Marsa. Sliema Creek, Lazzaretto Creek, Msida Creek and Pietà Creek in Marsamxett. These are the resonating elements and an under-resolved inlet loses its mode silently. The name creek is nautical, denoting a tidal inlet, not a watercourse.
 
 ## Observational basis
 

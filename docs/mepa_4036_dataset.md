@@ -34,7 +34,7 @@ The metadata identifies the projection as `ED_1950_UTM_Zone_33N` on the geograph
 
 The accompanying `prj.adf` does not encode the datum name. GDAL consequently reports the coordinate system as *"unnamed, Unknown datum based upon the International 1924 ellipsoid (deprecated)"* and attaches no EPSG code. Since the projection parameters of ED50 / UTM 33N and WGS84 / UTM 33N (EPSG:32633) are identical, the two are indistinguishable from the file alone.
 
-The consequence of the substitution was quantified at a point within the Grand Harbour. Interpreting ED50 coordinates as WGS84 displaces the data by 70.7 m in easting and 183.9 m in northing, a total offset of 197 m, equivalent to approximately 20 cells at the native resolution. This exceeds the width of most creeks in both harbours. The resulting field would place bathymetry on the incorrect side of quay structures and would fail to close the shoreline, and no error condition would be raised.
+The consequence of the substitution was quantified at a point within the Grand Harbour. Interpreting ED50 coordinates as WGS84 displaces the data by 70.7 m in easting and 183.9 m in northing, a total offset of 197 m, equivalent to approximately 20 cells at the native resolution. This exceeds the width of most inlets in both harbours. The resulting field would place bathymetry on the incorrect side of quay structures and would fail to close the shoreline, and no error condition would be raised.
 
 The coordinate reference system must therefore be assigned explicitly as EPSG:23033 on opening, rather than inferred from the file. Reprojection to WGS84 requires a datum transformation and not an affine conversion alone; `pyproj` performs this correctly when both systems are specified by EPSG code.
 
@@ -76,16 +76,16 @@ The values are therefore orthometric, referenced to a surface approximating mean
 
 ## 4. Resolution relative to the public product
 
-EMODnet publishes the same survey resampled to a grid of 1/16 by 1/16 arc-minute, approximately 115 m. The difference in the number of resolved water cells over the two harbours is given below, together with the representation of creek widths.
+EMODnet publishes the same survey resampled to a grid of 1/16 by 1/16 arc-minute, approximately 115 m. The difference in the number of resolved water cells over the two harbours is given below, together with the representation of inlet widths.
 
 | Measure | EMODnet (115 m) | MEPA (10 m) | Ratio |
 |---|---|---|---|
 | Grand Harbour, water cells | 222 | 38,619 | 174 |
 | Marsamxett, water cells | 77 | 19,732 | 256 |
-| Creek of 100 m width | 0.9 cells | 10 cells | |
-| Creek of 300 m width | 2.6 cells | 30 cells | |
+| Inlet of 100 m width | 0.9 cells | 10 cells | |
+| Inlet of 300 m width | 2.6 cells | 30 cells | |
 
-The creeks constitute the resonating elements of the harbour system. At 115 m their modes were absent from any solution that could be constructed, and their absence would not have been signalled by the model. At 10 m they are adequately represented. The principal risk identified in the project plan is accordingly resolved, and the reduced scope that risk had imposed is no longer necessary. Marsamxett can be retained within the modelled domain and the creek-scale modes return to scope.
+The inlets constitute the resonating elements of the harbour system. At 115 m their modes were absent from any solution that could be constructed, and their absence would not have been signalled by the model. At 10 m they are adequately represented. The principal risk identified in the project plan is accordingly resolved, and the reduced scope that risk had imposed is no longer necessary. Marsamxett can be retained within the modelled domain and the inlet-scale modes return to scope.
 
 ---
 
