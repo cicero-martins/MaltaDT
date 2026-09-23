@@ -83,7 +83,7 @@ Processing was performed under ArcGIS 10.0 on Windows Server 2008 R2, placing th
 
 **Residual coverage gaps.** The merged product leaves 14.0% of the Grand Harbour window and 24.8% of the Marsamxett window without data in either grid. A substantial proportion of this lies inland, beyond the coastal strip covered by the LiDAR survey, and is immaterial. A further proportion is not: gaps are visible at the inner extremity of Marsamxett in the vicinity of Msida and Pietà. Prior to mesh construction the gaps must be intersected with an independent coastline so that unmapped water is distinguished from ordinary land, after which the need for and extent of interpolation can be established.
 
-**Resampling method.** Nearest-neighbour resampling from 2 m preserves individual values rather than averaging them, so isolated spikes present in the source mosaics propagate unchanged into the 10 m product. A despiking pass is advisable before the field is used for mesh generation.
+**Resampling method.** Nearest-neighbour resampling from 2 m preserves individual values rather than averaging them, so isolated extremes present in the source mosaics propagate unchanged into the 10 m product. A despiking pass was tested and is **not** applied to the merged product, for reasons given in Section 7.
 
 **Depth extremes.** The Grand Harbour extraction window reaches 53 m and the full sonar grid reaches 262 m, both attributable to water beyond the harbour entrances. Windows must be clipped to the basins before any summary statistic is computed, since otherwise the resulting values describe the open shelf rather than the harbour.
 
@@ -96,3 +96,17 @@ Processing was performed under ArcGIS 10.0 on Windows Server 2008 R2, placing th
 3. **Existence of a Part 2** of the December 2012 vessel survey, and of any resurvey undertaken since.
 4. **Survey accuracy**, in the horizontal and the vertical, and the depth penetration limit achieved by the LiDAR survey in these waters.
 5. **Licensing and attribution**, specifically what may be published and how MEPA, the University of Malta and the compiler should be credited in a manuscript and in a data availability statement.
+
+---
+
+## 7. Merged product
+
+The two components were combined by `scripts/build_merged_bathymetry.py` into `data/processed/mepa_4036_merged_10m.tif`, with a geographic counterpart `mepa_4036_merged_10m_wgs84.tif`. Sonar is given precedence and LiDAR fills the remainder, contributing 770,412 cells. The union grid is 4098 by 3727 cells at 10 m in EPSG:23033, of which 31.7% carry data, comprising 4,233,597 submerged and 613,271 emerged cells.
+
+Coverage over the two harbours in the merged product is 86.1% for the Grand Harbour window and 75.1% for Marsamxett, with median depths of 17.5 m and 14.6 m respectively.
+
+**Verification of georeferencing.** The geographic product was sampled at seven control points of known character. The Grand Harbour entrance returns -9.0 m, the inner harbour at Marsa -16.0 m and Sliema Creek -24.6 m, all submerged as expected. Valletta returns +57.6 m, consistent with the elevation of the peninsula, and Manoel Island +8.8 m. The results are consistent with the ED50 interpretation of the source coordinates and would not be obtained under the WGS84 substitution described in Section 2.
+
+**Despiking was tested and rejected.** A pass replacing cells departing from a 5 by 5 local median by more than 5 m flags 70,989 of 4,846,868 valid cells. The flagged population has a median local gradient of 49.5% against 7.1% for the remainder, and 7.2% of all emerged cells are flagged against approximately 1% of cells in water shallower than 20 m. The criterion is therefore identifying the coastal cliffs and the Valletta bastions, which are genuine features of the terrain, rather than artefacts of the nearest-neighbour resampling. The archival product is accordingly left unfiltered. Should despiking prove necessary, it belongs at mesh construction, restricted to the model domain and governed by a slope-aware rather than an absolute criterion.
+
+**Depth extremes persist in the harbour windows.** The merged windows reach 74 m, which originates in water beyond the entrances included by the rectangular extraction. The requirement to clip to the basins before computing summary statistics, stated in Section 5, is unchanged.
