@@ -41,6 +41,8 @@ Two caveats remain. The declared 44 m is a floor on co-registration even though 
 
 **History output at approximately 1 minute.** The milgħuba seiche band is 0.2 to 2 cph. Coarser output aliases the target signal. Map output may remain coarse.
 
+**Domain B is proposed, roughly 86 x 66 km over the Malta Plateau, east to 15.0 degrees.** The harbours resonate at 17 and 18 minutes and their inlets at 4 to 6, all above the milghuba band, while the plateau resonates at 78 to 156 minutes, within it. A harbour-only domain holds no resonator in the band. Domain B costs 28,500 cells against 25,900 for the harbours alone. Stopping short of the escarpment is also what keeps sigma layers defensible. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md).
+
 **Mesh resolution follows the inlets.** French Creek, Dockyard Creek, Kalkara Creek and Rinella Creek in the Grand Harbour, with the head at Marsa. Sliema Creek, Lazzaretto Creek, Msida Creek and Pietà Creek in Marsamxett. These are the resonating elements and an under-resolved inlet loses its mode silently. The name creek is nautical, denoting a tidal inlet, not a watercourse.
 
 ## Observational basis
