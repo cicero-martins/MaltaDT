@@ -1,4 +1,4 @@
-# MaltaDT — Valletta harbour system
+# MaltaDT: model of the Valletta harbour system
 
 Coupled wave-hydrodynamic model of the Grand Harbour and Marsamxett Harbour, Malta, constructed with Delft3D FM and SWAN coupled through DIMR.
 

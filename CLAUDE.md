@@ -1,4 +1,4 @@
-# MaltaDT — context for Claude
+# MaltaDT: working context
 
 Coupled wave-hydrodynamic Delft3D FM and SWAN model of the Valletta harbour system (Grand Harbour and Marsamxett), Malta. Conducted during a research period at the Oceanography Malta Research Group, University of Malta, September 2026 to March 2027, within the Interreg VI-A Italia-Malta WETWISE project (deliverable D.3.3.3, WP3, RCO116).
 
@@ -6,16 +6,16 @@ Distinct from, but methodologically dependent on, `../StagnoneDT`. The scientifi
 
 ## Register
 
-All generated text, in documents, code comments and commit messages, is written in an academic register. Impersonal construction, measured claims, descriptive rather than rhetorical section titles. Em dashes are not used, explanatory colons are avoided, and semicolons are used sparingly.
+All generated text, in documents, code comments and commit messages, is written in an academic register. Impersonal construction, measured claims, and descriptive rather than rhetorical section titles. Em dashes are not used, explanatory colons are avoided, and semicolons are used sparingly.
 
 ## Current state
 
-- **Site fixed** 2026-09-22 with Prof. Adam Gauci: Valletta harbours.
-- **Bathymetry obtained** 2026-09-22: CDI `4036_MEPA`, 10 m LiDAR and sonar grids covering the Maltese Islands. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md).
+- **Site fixed** 2026-09-22 with Prof. Adam Gauci. The Valletta harbours.
+- **Bathymetry obtained** 2026-09-22. CDI `4036_MEPA`, 10 m LiDAR and sonar grids covering the Maltese Islands. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md).
 - **No field campaign planned.** The study proceeds on existing observations. Deferred rather than cancelled.
 - **No model built yet.** Mesh construction is scheduled for B3, 27 October to 21 November.
 
-Planning documents: [docs/malta_valletta_model_plan.md](docs/malta_valletta_model_plan.md) is the operative plan; [docs/malta_period_plan_2026-2027.md](docs/malta_period_plan_2026-2027.md) holds the block calendar and the parallel UNIPA commitments.
+Planning documents. [docs/malta_valletta_model_plan.md](docs/malta_valletta_model_plan.md) is the operative plan. [docs/malta_period_plan_2026-2027.md](docs/malta_period_plan_2026-2027.md) holds the block calendar and the parallel commitments at UNIPA.
 
 ## Critical configuration facts
 
@@ -46,12 +46,12 @@ The following transfer without modification and their reuse constitutes the evid
 - `dfm_tools` mesh generation sequence (`mesh_generation_workflow.md`)
 - CMEMS MED-MFC boundary chain and the anchored-offset datum methodology
 - ERA5 and station wind blending
-- DIMR and SWAN coupling, including the full gotcha catalogue in `StagnoneDT/docs/fm_2026_gotchas.md`
-- Validation methodology: raw and anomaly metrics reported together, post-spinup window, cell-based extraction for offshore points
+- DIMR and SWAN coupling, including the configuration catalogue in `StagnoneDT/docs/fm_2026_gotchas.md`
+- Validation methodology, comprising raw and anomaly metrics reported together, a post-spinup window, and cell-based extraction for offshore points
 - OpenDrift regridding and Lagrangian scoring
 - Containerised EDITO deployment
 
-The following do not apply at this site and their inapplicability is itself a result: the `[veg]` canopy drag module, the Random-Forest bottom-class classifier, the hypersaline initial condition, ERA5 evaporation forcing, and the D-Morph sediment configuration.
+The following do not apply at this site, and their inapplicability constitutes a result in itself. They are the `[veg]` canopy drag module, the Random-Forest bottom-class classifier, the hypersaline initial condition, ERA5 evaporation forcing, and the D-Morph sediment configuration.
 
 **A porting log is maintained**, classifying every pipeline stage as transferred unchanged, re-parameterised, or not applicable, with the effort expended. This log is the primary evidence base for the methodological contribution and is not administrative overhead.
 
