@@ -10,6 +10,8 @@ Distinct from, but methodologically dependent on, `../StagnoneDT`. The scientifi
 
 All generated text, in documents, code comments and commit messages, is written in an academic register. Impersonal construction, measured claims, and descriptive rather than rhetorical section titles. Em dashes are not used, explanatory colons are avoided, and semicolons are used sparingly.
 
+`scripts/check_register.py` flags departures. Run it over the repository before a document is circulated. Its patterns come from departures actually found here rather than from a stylebook, and it reports rather than enforces, since some hits are legitimate.
+
 ## Current state
 
 - **Site fixed** 2026-09-22 with Prof. Adam Gauci. The Valletta harbours.

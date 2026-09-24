@@ -84,7 +84,7 @@ The estimate remains first-order. Irregular planform, the branching of the inlet
 
 Cell counts assume the graded scheme of Section 3 and include a factor of 1.5 for the transition zones required to keep the size ratio between neighbouring cells near 1.25.
 
-**Domain B costs a tenth more cells than domain A while covering twenty-two times the area.** The additional area is entirely offshore and coarsely resolved, so it is nearly free. This is the principal argument for the unstructured approach over the structured nesting used by ROSARIO-I, and it is worth stating in the paper as such, since a single graded mesh spanning from 1.5 km on the plateau to 15 m in an inlet is the capability the framework brings.
+**Domain B costs a tenth more cells than domain A while covering twenty-two times the area.** The additional area is entirely offshore and coarsely resolved, so it is nearly free. This constitutes the principal argument for the unstructured approach over the structured nesting employed by ROSARIO-I, and the manuscript should state it as such, since a single graded mesh spanning from 1.5 km on the plateau to 15 m in an inlet is the capability the framework brings.
 
 **Recommendation: domain B**, extending west and north over the plateau and east to approximately 15.0°E, short of the escarpment. Domain C is available if the half-wave mode between Malta and Sicily proves to matter, at a further 18 per cent in cells.
 
