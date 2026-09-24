@@ -22,6 +22,7 @@ The governing question is whether the framework, forced by observed atmospheric 
 | Aligned basemap | Bathymetry and coastline co-registered in EPSG:4326 in `data/processed/`. 99.51% land and water agreement, median disagreement one cell |
 | Observational basis | Identified. BLUE buoy, PORTO network, HF radar, Portomaso tide gauge. Access terms pending |
 | Field campaign | Not planned. The study proceeds on existing observations |
+| Research question | Reframed 24 September from model verification to attribution of amplification. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
 | Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
 | Mesh | Not started. Scheduled for late October |
 | Model | Not started |
@@ -48,6 +49,7 @@ reference/         third-party material
 - [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md), assessment of the bathymetric dataset
 - [docs/coastline_dataset.md](docs/coastline_dataset.md), assessment of the coastline, including the inference establishing the vertical datum
 - [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md), sizing of the domain, the horizontal resolution and the vertical layering
+- [docs/research_question_and_literature.md](docs/research_question_and_literature.md), the research question, the prior work it must clear, and the reading list
 - [CLAUDE.md](CLAUDE.md), working context and critical configuration facts
 
 ## Tooling

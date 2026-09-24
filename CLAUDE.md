@@ -4,6 +4,8 @@ Coupled wave-hydrodynamic Delft3D FM and SWAN model of the Valletta harbour syst
 
 Distinct from, but methodologically dependent on, `../StagnoneDT`. The scientific contribution of this project is the transfer of the StagnoneDT framework across archetype, from a shallow vegetated micro-tidal lagoon to a deep engineered seiche-dominated harbour.
 
+**The milghuba is a meteotsunami, not a seiche in general**, alongside the rissaga of the Balearics and the marrobbio of Sicily. The governing question is the partition of amplification between Proudman resonance over the Malta Plateau, shoaling on the approach, and resonance of the basins. Prior work already treats Maltese coastal seiches in 2D with prescribed offshore forcing, so the generation side is the open ground. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md).
+
 ## Register
 
 All generated text, in documents, code comments and commit messages, is written in an academic register. Impersonal construction, measured claims, and descriptive rather than rhetorical section titles. Em dashes are not used, explanatory colons are avoided, and semicolons are used sparingly.
