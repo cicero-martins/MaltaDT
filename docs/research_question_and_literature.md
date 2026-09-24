@@ -103,15 +103,74 @@ The role of the observations is inverted. They cease to be the forcing and becom
 
 ---
 
-## 6. Consequences for the thesis argument
+## 6. Climate change as a bounded discussion element
+
+The phenomenon is recurrent and damaging, and whether it intensifies under a changing climate follows as a question. It is treated here as a discussion element and as a route for subsequent work rather than as a work package, since its execution would exceed the period available.
+
+### 6.1 Documented consequence
+
+The hazard is established in the public record. Flooding of low-lying coastal streets occurs at Marsaskala, Xemxija, Marsaxlokk and at Msida in the vicinity of the Workers' Memorial, reported as occurring in the absence of rain and under otherwise settled weather, which is the signature of a meteotsunami rather than of a storm surge. One reported event carried a vehicle into the sea. Storm Harry of January 2026 inundated waterfronts at Marsascala, Sliema and Birżebbuġa, and the host group published an analysis of that event drawn from its own monitoring network.
+
+**Msida lies at the head of Msida Creek, inside Marsamxett and therefore inside the proposed domain.** The risk recorded in Section 8, that the hazard framing might lack documented consequence, is accordingly reduced. Sliema likewise lies within Marsamxett.
+
+### 6.2 Two pathways, unequally tractable
+
+Climate change acts on the hazard through two distinct pathways.
+
+**The baseline.** Mean sea level rise raises the still water level on which the event is superimposed. A meteotsunami of peak-to-trough amplitude A overtops a threshold of elevation Z when A/2 exceeds Z less the rise S. The rise consumes freeboard directly.
+
+| Threshold elevation | Amplitude required at present | With 0.5 m of rise | With 1.0 m |
+|---|---|---|---|
+| 0.6 m | 1.2 m | 0.2 m | exceeded without an event |
+| 1.0 m | 2.0 m | 1.0 m | exceeded without an event |
+| 1.5 m | 3.0 m | 2.0 m | 1.0 m |
+
+This pathway is quantifiable within the present study at negligible cost, since it requires only the superposition of a projected rise on the modelled response.
+
+**The distribution of the forcing.** Meteotsunami generation requires particular synoptic conditions. Mid-tropospheric jet intensity, meandering and latitudinal range correlate most strongly with occurrence globally, frequently in conjunction with a strong thermal front in the lower troposphere and a surface low, and these are affected by a changing climate. Positive trends in temperature and maximum wind speed over the Adriatic between 1987 and 2017 have been reported as potentially already influencing meteotsunamigenic conditions at the synoptic scale.
+
+This pathway is not quantifiable within the present study, since it requires climate model output and a validated synoptic index.
+
+### 6.3 The resonance is nearly invariant to sea level rise
+
+A rise increases depth. In a harbour bounded by vertical quay walls it does so without altering the length of the basin, so the quarter-wave period shortens. In a natural bay with sloping margins the length increases also and partly offsets the effect. The Valletta harbours are of the first kind.
+
+| System | Present period | +0.3 m | +0.5 m | +1.0 m |
+|---|---|---|---|---|
+| Grand Harbour | 17.2 min | -0.9% | -1.5% | -3.0% |
+| Marsamxett | 18.4 min | -1.1% | -1.8% | -3.6% |
+| Msida Creek, head | 7.0 min | -2.4% | -3.9% | -7.4% |
+| Malta Plateau | 156.4 min | -0.1% | -0.2% | -0.3% |
+
+The displacement of the modes is between one and four per cent even for a metre of rise, and on the plateau it is negligible. **The geometry of the resonance is therefore robust and the hazard changes through the baseline rather than through the resonance.** The shallow heads of the inlets are the exception, where the proportional change in depth is largest, and they are also where the flooding is reported.
+
+### 6.4 The design renders the question inexpensive
+
+The parametric sweep proposed in Section 5 produces a response surface, that is the amplification of the harbour system as a function of the speed and direction of the atmospheric disturbance. That surface is a transfer function of the geometry and does not depend on the climate.
+
+Climate change acts on the input distribution, namely the frequency with which disturbances of a given speed and direction occur. The two separate cleanly. The present study computes the transfer function once, and any subsequent study possessing projections of the synoptic forcing may convolve the two without repeating the hydrodynamic work.
+
+The separation is what makes the question tractable as a discussion element. No climate scenario need be run through the model.
+
+### 6.5 Scope
+
+Within the present study: the response surface, the superposition of projected sea level rise, and a statement of the two pathways with the sensitivity figures above.
+
+Outside it, and identified as the natural continuation: evaluation of a synoptic index of the kind constructed by Šepić et al. (2016) against climate model output, which has so far been achieved only for the Balearic Islands, and its convolution with the response surface computed here.
+
+**Additional reading.** *Climate projections of meteotsunami hazards*, Frontiers in Marine Science 10, 1167863 (2023), which reviews the three available approaches, namely synoptic indices, high-resolution numerical models, and ensemble or stochastic methods. **Šepić, J. et al. (2016)**, *Quantifying the probability of meteotsunami occurrence from synoptic atmospheric patterns*, Geophysical Research Letters.
+
+---
+
+## 7. Consequences for the thesis argument
 
 The transferability claim is strengthened. It ceases to be an assertion that the same pipeline was executed at a second site and becomes a demonstration that the pipeline answered a question in a physical regime other than the one for which it was constructed. At the Stagnone the framework addressed wind-driven circulation over a vegetated bed. At Valletta it addresses atmospherically generated long waves in an engineered basin. The solver and the assembly are unchanged and the physics is not, which constitutes a stronger test of reusability than a second lagoon would have provided.
 
 ---
 
-## 7. Risks
+## 8. Risks
 
-**The hazard framing requires documented consequence.** Airy described the phenomenon in the Grand Harbour in 1878, so the historical record exists, but whether Malta has documented damage in the modern port, such as mooring failures, interruption of cargo operations or range action on berthed vessels, is not established. In its absence the hazard framing weakens and the question in Section 4.3 becomes the primary one.
+**The hazard framing requires documented consequence, and is partly supported.** Section 6.1 records flooding at Msida, inside the proposed domain, together with events at Marsaskala, Xemxija, Marsaxlokk and Sliema. What remains unestablished is damage within the commercial port specifically, such as mooring failures, interruption of cargo operations or range action on berthed vessels, which is held by Transport Malta and the terminals rather than in the public record. Should it prove absent, the exposure framing rests on the low-lying quays and the question in Section 4.3 gains weight.
 
 **The prior work may extend beyond the published record.** Section 2 rests on a literature search rather than on consultation with its authors, who are members of the host group. The first action is to establish what exists, including unpublished material and student work.
 
@@ -121,17 +180,17 @@ The transferability claim is strengthened. It ceases to be an assertion that the
 
 ---
 
-## 8. Reading list
+## 9. Reading list
 
 Ordered by function.
 
-### 8.1 Introductory treatments
+### 9.1 Introductory treatments
 
 **Rabinovich, A.B. (2009).** *Seiches and Harbor Oscillations.* Chapter 9 in Kim, Y.C. (ed.), *Handbook of Coastal and Ocean Engineering*, World Scientific, pp. 193–236. [Freely available](http://jadran.izor.hr/~vilibic/meteotsunami/Rabinovich_Handbook_2010_Chapter9.pdf). The principal introductory reference, covering basin modes, the Helmholtz or pumping mode, and range action on berthed vessels, written for coastal engineers.
 
 **Coastal Wiki**, [Harbor resonance](https://www.coastalwiki.org/wiki/Harbor_resonance) and [Proudman resonance and meteo tsunamis](https://www.coastalwiki.org/wiki/Proudman_resonance_and_meteo_tsunamis). Short entries, suited to a first reading.
 
-### 8.2 The field
+### 9.2 The field
 
 **Vilibić, I. et al. (2025).** *Meteorological Tsunamis: From Local Hazard to Global Relevance.* Reviews of Geophysics. The current authoritative review.
 
@@ -143,17 +202,17 @@ Ordered by function.
 
 **Are meteotsunamis an underrated hazard?** Philosophical Transactions of the Royal Society A 373, 20140377 (2015). Relevant to the hazard framing.
 
-### 8.3 Analogues
+### 9.3 Analogues
 
 **Ciutadella, Menorca.** The canonical case, in which Proudman resonance on the shelf, shoaling and harbour resonance compound to an order of magnitude. The relevant work is that of Rabinovich and Monserrat on the *rissaga*, together with the modelling of the event of 15 June 2006.
 
 **Meteotsunami ("Marrobbio") of 25–26 June 2014 on the Southwestern Coast of Sicily, Italy.** Pure and Applied Geophysics (2018). The same shelf system and the adjacent coast. The event is attributed to Proudman resonance on the western Sicilian shelf combined with local resonant conditions.
 
-### 8.4 Malta
+### 9.4 Malta
 
 The three works listed in Section 2.
 
-### 8.5 Renewal and residence time
+### 9.5 Renewal and residence time
 
 **Samper, Y. et al. (2022).** *Water exchanges in Mediterranean microtidal harbours.* Water 14, 2012.
 
@@ -161,9 +220,11 @@ The three works listed in Section 2.
 
 ---
 
-## 9. Questions for the host group
+## 10. Questions for the host group
 
 1. **Does a sea level record exist for the Grand Harbour, and at what sampling interval?** Drago is reported to have maintained an installation there. A spectrum computed from it would establish whether the Valletta basins carry energy at their own 12 to 18 minute mode, which the present analysis can only infer.
 2. **What is the full extent of prior work on the milgħuba**, including unpublished material, student dissertations and any treatment of the southern and eastern coasts.
 3. **Is there documented damage or operational disruption** attributable to long waves in the Grand Harbour, held by Transport Malta, the port operators or the terminals.
 4. **Would the group regard the attribution question of Section 4.1 as a contribution**, or does it lie closer to their own intentions than the published record indicates.
+5. **Is the analysis of Storm Harry, January 2026, available**, and would that event serve as the case study for validation. The host group published an account of it from its own monitoring network.
+6. **Has any assessment been made of the milgħuba under a changing climate for Malta**, whether through a synoptic index or otherwise. Section 6 treats the matter as a discussion element for want of such an assessment.
