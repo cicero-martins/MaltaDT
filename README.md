@@ -22,6 +22,7 @@ The governing question is whether the framework, forced by observed atmospheric 
 | Aligned basemap | Bathymetry and coastline co-registered in EPSG:4326 in `data/processed/`. 99.51% land and water agreement, median disagreement one cell |
 | Observational basis | Identified. BLUE buoy, PORTO network, HF radar, Portomaso tide gauge. Access terms pending |
 | Field campaign | Not planned. The study proceeds on existing observations |
+| Delft mission | Delft3D User Days 2 to 4 November, inside block B3. Abstract due 19 October. Costs B3 four working days |
 | Research question | Reframed 24 September from model verification to attribution of amplification. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
 | Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
 | Mesh | Not started. Scheduled for late October |

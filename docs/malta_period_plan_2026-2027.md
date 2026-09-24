@@ -17,11 +17,11 @@ The period spans six calendar months but does not constitute six months of work.
 |---|---|---|---|
 | B1 | Thu 17 Sep to Sat 26 Sep 2026 | 10 | 7 |
 | B2 | Wed 7 Oct to Sat 17 Oct 2026 | 11 | 8 |
-| B3 | Tue 27 Oct to Sat 21 Nov 2026 | 26 | 19 |
+| B3 | Tue 27 Oct to Sat 21 Nov 2026 | 26 | 19, reduced to **15** by the Delft mission |
 | B4 | Tue 1 Dec to Sat 19 Dec 2026 | 19 | 14 |
 | B5 | Tue 19 Jan to Sat 6 Feb 2027 | 19 | 14 |
 | B6 | Tue 23 Feb to Sat 27 Mar 2027 | 33 | 24 |
-| **Total** | | **118** | **86** |
+| **Total** | | **118** | **86**, effectively **82** |
 
 Presence accounts for 61 per cent of the 192-day window. Five intervals fall in Palermo.
 
@@ -36,6 +36,8 @@ Presence accounts for 61 per cent of the 192-day window. Five intervals fall in 
 Three consequences follow directly and govern the allocation of work.
 
 Blocks B3 and B6 together account for 43 of the 86 working days. Substantial model construction therefore belongs in B3 and closure in B6. No structural undertaking should be assigned to the short blocks.
+
+**B3 is reduced by the Delft mission.** The Delft3D User Days fall on 2 to 4 November, inside the second week of B3, and with travel the block loses four working days. B3 therefore holds 15 working days rather than 19, and the period 82 rather than 86. Section 2.1 records the mission and its consequences.
 
 Block B1 comprises seven working days. It cannot serve as a technical block and functions instead as the block in which every item with a lead time exceeding two weeks is initiated.
 
@@ -53,8 +55,41 @@ Four obligations run alongside the research period, two of them reactive.
 | SWOT manuscript | Own deadline, to be submitted | **G2, by 26 October** | Displaced to G3 should Paper 1 overrun |
 | GEE Paper 1 revision | Reactive, timing determined externally | G3, G4 or G5 | Two to three weeks of contingency reserved wherever it falls |
 | Westrade collaboration | Scheduled, scope unspecified | B5, G5, B6 | Requires a defined allocation of time before it can be planned |
+| **Delft3D User Days**, Deltares | Fixed date, presentation accepted | **2 to 4 November, inside B3** | Abstract due 19 October. Section 2.1 |
 
-Only the first two carry dates of their own. The remainder constitutes contingency, deliberately located in the Palermo intervals so that contact time with the host group is not expended on work belonging to the home institution.
+Only the first two of the manuscripts carry dates of their own. The remainder constitutes contingency, deliberately located in the Palermo intervals so that contact time with the host group is not expended on work belonging to the home institution. The Delft mission is the exception, being fixed and falling inside a Malta block.
+
+### 2.1 The Delft mission
+
+An invitation to present at the Delft3D User Days, part of Delft Software Days 2026, was accepted on 17 September. The contribution is titled *3D Modeling of Vegetated Shallow Water Dynamics Using Delft3D FM and SWAN: Towards a Digital Twin of the Stagnone Lagoon, Sicily*, and continues a presentation given the previous year. The supporting correspondence is held at `../StagnoneDT/docs/dsd2026/`.
+
+| Item | Date |
+|---|---|
+| **Abstract, maximum 1300 characters** | **Monday 19 October 2026** |
+| Event, on premises at Deltares Campus Delft | Monday 2 to Wednesday 4 November 2026 |
+| Presentation duration | 30 minutes |
+| Optional courses following the user days | 5 and 6 November |
+
+Three consequences follow.
+
+**The abstract deadline falls in G2**, the interval of 18 to 26 October, and 19 October is its first working day. G2 already carries the submission of the SWOT manuscript. The abstract is short and the material exists, so the collision is manageable, but it is a fixed external deadline and is treated as such.
+
+**Four working days are removed from B3.** The event occupies 2 to 4 November and the return consumes a fourth. B3 falls from 19 working days to 15, and its second week is the one affected.
+
+**The subject is the Stagnone rather than Malta.** The mission belongs to the commitments of the home institution and the preparation of the presentation should be located in G2 rather than in B3, so that the Malta block is not further reduced.
+
+### 2.2 The mission as a consultation
+
+The days are not wholly a loss and the schedule can be arranged so that they are not. The programme places 3D hydrodynamics and water quality on 2 November, together with D-Particle Tracking, and D-Waves with D-Morphology on 3 November. Those are the sessions bearing on the configuration questions this project has open, and the developers are present.
+
+Four questions are worth taking to Delft, and each is a question the project would otherwise resolve by experiment.
+
+1. The specification of a weakly reflective or Riemann boundary for a study in which the signal of interest is a long wave, and whether the synthetic pulse test proposed in the plan is the appropriate verification.
+2. Whether sigma layers remain appropriate over a domain spanning 15 m in the harbours to 150 m on the plateau, or whether a z-sigma hybrid is indicated.
+3. The suitability of D-Particle Tracking against the OpenDrift pipeline inherited from the Stagnone for the residence-time question.
+4. The behaviour of the `[veg]` module, on which the Stagnone work encountered several undocumented conditions.
+
+**The work that generates these questions should therefore precede the mission.** The first week of B3, 27 October to 1 November, holds four working days and should be directed at the mesh and the first boundary experiments, so that the questions arrive at Delft in concrete form rather than in general terms.
 
 ---
 
