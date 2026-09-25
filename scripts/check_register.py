@@ -82,6 +82,10 @@ def gather(targets: list[str]) -> list[Path]:
     for p in sorted(ROOT.rglob("*")):
         if any(part in SKIP_DIRS for part in p.parts):
             continue
+        # Office writes a lock file beside an open document. It is not
+        # readable and is not content.
+        if p.name.startswith("~$"):
+            continue
         if p.suffix in SUFFIXES and p.is_file() and p.name != Path(__file__).name:
             out.append(p)
     return out

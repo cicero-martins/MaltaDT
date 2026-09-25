@@ -53,6 +53,22 @@ The plateau geometry was verified rather than assumed. A transect north along 14
 
 The consequence for the model is direct. A domain confined to the harbours contains no resonator in the band and cannot produce the signal under study. It could only receive that signal through its open boundary, and the available boundary product, CMEMS MED-MFC at hourly resolution, carries no energy in the band. Such a domain would have to be driven by the Portomaso record, which is a single coastal station outside both basins, and validating the harbour response against a signal imposed from a neighbouring gauge is close to circular.
 
+### Provenance of the basin period, and its sensitivity
+
+The periods above follow from T = 4L/√(gh). The depth is measured directly and is well constrained at 15 to 16 m. The length is not, and the figure reported as 3.22 km was the diagonal of a rectangle drawn by hand around the harbour rather than a measured basin length.
+
+Measurement by geodesic distance through the water, from the entrance to the head at Marsa, returns 2.15 km. A generous alternative that admits the outer approaches returns 3.6 km. The three estimates bracket the period as follows.
+
+| Estimate of L | L | Period | Frequency |
+|---|---|---|---|
+| Entrance to Marsa, measured through the water | 2.15 km | 11.6 min | 5.16 cph |
+| Diagonal of the bounding rectangle | 3.22 km | 17.4 min | 3.45 cph |
+| Generous, including the approaches | 3.60 km | 19.5 min | 3.08 cph |
+
+**The conclusion does not depend on resolving the length.** The observed band reaches 2 cph, a period of 30 minutes. For the Grand Harbour to enter it at the measured depth the basin would have to be 5.55 km long, which is between 1.5 and 2.6 times its length under any of the three estimates. Alternatively, at the length of 3.22 km the mean depth would have to be 5.2 m rather than 15.5 m, a third of the measured value. Neither margin is narrow.
+
+The figure of 17 minutes is therefore retained as an order of magnitude rather than as a determination, and the separation from the observed band survives the uncertainty in the quantity that is least well known.
+
 ### Robustness of the estimate
 
 Two objections could overturn the reasoning above, and both were tested.
@@ -114,7 +130,32 @@ Cells across a channel, by channel width and candidate cell size:
 
 Four to five cells carry the conveyance of a channel and eight to ten resolve the flow across it.
 
-**The binding constraint is geometry, not the wave.** A long wave of 17-minute period in 16 m of water has a wavelength of 12.8 km, which twenty cells per wavelength would resolve at 640 m. The wave imposes no meaningful requirement at these scales. What the resolution must capture is the planform and the cross-section of the inlets and the entrances, because those control the exchange and the storage.
+### Why the wave imposes no requirement
+
+The wavelength of a wave is its celerity multiplied by its period, and in shallow water the celerity depends on depth alone.
+
+λ = c · T,  with  c = √(gh)
+
+For a period of 17 minutes in 16 m of water this gives c = 12.5 m s⁻¹ and λ = 12.8 km.
+
+The term shallow is relative rather than absolute. Water is shallow with respect to a wave when the wavelength greatly exceeds the depth, conventionally by a factor of twenty. Here the ratio is far larger, which is why the expression for celerity holds without correction.
+
+| Location | h | c | Period | λ | λ / h |
+|---|---|---|---|---|---|
+| Grand Harbour, own mode | 16 m | 12.5 m s⁻¹ | 17 min | 12.8 km | 800 |
+| Grand Harbour, upper edge of the band | 16 m | 12.5 m s⁻¹ | 30 min | 22.6 km | 1 400 |
+| Grand Harbour, lower edge of the band | 16 m | 12.5 m s⁻¹ | 5 h | 225 km | 14 100 |
+| Malta Plateau, half wave | 150 m | 38.4 m s⁻¹ | 78 min | 180 km | 1 200 |
+
+The plateau at 150 m is shallow with respect to these waves also.
+
+**The figure of 12.8 km is not independent of the period.** A quarter-wave resonator satisfies L = λ/4 by definition, so a wavelength of 12.8 km in a basin of 3.2 km states the same fact as a period of 17 minutes. The value is reported because it is the shortest wavelength among the signals of interest, and therefore the conservative case. Every other signal in the band is longer, from 22.6 km at the upper edge to 225 km at the lower.
+
+The physical consequence is that no wave form is present within the basin. A wavelength of 12.8 km spans four times the length of the Grand Harbour, so the basin rises and falls very nearly in unison rather than carrying a crest from its mouth to its head. This is the same statement as the quasi-static response recorded in Section 2, arrived at from the spatial side rather than the spectral one.
+
+**The binding constraint is therefore geometry rather than the wave.** Twenty to forty cells per wavelength is the conventional numerical requirement, which for 12.8 km is a cell of 320 to 640 m, and for the plateau half wave of 180 km a cell of 4.5 to 9 km. The proposal of 15 m in the inlets is twenty to forty times finer than the wave requires. What the resolution must capture is the planform and the cross-section of the inlets and the entrances, because those control the exchange and the storage.
+
+The contrast with wind waves is instructive. A wave of 6 s period has a wavelength of 56 m in deep water, and resolving its form would require cells of about 3 m over a domain of 86 by 66 km. This is why SWAN is a spectral model, following the distribution of energy over frequency and direction within each cell rather than the shape of any individual wave.
 
 **Proposed grading**
 
@@ -130,7 +171,33 @@ The 10 m of the source bathymetry is the floor. A mesh finer than 15 m would int
 
 **Time step.** At 15 m cells in 15 m of water the celerity is 12.1 m/s and a Courant number of unity requires 1.2 s. The implicit solver tolerates Courant numbers between five and ten, giving a time step of 6 to 12 s. A seiche of 17-minute period is then sampled at roughly 100 steps per cycle, which is ample.
 
-**On coupling.** SWAN is not required for the seiche experiments and its omission roughly halves the cost of the long runs needed for a climatology. It is required for the storm case study and for validation against the wave record at BLUE and the HF radar. The recommendation is to run uncoupled for the seiche work and coupled for the events.
+### SWAN grids
+
+The nested arrangement carried from the Stagnone remains appropriate, with different numbers. SWAN operates on structured grids within the DIMR coupling, so the graded unstructured mesh used by the flow model has no counterpart on the wave side and the resolution is stepped through nests instead.
+
+What the wave grid must resolve is not the wave form but the spatial gradients of the wave field, namely refraction over the bathymetry, sheltering by the headlands, and penetration past the breakwater. The controlling dimension is the harbour entrance at approximately 400 m.
+
+| Cell size | Cells across the Grand Harbour entrance |
+|---|---|
+| 1500 m | 0.3 |
+| 300 m | 1.3 |
+| 250 m | 1.6 |
+| 80 m | 5.0 |
+| 60 m | 6.7 |
+
+Three arrangements were sized.
+
+| Arrangement | Levels | Cells | Ratio between levels |
+|---|---|---|---|
+| **A**, two grids at 1000 m and 80 m | 86 × 66 km, 16 × 13 km | 38,100 | 12.5 |
+| **B**, three grids at 1500, 300 and 60 m | 86 × 66 km, 30 × 24 km, 12 × 9 km | 40,500 | 5 and 5 |
+| **C**, two grids at 1200 m and 250 m | 86 × 66 km, 30 × 24 km | 15,400 | 4.8 |
+
+**Arrangement C is proposed for the questions as stated, with B held in reserve.** The wave field enters this study through validation against the BLUE buoy and the HF radar, both offshore, and through the storm case study. None of these requires the entrances to be resolved, and C is less than half the cost of the alternatives. A ratio of 4.8 between levels is also conventional, whereas the ratio of 12.5 in arrangement A places the boundary of the nest where the parent represents the coastal bathymetry poorly.
+
+Arrangement B becomes necessary only if wave penetration into the harbours becomes a question in its own right. **Should it do so, SWAN is in any case the wrong instrument.** Diffraction past a breakwater is represented only approximately in a phase-averaged spectral model, and harbour agitation is conventionally treated with a mild-slope or Boussinesq formulation. That limitation should be stated rather than resolved by refinement.
+
+**On coupling.** SWAN is not required for the seiche experiments, and its omission roughly halves the cost of the long runs needed for a climatology. It is required for the storm case study and for validation against the wave record at BLUE and the HF radar. The recommendation is to run uncoupled for the seiche work and coupled for the events.
 
 ---
 
