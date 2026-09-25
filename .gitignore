@@ -35,3 +35,6 @@ __pycache__/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+
+# Referencia: PDF grande, open access, obtenivel pelo DOI (ver reference/README.md)
+reference/Laksono2026_tsunamiSicilianchannel.pdf
