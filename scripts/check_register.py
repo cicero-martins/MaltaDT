@@ -26,6 +26,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 # Each entry is a label and a pattern. Ordered by how badly each reads in a
 # document intended for supervisors and for a manuscript.
+#
+# A pattern for the antithetical title, of the form "Attribution, not
+# verification", was written and then removed. It matched seven ordinary
+# contrastive sentences for every rhetorical title, and a check that reports
+# mostly noise is one that stops being read. That failure mode is caught by
+# reading rather than by regular expression.
 CHECKS: list[tuple[str, str]] = [
     ("first or second person",
      r"\b(we|our|ours|us|you|your|yours|I'm|I've|let's)\b"),
@@ -33,9 +39,11 @@ CHECKS: list[tuple[str, str]] = [
      r"—"),
     ("rhetorical aside",
      r"\b(uncomfortable|worked around|is thin|poor use|straightforward|"
-     r"proper place|to their advantage|ground is open|read first|"
+     r"proper place|to their advantage|ground is open|open ground|read first|"
      r"no stakeholder|worth noting|it is worth|the trick|the catch|"
-     r"the headline|the finding that matters|pays off|big deal)\b"),
+     r"the headline|the finding that matters|pays off|big deal|"
+     r"where it belongs|better asked|already found|the obvious question|"
+     r"what happens next|what we need)\b"),
     ("imperative or address to the reader",
      r"(^|\. )(Look to|Note that|Consider|Remember|Bear in mind|Keep in mind|"
      r"Ask |Check |Use |Read )"),
@@ -48,10 +56,19 @@ CHECKS: list[tuple[str, str]] = [
     ("judgemental section heading",
      r"^#{1,4} .*\b(why .* is (weak|wrong|bad)|what went wrong|the problem with|"
      r"what has already been done)\b"),
+    # Anchored to the start of a line, since a rhetorical label is a heading.
+    # The same words inside a sentence are ordinary prose.
+    ("rhetorical question as a label",
+     r"^\s*#*\s*\**(Why (not|this|each|it)\b|Why .{0,24}matters)"),
 ]
 
-SKIP_DIRS = {".git", "data", "figures", "model", "__pycache__", ".ipynb_checkpoints"}
-SUFFIXES = {".md", ".py"}
+SKIP_DIRS = {".git", "data", "figures", "model", "__pycache__",
+             ".ipynb_checkpoints", "node_modules"}
+
+# Prose reaches the reader through more than Markdown. A deck is read by the
+# host group and a generator script carries the deck's every sentence, so both
+# are checked. Omitting them is how the rule was missed a third time.
+SUFFIXES = {".md", ".py", ".js", ".pptx", ".docx"}
 
 # An instruction file directs an agent and is legitimately imperative, so the
 # imperative check is not applied to it. The register rules still are.
@@ -70,12 +87,53 @@ def gather(targets: list[str]) -> list[Path]:
     return out
 
 
+def _pptx_lines(path: Path) -> list[str]:
+    """Slide text and speaker notes, one shape or note per line.
+
+    Speaker notes are included deliberately. They are read aloud and they drift
+    into a conversational register more readily than the slides do.
+    """
+    try:
+        from pptx import Presentation
+    except ImportError:
+        return ["python-pptx unavailable, deck not checked"]
+    lines = []
+    for n, slide in enumerate(Presentation(path).slides, 1):
+        for shape in slide.shapes:
+            if shape.has_text_frame and shape.text_frame.text.strip():
+                for part in shape.text_frame.text.split("\n"):
+                    lines.append(f"[slide {n}] {part}")
+        if slide.has_notes_slide:
+            note = slide.notes_slide.notes_text_frame.text.strip()
+            if note:
+                lines.append(f"[slide {n} notes] {note}")
+    return lines
+
+
+def _docx_lines(path: Path) -> list[str]:
+    import xml.etree.ElementTree as ET
+    import zipfile
+    W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+    try:
+        root = ET.fromstring(zipfile.ZipFile(path).read("word/document.xml"))
+    except (OSError, KeyError, ET.ParseError):
+        return []
+    return [t for t in ("".join(x.text or "" for x in p.iter(W + "t")).strip()
+                        for p in root.iter(W + "p")) if t]
+
+
 def scan(path: Path) -> list[tuple[int, str, str]]:
     hits: list[tuple[int, str, str]] = []
-    try:
-        text = path.read_text(encoding="utf-8")
-    except (UnicodeDecodeError, OSError):
-        return hits
+    if path.suffix == ".pptx":
+        lines = _pptx_lines(path)
+    elif path.suffix == ".docx":
+        lines = _docx_lines(path)
+    else:
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except (UnicodeDecodeError, OSError):
+            return hits
+    text = "\n".join(lines)
     in_fence = False
     for n, line in enumerate(text.splitlines(), 1):
         if line.lstrip().startswith("```"):

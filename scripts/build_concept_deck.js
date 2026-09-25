@@ -82,13 +82,13 @@ function note(s, txt) {
       isTextBox: true, margin: 0 });
   s.addText("25 September 2026", { x: M, y: 5.02, w: 8.6, h: 0.3, fontSize: 12,
     color: "9FB3D1", fontFace: BODY, isTextBox: true, margin: 0 });
-  s.addNotes("Brief: what the model is meant to be, and what has to be settled with the group before it is built.");
+  s.addNotes("The deck covers the intended model and the matters to be settled before its construction.");
 }
 
 /* ---------------- 2. where this starts ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "POINT OF DEPARTURE", "A framework, carried across archetype",
+  titleSlide(s, "ORIGIN", "A framework, carried across archetype",
     "The solver and the assembly are unchanged. The physics is not.");
 
   s.addText([
@@ -117,13 +117,13 @@ function note(s, txt) {
           border: { type: "solid", color: "D6DEE3", pt: 0.5 } });
 
   note(s, "The transfer effort is logged stage by stage as transferred, re-parameterised, or not applicable. That log is the methodological result.");
-  s.addNotes("One slide of context. The thesis contribution is framework reusability; Valletta is the harder and therefore better test.");
+  s.addNotes("Context. The thesis contribution is framework reusability, and Valletta constitutes the harder test.");
 }
 
 /* ---------------- 3. data in hand ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "ALREADY IN HAND", "Bathymetry and coastline, co-registered",
+  titleSlide(s, "AVAILABLE DATA", "Bathymetry and coastline, co-registered",
     "Supplied by the host group on 22 and 23 September.");
 
   const stats = [
@@ -142,8 +142,8 @@ function note(s, txt) {
   s.addImage({ path: path.join(FIG, "bathymetry_overview.png"),
     x: 4.55, y: 1.95, w: 5.2, h: 4.44 });
   s.addText([
-    { text: "Two hazards already found\n", options: { bold: true, color: INK, breakLine: true } },
-    { text: "The grids carry no datum. Read as WGS84 they land 197 m out, silently.\n", options: { color: MUTED, breakLine: true } },
+    { text: "Two coordinate hazards\n", options: { bold: true, color: INK, breakLine: true } },
+    { text: "The grids carry no datum. Interpreted as WGS84 they are displaced by 197 m, without error.\n", options: { color: MUTED, breakLine: true } },
     { text: "Bathymetry is ED50, the coastline is WGS84. Neither overlays the other untransformed.", options: { color: MUTED } },
   ], { x: 10.05, y: 2.6, w: 2.7, h: 2.2, fontSize: 11.5, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
@@ -180,13 +180,13 @@ function note(s, txt) {
   });
 
   note(s, "At Ciutadella, Menorca, the three compound to an order of magnitude. No equivalent decomposition has been published for Malta.");
-  s.addNotes("The three-stage chain is the organising idea of the whole study. It is also what sets the domain.");
+  s.addNotes("The three-stage chain organises the study and determines the domain.");
 }
 
 /* ---------------- 5. the pivotal measurement ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "WHAT THE GEOMETRY SAYS", "The harbours do not resonate in the observed band",
+  titleSlide(s, "RESONANT PERIODS", "The harbours do not resonate in the observed band",
     "Quarter-wave periods, T = 4L∕√(gh), against the 0.2 to 2 cph band reported by Drago.");
 
   const rows = [
@@ -223,13 +223,13 @@ function note(s, txt) {
        fontFace: BODY, lineSpacing: 15, isTextBox: true, margin: 0 });
 
   note(s, "Tested against its two plausible failures. A Helmholtz idealisation returns 12 to 18 minutes also, and the harbours amplify by less than a tenth across most of the band.");
-  s.addNotes("This is the slide that decides the domain. Ask whether the group's own harbour records show energy near 17 minutes.");
+  s.addNotes("The domain follows from this table. Whether the group's harbour records carry energy near 17 minutes is the first outstanding question.");
 }
 
 /* ---------------- 6. the domain ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "MODEL CONCEPT, EXTENT", "The plateau costs a tenth more cells",
+  titleSlide(s, "MODEL CONCEPT, EXTENT", "Extent over the plateau, and its cost",
     null);
   s.addImage({ path: path.join(FIG, "domain_design.png"), x: M, y: 1.72, w: 12.09, h: 5.42 });
   s.addNotes("Domain B, roughly 86 by 66 km, east to 15 degrees, short of the escarpment. Stopping there is also what keeps sigma layers defensible.");
@@ -238,7 +238,7 @@ function note(s, txt) {
 /* ---------------- 7. resolution and layers ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "MODEL CONCEPT, DISCRETISATION", "Geometry sets the resolution, not the wave",
+  titleSlide(s, "MODEL CONCEPT, DISCRETISATION", "The geometry sets the resolution",
     "A 17-minute wave in 16 m of water is 12.8 km long. The planform of the inlets is what must be resolved.");
 
   s.addText("Measured channel width", { x: M, y: 2.3, w: 5.5, h: 0.32, fontSize: 14,
@@ -282,13 +282,13 @@ function note(s, txt) {
   ], { x: 6.85, y: 4.64, w: 5.6, h: 1.3, fontSize: 12, color: "CADCFC",
        fontFace: BODY, lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addNotes("Deltares question: whether sigma holds from 15 m to 150 m, or whether z-sigma is indicated.");
+  s.addNotes("A question for Deltares concerns whether sigma holds from 15 m to 150 m, or whether a z-sigma hybrid is indicated.");
 }
 
 /* ---------------- 8. the question ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "WHAT THE STUDY ASKS", "Attribution, not verification", null);
+  titleSlide(s, "RESEARCH QUESTION", "Attribution of amplification", null);
 
   s.addShape(p.ShapeType.roundRect, { x: M, y: 2.05, w: 12.09, h: 1.42,
     fill: { color: TINT }, rectRadius: 0.06 });
@@ -296,21 +296,21 @@ function note(s, txt) {
     { x: M + 0.35, y: 2.28, w: 11.4, h: 1.0, fontSize: 15, italic: true, color: INK,
       fontFace: HEAD, lineSpacing: 21, isTextBox: true, margin: 0 });
 
-  s.addText("Why not the obvious question", { x: M, y: 3.78, w: 5.7, h: 0.32,
+  s.addText("The formulation it replaces", { x: M, y: 3.78, w: 5.7, h: 0.32,
     fontSize: 14, bold: true, color: BLUE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "Whether the model reproduces the observed signal is binary and asymmetric. Affirmed, it confirms what is expected of a mature solver. Denied, it is blamed on the configuration.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
     { text: "It interrogates the instrument rather than the system, and has no constituency beyond modellers.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "It is now a section of the methods, where it belongs.", options: { bullet: true } },
+    { text: "It is relocated to the methods.", options: { bullet: true } },
   ], { x: M, y: 4.16, w: 5.7, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addText("What the prior work already settled", { x: 6.95, y: 3.78, w: 5.7, h: 0.32,
+  s.addText("Prior work to be cleared", { x: 6.95, y: 3.78, w: 5.7, h: 0.32,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "Maltese coastal seiches were modelled in 2007, in a two-dimensional depth-averaged POM, for Mellieħa and St Paul's Bay, forced by a prescribed offshore long wave.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
     { text: "Repeating that at Valletta in three dimensions would be incremental.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "The generation side is untouched, because the prior work imposes the wave rather than producing it. That is the open ground.", options: { bullet: true } },
+    { text: "The generation side is untouched, because the prior work imposes the wave rather than producing it, and it therefore remains unaddressed.", options: { bullet: true } },
   ], { x: 6.95, y: 4.16, w: 5.76, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
@@ -320,7 +320,7 @@ function note(s, txt) {
 /* ---------------- 9. the design ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "EXPERIMENTAL DESIGN", "A parametric sweep, not a hindcast",
+  titleSlide(s, "EXPERIMENTAL DESIGN", "A parametric sweep in place of a hindcast",
     "ERA5 does not resolve the atmospheric gravity waves that trigger the phenomenon. That has been the largest standing risk.");
 
   const steps = [
@@ -339,7 +339,7 @@ function note(s, txt) {
 
   s.addShape(p.ShapeType.roundRect, { x: 8.4, y: 2.5, w: 4.31, h: 3.4,
     fill: { color: MID }, rectRadius: 0.06 });
-  s.addText("Why this matters beyond the study", { x: 8.7, y: 2.72, w: 3.75, h: 0.6,
+  s.addText("Bearing beyond the present study", { x: 8.7, y: 2.72, w: 3.75, h: 0.6,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "A response surface is a property of the geometry. Climate change acts on the distribution of the forcing.\n", options: { breakLine: true } },
@@ -349,13 +349,13 @@ function note(s, txt) {
        fontFace: BODY, lineSpacing: 15.5, isTextBox: true, margin: 0 });
 
   note(s, "The milgħuba floods Msida, at the head of Msida Creek inside Marsamxett, together with Marsaskala, Xemxija, Marsaxlokk and Sliema.");
-  s.addNotes("A sweep of six speeds by eight directions is forty-eight runs, barotropic and uncoupled, therefore cheap.");
+  s.addNotes("A sweep of six speeds by eight directions amounts to forty-eight runs, barotropic and uncoupled, and therefore inexpensive.");
 }
 
 /* ---------------- 10. what to settle ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "WHAT WE NEED FROM THE GROUP", "Six questions, and why each one matters", null);
+  titleSlide(s, "OUTSTANDING QUESTIONS", "Six questions and their bearing on the study", null);
 
   const qs = [
     ["Is there a sea level record inside the Grand Harbour, and at what sampling interval?",
@@ -369,7 +369,7 @@ function note(s, txt) {
     ["What is the levelling datum behind the bathymetry, and how does its zero relate to the tide gauges?",
      "The files declare ellipsoidal heights and the data are orthometric. What remains is the offset against the gauges used for validation."],
     ["Would the group regard the attribution question as a contribution, or as their own intention?",
-     "Better asked now than discovered later."],
+     "Establishing this early avoids a duplication of intent."],
   ];
   qs.forEach((q, i) => {
     const col = i % 2, row = Math.floor(i / 2);
@@ -380,7 +380,7 @@ function note(s, txt) {
     s.addText(q[1], { x: x + 0.62, y: y + 0.5, w: 5.28, h: 0.98, fontSize: 11,
       color: MUTED, fontFace: BODY, lineSpacing: 14.5, isTextBox: true, margin: 0 });
   });
-  s.addNotes("These are the items that change what the study can be. Everything else can be resolved by working.");
+  s.addNotes("These items determine what the study can be. The remainder is resolvable by execution.");
 }
 
 /* ---------------- 11. immediate ---------------- */
@@ -390,13 +390,13 @@ function note(s, txt) {
   s.addShape(p.ShapeType.ellipse, { x: -1.9, y: 4.2, w: 5.2, h: 5.2,
     fill: { color: BLUE, transparency: 60 } });
 
-  s.addText("WHAT HAPPENS NEXT", { x: M, y: 0.7, w: 9, h: 0.3, fontSize: 12,
+  s.addText("IMMEDIATE SEQUENCE", { x: M, y: 0.7, w: 9, h: 0.3, fontSize: 12,
     bold: true, color: ORANGE, charSpacing: 2, fontFace: BODY, isTextBox: true, margin: 0 });
   s.addText("Before the mesh is built", { x: M, y: 1.05, w: 10, h: 0.7, fontSize: 30,
     bold: true, color: WHITE, fontFace: HEAD, isTextBox: true, margin: 0 });
 
   const tl = [
-    ["Late September", "Seiche climatology from the Portomaso and PORTO archives. No model required."],
+    ["Late September", "Seiche climatology from the Portomaso and PORTO archives. No model is required."],
     ["19 October", "Delft3D User Days abstract."],
     ["Early October", "Merged bathymetry over the domain, gaps intersected with the coastline."],
     ["2 to 4 November", "Delft3D User Days at Deltares, with the four configuration questions."],
