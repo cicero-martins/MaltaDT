@@ -2,6 +2,8 @@
 
 *Prepared 24 September 2026 for discussion with the host group. Supersedes the question stated in Section 2 of [malta_valletta_model_plan.md](malta_valletta_model_plan.md), which is retained there as the point of departure.*
 
+*Revised 25 September 2026 following a second literature pass over the material in `reference/`. Two documents found in that pass change the assessment materially. The ARTELIA study commissioned by Infrastructure Malta establishes that the Grand Harbour has been modelled for wind-wave agitation and that a protection scheme is before the planning authorities, which yields the counterfactual proposed in Section 4.4. The host group's own design report for the LIFE RBMP project establishes that harbour flushing at the principal harbours is an institutional objective, which re-weights Section 4.3. Sections 2, 4, 5, 6.1, 8, 9 and 10 are affected.*
+
 ---
 
 ## 1. Classification of the phenomenon
@@ -37,19 +39,51 @@ The prior literature was surveyed after the plan was drafted. The outcome bears 
 
 **Drago, A.F. (2009).** *Sea level variability and the 'Milgħuba' seiche oscillations in the northern coast of Malta, Central Mediterranean.* Physics and Chemistry of the Earth 34, 948–970. The published treatment, drawing on 43 months of densely sampled sea level at Mellieħa Bay between 1993 and 1996. Establishes the band of 0.2 to 2 cph, the masking of the tidal signal, and the interpretation as shelf-scale resonance amplified within the embayments.
 
-**Numerical modelling of coastal seiches in Malta.** Physics and Chemistry of the Earth, 2007, PII S1474706507000551. Authorship to be confirmed, most probably Drago and co-workers. This is the closest prior work. It simulates the generation and propagation of seiche oscillations in two adjacent wide-mouthed embayments of the northern coast, Mellieħa Bay and St Paul's Bay, using a two-dimensional depth-averaged version of the Princeton Ocean Model, and examines their response to **prescribed offshore long-period waves**. It reports that standing oscillations generated cross-shore on the shelf, that is leaky waves, force the extreme oscillations in the embayments more effectively than alongshore-propagating edge waves.
+**Numerical modelling of coastal seiches in Malta.** Physics and Chemistry of the Earth, 2007, PII S1474706507000551. Authorship to be confirmed, most probably Drago and co-workers. This is the closest prior work on the phenomenon. It simulates the generation and propagation of seiche oscillations in two adjacent wide-mouthed embayments of the northern coast, Mellieħa Bay and St Paul's Bay, using a two-dimensional depth-averaged version of the Princeton Ocean Model, and examines their response to **prescribed offshore long-period waves**. It reports that standing oscillations generated cross-shore on the shelf, that is leaky waves, force the extreme oscillations in the embayments more effectively than alongshore-propagating edge waves.
 
-### Implications for the contribution
+**Mazas, F. and Farrugia, C.** *Protecting Valletta's Grand Harbour against adverse wave conditions.* Coastal Engineering Proceedings, paper 154. ARTELIA and Infrastructure Malta. Copy at `reference/`. The Grand Harbour has been modelled, for wind waves. Offshore sea states were hindcast over the Mediterranean from January 1992 to June 2019 from satellite wind and wave measurements and the directional climate off Valletta established at NW 45 per cent, NE 19 per cent, E 15 per cent and SE 20 per cent. A wave disturbance model was then built over the harbour in PHAROS, the Deltares harbour agitation code, and a transfer matrix of 36 period and direction combinations interpolated onto eight analysis areas. The work records that the site is deep at approximately 20 m, steeply sloped and bounded by a highly reflective rocky foreshore including cliffs, so that waves entering the harbour undergo multiple reflections with little dissipation. Section 2.1 treats the protection scheme it defines.
 
-Four implications follow.
+**Drago, A.F. (2018).** *Designing an observing and forecasting system for the Maltese Islands.* Progress report, Action A.7 of LIFE 16 IPE MT 008, prepared for the Energy and Water Agency. Copy at `reference/`. The design document of the host group. It records the modelling infrastructure already in operation, namely the ROSARIO forecasting system built on the Princeton Ocean Model at 1/64° and 1/96°, WAM at 1/8°, a SWAN downscaling to the embayments on a regular grid of 1/500°, and a SHYFEM finite-element implementation on an unstructured mesh covering the Maltese Islands and the Malta Channel as far as the southern Sicilian coast. It states the intention to establish local-scale models **in proximity to and inside the five principal harbours**, lists harbour flushing, siltation and water quality among the process models to be linked to them, names the Deltares suite among the model families to be reviewed for that role, and carries three Deltares staff on its international working group. Section 2.2 treats the consequences.
 
-The **Valletta harbour system has not been modelled**. The published numerical work addresses the northern coast. Airy described the phenomenon in the Grand Harbour in 1878 and it appears not to have received numerical treatment since.
+### 2.1 The protection scheme, and the decision it is before
 
-The prior work is **two-dimensional and depth-averaged**, so the vertical structure and any consequence for the renewal of harbour water remain untreated.
+The scheme defined by ARTELIA for Infrastructure Malta comprises an outer breakwater at the tip of the Sciberras Peninsula to block the most severe waves from the northwest, a detached submerged breakwater along the peninsula to dissipate northeasterly and easterly energy by depth-induced breaking, and two revetments at the foot of the cliffs inside the harbour. Against an operational criterion of 0.3 m the downtime is generally halved. The submerged structure was tested in the wave flume and the outer breakwater in the wave basin at the ARTELIA laboratory, with reflection reduced by between 23 and 74 per cent.
 
-**The prior work already establishes the response of a Maltese embayment to an imposed offshore long wave.** Repeating that exercise at Valletta in three dimensions would be incremental. If the question is how a given basin responds to a long wave arriving from offshore, it has been posed and answered for this coast with a different basin, and the novelty would rest on the basin and the dimensionality alone, which is a narrow basis.
+#### Stage of the works, as far as the public record establishes it
+
+The distinction between what exists and what is proposed matters for how the geometry is treated, and the two are easily conflated in the reporting.
+
+| | Status |
+|---|---|
+| **Existing breakwater, 1910** | Built. Two arms, 370 m from Fort St Elmo and 120 m from Fort Ricasoli. Repaired by Infrastructure Malta in a €1 million programme completed around 2020, covering coping stones, deck slabs and the 2012 steel bridge to Valletta. This is restoration of the historic structure and is unrelated to the protection scheme |
+| **Protection scheme, ARTELIA** | Not built. Announced in February 2025 at €55 million. Reported as an outer breakwater of some 100 m beyond the existing St Elmo arm and a detached submerged breakwater of some 600 m, with revetments inside the harbour |
+| **Grand Harbour Revival Plan** | Public consultation launched February 2026 by the Office of the Prime Minister, a four-phase long-term regeneration of the harbour within which the wave protection sits. Responses closed 19 March 2026 |
+
+The structures are accordingly in design and consultation rather than in execution, and the harbour as this study will represent it is the present one. Whether the scheme has since advanced to a planning application or a permit is not established from the public record consulted on 25 September 2026, and the host group is better placed to say.
+
+Two properties of the scheme bear on the present study. The structures would alter the geometry of the mouth of a basin whose long-wave behaviour and whose exchange with the sea are governed by that mouth. The instrument used to dimension them, a phase-resolving harbour agitation model driven by a matrix of wind-wave periods and directions, computes neither of those quantities, which is a statement about the scope of that instrument and not a criticism of its application.
+
+#### The present geometry of the mouth is more complex than the sizing exercise assumed
+
+The supplied coastline was checked for the 1910 structures. The **St Elmo arm is present** as a detached polygon 378 m long and 58 m wide, separated from the shore by 42 m, which is the span carried by the steel bridge and which is correctly open water for a hydrodynamic model. The measured length agrees with the documented 370 m.
+
+The consequence is that the entrance is not the single 400 m opening used for the Helmholtz estimate in [domain_and_discretisation.md](domain_and_discretisation.md). It is a two-part opening partly closed by the historic breakwater, and the cross-section that governs the pumping mode is correspondingly smaller and differently shaped. The estimate should be recomputed from the mesh once it exists rather than from the distance transform of the water mask. The direction of the correction is toward a longer period, that is toward the observed band, which makes it worth doing rather than deferring.
+
+Whether the 120 m Ricasoli arm is represented was not resolved, since it joins the land at Fort Ricasoli and would appear within the mainland polygon rather than as a detached feature. It is added to the checks to run when the mesh is built.
+
+### 2.2 Implications for the contribution
+
+**The Grand Harbour has been modelled, for wind waves and for agitation.** The claim recorded earlier, that the harbour system had not been modelled, was drawn before the ARTELIA work was found and is corrected here. What remains untreated is the circulation of the harbour, its renewal, and its response in the long-wave band.
+
+The prior work on the phenomenon is **two-dimensional and depth-averaged**, so the vertical structure and any consequence for the renewal of harbour water remain untreated.
+
+**The 2007 study already establishes the response of a Maltese embayment to an imposed offshore long wave.** A repetition at Valletta in three dimensions would be incremental. If the question is how a given basin responds to a long wave arriving from offshore, it has been posed and answered for this coast with a different basin, and the novelty would rest on the basin and the dimensionality alone, which is a narrow basis.
 
 **The generation side remains unaddressed.** The prior work prescribes the offshore wave rather than producing it, so the coupling between the atmospheric disturbance and the shelf, and the partition of amplification between the shelf, the approach and the basin, are open for Malta.
+
+**The renewal question is an institutional objective of the host group rather than a fallback.** Harbour flushing at the five principal harbours appears in the group's own design document as a target of the local-scale modelling system, in support of Water Framework Directive and Marine Strategy Framework Directive obligations, with the Deltares suite named among the candidate tools. The question recorded in Section 4.3 as a consequential fallback is accordingly re-weighted in Section 4.4.
+
+**The low dissipation of the basin is a physical finding available from the ARTELIA work.** A basin bounded by reflective rock and masonry dissipates little of what enters it, which raises the quality factor of any resonance it supports. The forced-oscillator estimate in [domain_and_discretisation.md](domain_and_discretisation.md), computed without damping, is therefore less conservative than the omission of damping would ordinarily make it.
 
 ---
 
@@ -85,7 +119,46 @@ The deliverable is a map of exposure by inlet and by quay, which is the form in 
 
 > In a microtidal harbour without appreciable tide or freshwater input, what renews the water, and how much of the exchange driven by long waves constitutes genuine renewal rather than reversible oscillation?
 
-Alternating currents displace water without necessarily exchanging it. The distinction is the classical return-flow problem and it is not resolvable without a model. The question carries independent value given the status of both harbours as heavily modified water bodies under the Water Framework Directive and the contamination documented by Romeo et al. (2015), and it exercises the three-dimensional and Lagrangian components of the framework which the prior two-dimensional work could not.
+Alternating currents displace water without necessarily exchanging it. The distinction is the classical return-flow problem and it is not resolvable without a model. The question carries independent value given the status of both harbours as heavily modified water bodies under the Water Framework Directive and the contamination documented by Romeo et al. (2015), and it exercises the three-dimensional and Lagrangian components of the framework which the prior two-dimensional work could not. Section 2.2 records that harbour flushing is a stated objective of the host group's own design for a national modelling system.
+
+### 4.4 A counterfactual on the geometry of the mouth
+
+The material in Section 2.1 admits a question that was not available when Sections 4.1 to 4.3 were drafted.
+
+> How sensitive are the long-wave response and the renewal of the Grand Harbour to the geometry of its mouth?
+
+**The question is posed as an academic exercise on the sensitivity of the basin, not as an assessment of any particular design.** No part of this work is intended to bear on the project being carried forward by Infrastructure Malta, and it is not framed as a review of that project or of the engineering behind it. The published scheme enters only as a realistic magnitude for the perturbation, in place of an arbitrary one, and the result is a response curve over a range of restrictions rather than a verdict on a configuration. Should the findings prove informative, whether and how they are communicated further is a matter for the host group rather than for this study, and it belongs to a later stage.
+
+With that framing the question has properties the others do not.
+
+**It is a counterfactual and therefore unanswerable by observation in principle.** A basin can be gauged only in the geometry it has. The sensitivity of its response to a geometry it does not have requires a model, which is the criterion set out in Section 3.
+
+**It is not a repetition of the ARTELIA work.** A phase-resolving agitation model driven by a matrix of wind-wave periods and directions and a three-dimensional circulation model in the long-wave band compute different quantities. The first is the established treatment of harbour agitation and this study does not attempt it.
+
+**It requires the answer to Section 4.1 first.** The partition of amplification between shelf, approach and basin has to be established before any statement can be made about what a change at the mouth does to it. The two questions compose rather than compete, and together they form a sequence with a beginning and a consequence.
+
+**It generalises beyond the site.** The relation between the cross-section of a harbour mouth, its pumping mode and its renewal is a property of the class of basin rather than of Valletta, which suits the transferability argument of Section 7. Expressed as a response curve the result applies to any engineered harbour of comparable aspect.
+
+#### Scoping of the magnitude
+
+`scripts/estimate_entrance_restriction.py` computes the sensitivity of the pumping mode to a restriction of the mouth, ahead of any geometry. The period scales as the inverse square root of the open cross-section, so the shift is independent of basin area and of the length of the connecting channel.
+
+| Restriction of the mouth section | Shift in the pumping period | Grand Harbour period |
+|---|---|---|
+| none | – | 12.4 to 17.5 min |
+| 25 per cent | +15.5 % | 14.3 to 20.2 min |
+| 50 per cent | +41.4 % | 17.5 to 24.7 min |
+| 66 per cent | +71.5 % | 21.2 to 30.0 min |
+
+Two readings follow, and they point in opposite directions.
+
+**The scheme does not plausibly bring the harbour into the observed band.** Reaching 2 cph would require the mouth to lose between 66 and 83 per cent of its section, which exceeds any restriction the reported dimensions suggest. The conclusion of the sizing exercise, that the harbours respond rather than resonate, is not overturned by the scheme.
+
+**The displacement is nonetheless large by the standards of the other perturbation considered.** Section 6.3 computes that a metre of sea level rise displaces these same modes by between one and four per cent. A restriction of a quarter displaces them four times as far, and a restriction of a half twelve times as far. The geometry of the mouth is the dominant control on the mode, and it is the quantity the scheme changes.
+
+The effect on exchange is separate from the effect on the mode, and it is the larger of the two. The volume passing the mouth per cycle scales with the open section directly rather than with its square root, and residence time responds accordingly. That is the quantity the host group's design document names, and it is not a resonance question at all.
+
+**These figures are a scoping calculation and not a result.** They rest on an idealisation of the basin as a Helmholtz resonator and on a mouth cross-section that Section 2.1 shows to be simplified. Their function is to establish that the sensitivity is large enough to be worth computing properly, which they do. The restriction is swept as a parameter and no particular design is represented.
 
 ---
 
@@ -101,6 +174,8 @@ The role of the observations is inverted. They cease to be the forcing and becom
 
 **Validation is relocated to the methods.** Whether the model reproduces observed sea level becomes a section of the methods rather than the question of the paper.
 
+**The counterfactual of Section 4.4 is a second pass over the same sweep.** The bathymetry and the land mask are modified to carry the proposed structures and the sweep is repeated, so that the response surface is computed twice and the difference between the two surfaces is the answer. The cost is a doubling of the barotropic runs, which are the inexpensive part of the design, together with a small number of paired three-dimensional runs for the renewal comparison. No new forcing, no new validation and no new configuration is required, which is why the counterfactual is affordable within the period.
+
 ---
 
 ## 6. Climate change as a bounded discussion element
@@ -112,6 +187,8 @@ The phenomenon is recurrent and damaging, and whether it intensifies under a cha
 The hazard is established in the public record. Flooding of low-lying coastal streets occurs at Marsaskala, Xemxija, Marsaxlokk and at Msida in the vicinity of the Workers' Memorial, reported as occurring in the absence of rain and under otherwise settled weather, which is the signature of a meteotsunami rather than of a storm surge. One reported event carried a vehicle into the sea. Storm Harry of January 2026 inundated waterfronts at Marsascala, Sliema and Birżebbuġa, and the host group published an analysis of that event drawn from its own monitoring network.
 
 **Msida lies at the head of Msida Creek, inside Marsamxett and therefore inside the proposed domain.** The risk recorded in Section 8, that the hazard framing might lack documented consequence, is accordingly reduced. Sliema likewise lies within Marsamxett.
+
+Damage inside the commercial port is documented separately, and it is of a different kind. Mazas and Farrugia record that the storms of February 2019 from the northeast and February 2023 from the east caused significant damage in the port, with significant wave heights reaching 7 to 8 m in the severe directional sectors. Those are wind-wave events and not meteotsunamis, and the two must not be conflated. The distinction sharpens rather than weakens the framing. The harbour has a documented wind-wave problem for which a remedy is before the planning authorities, and a separately documented long-wave problem against which that remedy has not been evaluated.
 
 ### 6.2 Two pathways, unequally tractable
 
@@ -170,9 +247,17 @@ The transferability claim is strengthened. It ceases to be an assertion that the
 
 ## 8. Risks
 
-**The hazard framing requires documented consequence, and is partly supported.** Section 6.1 records flooding at Msida, inside the proposed domain, together with events at Marsaskala, Xemxija, Marsaxlokk and Sliema. What remains unestablished is damage within the commercial port specifically, such as mooring failures, interruption of cargo operations or range action on berthed vessels, which is held by Transport Malta and the terminals rather than in the public record. Should it prove absent, the exposure framing rests on the low-lying quays and the question in Section 4.3 gains weight.
+**The hazard framing requires documented consequence, and is now supported.** Section 6.1 records flooding at Msida, inside the proposed domain, together with events at Marsaskala, Xemxija, Marsaxlokk and Sliema, and records significant damage within the port from the storms of February 2019 and February 2023. The second of those is wind-wave damage, so what remains unestablished is specifically long-wave consequence inside the commercial port, such as mooring failure, interruption of cargo operations or range action on berthed vessels. That record is held by Transport Malta and the terminals rather than in the public domain.
 
-**The prior work may extend beyond the published record.** Section 2 rests on a literature search rather than on consultation with its authors, who are members of the host group. The first action is to establish what exists, including unpublished material and student work.
+**The exact geometry of the proposed structures is not obtainable from the public record, and the question is framed so as not to require it.** The published paper carries a plan at figure scale and the press reports approximate lengths, neither of which would be sufficient to modify a bathymetry. Section 4.4 is accordingly posed as a sensitivity over a range of restrictions rather than as a simulation of a specific design, which is the weaker form of the question in one respect and the more general form in another, since a response curve transfers to other basins while a single configuration does not.
+
+**A result about the geometry of a harbour mouth may be read as a comment on a public project.** That is not the intention and the text should not permit the reading. Two measures follow. The results are reported as a response curve over the restriction of the mouth, with any particular scheme identified at most as one point on that curve and named only where it is unavoidable. Any contact with Infrastructure Malta, should the work later warrant it, is a matter for the host group and belongs to a stage after the results exist rather than to the design of the study.
+
+**The prior work may extend beyond the published record.** Section 2 rests on a literature search rather than on consultation with its authors, who are members of the host group. The literature search has already been shown to under-report, since the ARTELIA work and the group's own design document were both found only after the first assessment was written. The first action is to establish what exists, including unpublished material, consultancy reports and student work.
+
+**The claims must be bounded against what the host group already operates.** Section 2 records a SHYFEM implementation covering the Maltese Islands and the Malta Channel to the southern Sicilian coast, reported as three-dimensional, running daily to a four-day forecast, grading from a few kilometres to **50 m** at the coast, and coupled to a Lagrangian particle-tracking component used for jellyfish trajectories and for water quality within a marine protected area.
+
+The present study is an independent exercise tied to the research period rather than an alternative to that system, so the risk is not one of competition but of overstatement. Nothing here should be claimed as a capability the group lacks. What distinguishes the work is resolution inside the basins, between two and three times finer, coupling to a spectral wave model, and a frequency band the operational system is not configured to resolve. A Lagrangian capability already exists in the group and the renewal question is positioned as a difference in resolution, band and coupling rather than as the provision of a missing tool.
 
 **A Grand Harbour sea level record probably exists.** Drago is reported to have maintained installations at Mellieħa Bay, Portomaso, Marsaxlokk and the Grand Harbour. If a harbour record exists at adequate sampling, whether the Valletta basins carry energy at their own 12 to 18 minute mode can be established from the archive rather than assumed. This would also correct an error in the earlier analysis, which compared a computation for Valletta against a band observed at Mellieħa.
 
@@ -210,7 +295,7 @@ Ordered by function.
 
 ### 9.4 Malta
 
-The three works listed in Section 2.
+The five works listed in Section 2. Copies of the last three are held in `reference/`.
 
 ### 9.5 Renewal and residence time
 
@@ -218,13 +303,32 @@ The three works listed in Section 2.
 
 **Spatial variability analysis of renewal time in harbour environments using a Lagrangian model.** Journal of Marine Science and Engineering 13(2), 341 (2025).
 
+### 9.6 Long waves in this basin, and the configuration they require
+
+**Laksono, F.A.T., Mishra, M., Fadlin and Kovács, J. (2026).** *Exploring the tsunami generation potential of major faults in the Sicilian Channel using 3D numerical modeling.* Ocean Modelling 199, 102625. Open access. Copy at `reference/`. Delft3D-FLOW applied to the generation, propagation and inundation of seismic tsunamis from the Gela Nappe Thrust, the Sciacca strike-slip fault and the Malta Graben Normal Fault, on a domain of approximately 175 by 165 km² over the same channel, with inundation carried into HEC-RAS on a 2 m grid.
+
+The work is a methodological precedent rather than a source on the milgħuba, and it carries three things of direct use. It establishes Delft3D as the tool of record for long-wave propagation in this basin. It states that **the Riemann boundary condition is applied to prevent artificial reflection at the model boundaries**, which is the requirement already recorded in `CLAUDE.md` and which now has a citation in the same channel. It cites Proudman resonance in connection with the atmospheric pressure waves of the 2022 Hunga Tonga eruption, which places the mechanism of Section 1 within the regional tsunami literature rather than outside it.
+
+The paper also indicates that the domain proposed here supports a second hazard. The Malta Graben Normal Fault lies within it, and the seismic case shares the configuration, the bathymetry and the boundary treatment with the meteorological one. That is recorded as a possible continuation and is deliberately kept outside the present scope.
+
+### 9.7 The site as an engineering object
+
+**Mazas, F. and Farrugia, C.**, as listed in Section 2, together with the ARTELIA laboratory's own account of the wave disturbance study.
+
+**Balzan, M.V. et al. (2022).** *Assessing nature-based solutions uptake in a Mediterranean climate: insights from the case-study of Malta.* Nature-Based Solutions 2, 100029. Copy at `reference/`. The paper is a governance and stakeholder analysis rather than a hydrodynamic source, drawing on 96 implemented cases and a SWOT analysis conducted under the Horizon 2020 ReNature project. Its use here is as a map of who is engaged with nature-based approaches in Malta and through which institutions, which bears on the framing of the WETWISE deliverable rather than on the physics. It also identifies the co-design of solutions with communities as a recurring barrier, which is relevant to how a modelled result is presented to a port constituency.
+
 ---
 
 ## 10. Questions for the host group
 
-1. **Does a sea level record exist for the Grand Harbour, and at what sampling interval?** Drago is reported to have maintained an installation there. A spectrum computed from it would establish whether the Valletta basins carry energy at their own 12 to 18 minute mode, which the present analysis can only infer.
-2. **What is the full extent of prior work on the milgħuba**, including unpublished material, student dissertations and any treatment of the southern and eastern coasts.
-3. **Is there documented damage or operational disruption** attributable to long waves in the Grand Harbour, held by Transport Malta, the port operators or the terminals.
-4. **Would the group regard the attribution question of Section 4.1 as a contribution**, or does it lie closer to their own intentions than the published record indicates.
-5. **Is the analysis of Storm Harry, January 2026, available**, and would that event serve as the case study for validation. The host group published an account of it from its own monitoring network.
-6. **Has any assessment been made of the milgħuba under a changing climate for Malta**, whether through a synoptic index or otherwise. Section 6 treats the matter as a discussion element for want of such an assessment.
+Ordered by how much the answer changes the study.
+
+1. **Would the group consider the sensitivity exercise of Section 4.4 appropriate**, given that the geometry of the Grand Harbour mouth is the subject of an active public project. The exercise is framed as a response curve on the class of basin and not as an assessment of that project, and the question concerns whether that framing is one the group is comfortable with rather than whether the physics is sound.
+2. **Is there anything in the ROSARIO-SHYFEM configuration the group would wish reflected here**, such as its treatment of the open boundary or its bathymetry inside the harbours. The present work is independent of that system and the question is one of avoiding avoidable divergence rather than of scope.
+4. **Does a sea level record exist for the Grand Harbour, and at what sampling interval?** Drago is reported to have maintained an installation there. The 2018 design document records a permanent station at PortoMaso with two further stations then planned at Marsaxlokk and Mġarr Harbour, and none inside the Valletta basins. A spectrum computed from a harbour record would establish whether those basins carry energy at their own 12 to 18 minute mode, which the present analysis can only infer.
+5. **What is the full extent of prior work on the milgħuba**, including unpublished material, consultancy reports, student dissertations and any treatment of the southern and eastern coasts.
+6. **Is there documented damage or operational disruption attributable specifically to long waves** in the Grand Harbour, as distinct from the wind-wave damage of February 2019 and February 2023 already recorded, held by Transport Malta, the port operators or the terminals.
+7. **Would the group regard the attribution question of Section 4.1 as a contribution**, or does it lie closer to their own intentions than the published record indicates.
+8. **Is the analysis of Storm Harry, January 2026, available**, and would that event serve as the case study for validation. The host group published an account of it from its own monitoring network.
+9. **Has any assessment been made of the milgħuba under a changing climate for Malta**, whether through a synoptic index or otherwise. Section 6 treats the matter as a discussion element for want of such an assessment.
+10. **Do the PORTO stations at Elmo and Kordin carry pressure at a sampling interval usable in the band**, since both lie on the Grand Harbour and would otherwise be the closest atmospheric record to the basin under study.

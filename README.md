@@ -23,8 +23,9 @@ The governing question is whether the framework, forced by observed atmospheric 
 | Observational basis | Identified. BLUE buoy, PORTO network, HF radar, Portomaso tide gauge. Access terms pending |
 | Field campaign | Not planned. The study proceeds on existing observations |
 | Delft mission | Delft3D User Days 2 to 4 November, inside block B3. Abstract due 19 October. Costs B3 four working days |
-| Research question | Reframed 24 September from model verification to attribution of amplification. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
-| Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
+| Research question | Reframed 24 September from model verification to attribution of amplification. Extended 25 September with a sensitivity on the geometry of the harbour mouth. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
+| Literature | Second pass completed 25 September over the material in `reference/`. Four items added, two of which change the assessment: the ARTELIA wave study of the Grand Harbour and the host group's own 2018 design report |
+| Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. The Helmholtz estimate is to be recomputed from the mesh, since the entrance is partly closed by the 1910 breakwater. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
 | Mesh | Not started. Scheduled for late October |
 | Model | Not started |
 | Seiche climatology | Not started. Scheduled for late September, from the Portomaso and PORTO archives |
@@ -40,7 +41,7 @@ scripts/           reusable tooling
 notebooks/         pipelines, numbered by role
 model/             model configurations and runs
 figures/           generated figures
-reference/         third-party material
+reference/         third-party material, including the four PDFs of the 25 September pass
 ```
 
 ## Documents
@@ -59,6 +60,8 @@ reference/         third-party material
 `scripts/build_merged_bathymetry.py` combines the LiDAR and sonar components of the bathymetric dataset and writes the merged field in its native and geographic coordinate systems. `scripts/prepare_coastline.py` brings the coastline onto the working coordinate system and reports its registration against that field.
 
 `scripts/domain_design_estimate.py` sizes the domain, the resolution and the layering from the bathymetry, and `scripts/check_register.py` flags departures from the register the project writes in.
+
+`scripts/estimate_entrance_restriction.py` sweeps a restriction of the harbour mouth and reports what it does to the pumping mode, as an academic sensitivity on the class of basin rather than as an assessment of any design.
 
 `scripts/probe_emodnet_bathymetry.py` interrogates the EMODnet Bathymetry services over an arbitrary bounding box, reporting grid resolution, wet-cell coverage and the CDI provenance records actually used by the digital terrain model. It was written to establish whether the public product was adequate for this site, and it is applicable to any coastal domain.
 

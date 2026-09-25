@@ -41,7 +41,9 @@ Two caveats remain. The declared 44 m is a floor on co-registration even though 
 
 **Vertical datum. The files declare ETRS89 ellipsoidal and the data are orthometric.** Both `prj.adf` files carry `Zunits METERS /* ETRS_1989 - VCS# = 115701` and the `peXml` WKT carries the matching `VERTCS`. That declaration is a mislabel. Control points at Valletta and Floriana, and a median of +0.00 m sampled along the coastline, establish that the values are heights above a surface approximating mean sea level. **No geoid correction is to be applied.** What remains open is the relation between this zero and the tide gauge zeros used for validation.
 
-**The open boundary must be weakly reflective (Riemann), not a prescribed water level.** A prescribed level reflects outgoing long waves back into the domain and contaminates the seiche signal while producing plausible output. This is the principal configuration departure from StagnoneDT. A synthetic long-wave pulse test is required before any production run.
+**The open boundary must be weakly reflective (Riemann), not a prescribed water level.** A prescribed level reflects outgoing long waves back into the domain and contaminates the seiche signal while producing plausible output. This is the principal configuration departure from StagnoneDT. A synthetic long-wave pulse test is required before any production run. Precedent in the same basin: Laksono et al. (2026), Delft3D over the Sicilian Channel, applies Riemann for exactly this reason.
+
+**The Grand Harbour entrance is not a single 400 m opening.** The supplied coastline carries the 1910 St Elmo breakwater as a detached polygon, 378 m long, 58 m wide, 42 m from shore, the gap being the bridge span and correctly open water. The Helmholtz estimate in the sizing document assumed an unobstructed mouth and must be recomputed from the mesh. The correction lengthens the period, toward the observed band. Whether the 120 m Ricasoli arm is present is unresolved, since it joins the land and would sit inside the mainland polygon.
 
 **History output at approximately 1 minute.** The milgħuba seiche band is 0.2 to 2 cph. Coarser output aliases the target signal. Map output may remain coarse.
 
@@ -53,13 +55,28 @@ Two caveats remain. The declared 44 m is a floor on co-registration even though 
 
 | Asset | Sampling | Role |
 |---|---|---|
-| BLUE buoy, 3.7 km off the Grand Harbour, since 4 Jul 2025 | 10 min | Offshore validation. Waves, wind, currents, T, S and biogeochemistry |
+| BLUE buoy, 3.7 km off the Grand Harbour, since 4 Jul 2025 | 10 min | Offshore validation. Waves, wind, currents, T, S and biogeochemistry. The **only** direct wave observation |
 | PORTO network, 7 coastal meteo stations | 1 min | Atmospheric forcing, including the pressure signature of seiche events |
 | PORTO sea level stations (4) | to be confirmed | Coastal sea level. Sampling interval determines whether the seiche band is resolved |
-| HF radar, 4 stations, Malta Channel | 1 h, 3 km | Surface current validation |
+| HF radar, 4 stations, Malta Channel | 1 h, 3 km | Surface current validation. Its wave product is derived, not measured, so it is a cross-check and not a reference |
 | Portomaso tide gauge, since 2001 | real time | Long record for seiche climatology |
 
+**The PORTO stations are Mġarr, Ċirkewwa, Qammieħ, Elmo, Kordin, Delimara and Marsaxlokk.** Elmo and Kordin lie on the Grand Harbour, at the entrance and on the southern shore, and are therefore the closest atmospheric record to the basin under study. Station map in Drago (2018), `reference/`.
+
+**No sea level station lies inside the Valletta basins**, and none appears in the group's 2018 network design, which carries PortoMaso as built with Marsaxlokk and Mġarr then planned. The interior gap is a property of the network rather than of what has been published.
+
 Portal: `ocean.mt/bluedata`. Model output is to be integrated into this existing portal rather than served through a second one.
+
+## What the host group already operates
+
+From Drago (2018), Action A.7 of LIFE 16 IPE MT 008, in `reference/`. **This project is an independent exercise for the research period, not an alternative to any of it.** The purpose of recording it is to keep claims correctly bounded.
+
+- **ROSARIO**, Princeton Ocean Model, 1/64° and 1/96°, nested into CMEMS
+- **WAM** at 1/8°; **SWAN** downscaled to the embayments at **1/500°**, about 200 m
+- **ROSARIO-SHYFEM**, unstructured, 3D, operational to a 4-day forecast, grading from a few km to **50 m** at the coast, over the Maltese Islands and the Malta Channel to southern Sicily, with a Lagrangian particle-tracking component
+- The group derives its boundary conditions from **CMEMS**, which is what this project does too
+
+The design report asks for a **relocatable model setup** for ad hoc local domains and names harbour flushing at the five principal harbours among its process-model targets, with the Deltares suite among the families to review. Both bear directly on the framework-transfer argument.
 
 ## Inherited from StagnoneDT
 
