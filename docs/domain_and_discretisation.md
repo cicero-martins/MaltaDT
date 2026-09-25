@@ -75,6 +75,10 @@ Two objections could overturn the reasoning above, and both were tested.
 
 **The quarter-wave formula may be the wrong idealisation.** A basin connected to the sea by a mouth that is narrow relative to its own width behaves as a Helmholtz resonator rather than as an open pipe, and a Helmholtz mode is the lower of the two. Were the Grand Harbour such a resonator its period could fall into the observed band and the interpretation would reverse. Evaluating T = 2π√(L_c A / g a) for a mouth 400 m wide and 15 m deep over a channel length of 500 to 1000 m returns 12.4 to 17.5 minutes, and for Marsamxett 13.3 to 17.8 minutes. The two idealisations bracket the same answer, so the conclusion does not depend on the choice.
 
+*Amended 25 September 2026.* The mouth is not a single 400 m opening. The supplied coastline carries the 1910 St Elmo breakwater as a detached polygon 378 m long and 58 m wide, separated from the shore by 42 m, the span carried by the steel bridge and correctly open water for a model. The measurement agrees with the documented arm length of 370 m. The entrance is therefore a two-part opening partly closed by the historic structure, and the cross-section governing the pumping mode is smaller and differently shaped than the figure used above.
+
+The correction acts to lengthen the period, that is toward the observed band, so it is not conservative and should be made rather than deferred. It is to be recomputed from the mesh once that exists, since the distance transform of the water mask reports the width of the waterway rather than the open section of the entrance. Whether the 120 m Ricasoli arm is represented was not resolved, since it joins the land and would fall within the mainland polygon rather than appearing as a detached feature. `scripts/estimate_entrance_restriction.py` gives the sensitivity of the mode to the cross-section, where a reduction of a quarter lengthens the period by 15 per cent.
+
 **The harbours might still be excited appreciably below their own frequency.** Treating a basin as a forced oscillator without damping, the amplification of the response relative to the imposed sea level is 1/|1 − (ω/ω₀)²|.
 
 | Forcing | ω/ω₀ | Amplification |
@@ -201,7 +205,11 @@ Wave validation therefore rests on one offshore point. That is a limitation to s
 
 Arrangement B becomes necessary only if wave penetration into the harbours becomes a question in its own right. **Should it do so, SWAN is in any case the wrong instrument.** Diffraction past a breakwater is represented only approximately in a phase-averaged spectral model, and harbour agitation is conventionally treated with a mild-slope or Boussinesq formulation. That limitation should be stated rather than resolved by refinement.
 
-**On coupling.** SWAN is not required for the seiche experiments, and its omission roughly halves the cost of the long runs needed for a climatology. It is required for the storm case study and for validation against the wave record at BLUE and the HF radar. The recommendation is to run uncoupled for the seiche work and coupled for the events.
+**On coupling.** SWAN is not required for the seiche experiments, and its omission roughly halves the cost of the long runs needed for a climatology. It is required for the storm case study and for comparison against the wave record at BLUE. The recommendation is to run uncoupled for the seiche work and coupled for the events.
+
+**The proposed nest agrees with the host group's own downscaling.** Drago (2018) records that the group downscales its wave forecast to the Maltese embayments on a regular SWAN grid of 1/500°, which is approximately 200 m. Arrangement C proposes 250 m, arrived at independently from the measured width of the harbour entrances. The agreement supports the choice, and it indicates that a finer wave grid has not been judged necessary by those who work on this coast.
+
+**The directional climate at the site is now available.** Mazas and Farrugia report the wave sectors off Valletta as NW 45 per cent, NE 19 per cent, E 15 per cent and SE 20 per cent, from sea states hindcast over the Mediterranean between January 1992 and June 2019. The northwesterly sector governs operating conditions and the northeasterly and easterly sectors carry the severe storms, with significant wave heights reaching 7 to 8 m. This constrains the selection of the storm case study and it indicates which boundary sectors the wave nest must represent well.
 
 ---
 
