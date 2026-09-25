@@ -288,33 +288,34 @@ function note(s, txt) {
 /* ---------------- 8. the question ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "RESEARCH QUESTION", "Attribution of amplification", null);
+  titleSlide(s, "RESEARCH QUESTION", "A proposed question, for the group to judge",
+    "Drafted this week and put to the group before it is committed to.");
 
-  s.addShape(p.ShapeType.roundRect, { x: M, y: 2.05, w: 12.09, h: 1.42,
+  s.addShape(p.ShapeType.roundRect, { x: M, y: 2.34, w: 12.09, h: 1.42,
     fill: { color: TINT }, rectRadius: 0.06 });
   s.addText("Of the amplification between the open sea and the heads of the Valletta harbours, how is it partitioned between Proudman resonance over the plateau, shoaling on the approach, and resonance of the basins themselves, and which atmospheric disturbance speeds and directions maximise that chain?",
-    { x: M + 0.35, y: 2.28, w: 11.4, h: 1.0, fontSize: 15, italic: true, color: INK,
+    { x: M + 0.35, y: 2.57, w: 11.4, h: 1.0, fontSize: 15, italic: true, color: INK,
       fontFace: HEAD, lineSpacing: 21, isTextBox: true, margin: 0 });
 
-  s.addText("The formulation it replaces", { x: M, y: 3.78, w: 5.7, h: 0.32,
+  s.addText("Basis for the formulation", { x: M, y: 4.07, w: 5.7, h: 0.32,
     fontSize: 14, bold: true, color: BLUE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
-    { text: "Whether the model reproduces the observed signal admits a binary and asymmetric answer. An affirmative result confirms what is expected of a mature solver, and a negative result is attributed to the configuration rather than to the physics.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "The formulation interrogates the instrument rather than the system, and its answer concerns no constituency beyond the modelling community.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "It is accordingly relocated to the methods.", options: { bullet: true } },
-  ], { x: M, y: 4.16, w: 5.7, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
+    { text: "It is framed so that answering it requires a model. No arrangement of gauges separates the three stages of amplification from one another.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+    { text: "It is framed so that it does not repeat the prior work, which treats the response of a basin to a wave already present at its boundary.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+    { text: "Should the group judge the standing of that prior work differently, the formulation changes with it.", options: { bullet: true } },
+  ], { x: M, y: 4.45, w: 5.7, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addText("Prior work the study must clear", { x: 6.95, y: 3.78, w: 5.7, h: 0.32,
+  s.addText("Prior work the study must clear", { x: 6.95, y: 4.07, w: 5.7, h: 0.32,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "Maltese coastal seiches were modelled in 2007, in a two-dimensional depth-averaged POM, for Mellieħa and St Paul's Bay, forced by a prescribed offshore long wave.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
     { text: "A repetition at Valletta in three dimensions would be incremental.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
     { text: "The generation side is untreated, since the prior work imposes the offshore wave rather than producing it.", options: { bullet: true } },
-  ], { x: 6.95, y: 4.16, w: 5.76, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
+  ], { x: 6.95, y: 4.45, w: 5.76, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addNotes("The applied companion is a map of exposure by inlet and quay. The fallback, with independent value, is harbour renewal under the Water Framework Directive.");
+  s.addNotes("The question is a proposal rather than a decision. Whether the group has work of its own planned on the generation side, and how the effort should be divided if so, is worth putting directly. The applied companion is a map of exposure by inlet and quay, and the fallback, with independent value, is harbour renewal under the Water Framework Directive.");
 }
 
 /* ---------------- 9. the design ---------------- */
@@ -360,16 +361,16 @@ function note(s, txt) {
   const qs = [
     ["Is there a sea level record inside the Grand Harbour, and at what sampling interval?",
      "A spectrum would establish whether the basins carry energy near 17 minutes. The 0.2 to 2 cph band is observed at Mellieħa, on another coast, so the present analysis can only infer the Valletta response."],
-    ["What is the full extent of prior work on the milgħuba, published or not?",
-     "The contribution rests on the generation side being unaddressed. That claim derives from a literature search rather than from consultation with its authors."],
+    ["Has the generation of the wave been modelled, or only its effect on a basin?",
+     "The 2007 study imposes the long wave at the offshore boundary and computes the response. Modelling how the atmosphere produces that wave over the shelf is what this study proposes. Whether it is genuinely untouched is known only from a literature search."],
     ["What is the sampling interval of the PORTO sea level stations?",
      "The seiche band is 0.2 to 2 cph. At an interval coarser than one minute the model has no observational target within its own frequency range."],
     ["Is there documented damage or disruption inside the commercial port?",
      "Flooding is documented at Msida and elsewhere. Records of mooring failure or interrupted operations would be held by Transport Malta and the terminals."],
     ["What is the levelling datum behind the bathymetry, and how does its zero relate to the tide gauges?",
      "The files declare ellipsoidal heights while the data are orthometric. What remains to be established is the offset against the gauges used for validation."],
-    ["Would the group regard the attribution question as a contribution, or as their own intention?",
-     "Establishing this early avoids a duplication of intent."],
+    ["Is there any wave record beyond the BLUE buoy?",
+     "Wave validation presently rests on a single point 3.7 km offshore. The radar reports a derived product whose own accuracy was assessed against models, so it serves as a cross-check rather than a reference."],
   ];
   qs.forEach((q, i) => {
     const col = i % 2, row = Math.floor(i / 2);
@@ -380,7 +381,7 @@ function note(s, txt) {
     s.addText(q[1], { x: x + 0.62, y: y + 0.5, w: 5.28, h: 0.98, fontSize: 11,
       color: MUTED, fontFace: BODY, lineSpacing: 14.5, isTextBox: true, margin: 0 });
   });
-  s.addNotes("These items determine what the study can be. The remainder is resolvable by execution.");
+  s.addNotes("These items determine what the study can be, and the remainder is resolvable by execution. The question of whether the group has its own intentions on the generation side belongs with the preceding slide rather than here.");
 }
 
 /* ---------------- 11. immediate ---------------- */
