@@ -63,7 +63,19 @@ Two caveats remain. The declared 44 m is a floor on co-registration even though 
 
 **The PORTO stations are Mġarr, Ċirkewwa, Qammieħ, Elmo, Kordin, Delimara and Marsaxlokk.** Elmo and Kordin lie on the Grand Harbour, at the entrance and on the southern shore, and are therefore the closest atmospheric record to the basin under study. Station map in Drago (2018), `reference/`.
 
-**No sea level station lies inside the Valletta basins**, and none appears in the group's 2018 network design, which carries PortoMaso as built with Marsaxlokk and Mġarr then planned. The interior gap is a property of the network rather than of what has been published.
+**A sea level station does lie inside the Grand Harbour: Senglea.** An IDSL radar gauge deployed June 2021, transmitting at **5 s** to the University of Malta and to the JRC TAD server, with sea-state images every 15 min. Senglea sits on the peninsula between Dockyard Creek and French Creek, well inside the basin. The 2018 design report predates it, which is why that document shows no station in Valletta, and an earlier statement here that none existed was drawn from it and is withdrawn.
+
+| Sea level station | From | Sampling | Position |
+|---|---|---|---|
+| **Senglea**, IDSL | Jun 2021 | 5 s | **Inside the Grand Harbour** |
+| Delimara, IDSL | Mar 2021 | 5 s | Southeast coast |
+| Marsaxlokk breakwater, Radac WaveGuide | Mar 2021 | 10 Hz | Marsaxlokk |
+| Portomaso, MedGLOSS | Feb 2001 | real time | St Julian's, outside both basins |
+| Mellieħa Bay | 1993 to 2001 | historical | The series behind Drago (2009) |
+
+Four current stations, matching the seven meteo and four sea level stations the group reports. PORTO acquires at **one-minute** intervals. Senglea and Portomaso give an inside and outside pair for the Grand Harbour, and 5 s over-resolves the 0.2 to 2 cph band by a wide margin. The JRC TAD route is the one `StagnoneDT/scripts/download_marettimo_wl_long.py` already uses for device 658; the Senglea device id is not yet established.
+
+The interior gap that remains is **currents and stratification**, not sea level. An entry here listing Ċirkewwa as an IDSL station is not corroborated by the Copernicus review and is to be checked.
 
 Portal: `ocean.mt/bluedata`. Model output is to be integrated into this existing portal rather than served through a second one.
 

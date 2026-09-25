@@ -223,7 +223,7 @@ function note(s, txt) {
        fontFace: BODY, lineSpacing: 15, isTextBox: true, margin: 0 });
 
   note(s, "A Helmholtz idealisation returns 12 to 18 minutes likewise. The 1910 breakwater partly closes the entrance, which lengthens the period, so the figure awaits the mesh.");
-  s.addNotes("The estimate was tested against its two plausible failures, the Helmholtz idealisation and excitation below resonance. The domain follows from this table. One correction is outstanding and it is not conservative: the coastline carries the St Elmo breakwater as a detached polygon of 378 m, so the mouth is not the single 400 m opening assumed, and a smaller section lengthens the period toward the observed band. Whether the group's harbour records carry energy near 17 minutes is the first outstanding question.");
+  s.addNotes("The estimate was tested against its two plausible failures, the Helmholtz idealisation and excitation below resonance. The domain follows from this table. One correction is outstanding and it is not conservative: the coastline carries the St Elmo breakwater as a detached polygon of 378 m, so the mouth is not the single 400 m opening assumed, and a smaller section lengthens the period toward the observed band. Whether the basins carry energy near 17 minutes no longer has to be inferred, since the Senglea gauge inside the Grand Harbour has recorded at five seconds since June 2021 and a spectrum from it settles the matter.");
 }
 
 /* ---------------- 6. the domain ---------------- */
@@ -445,12 +445,12 @@ function note(s, txt) {
   const qs = [
     ["Is the sensitivity exercise on the harbour mouth one the group would consider appropriate?",
      "It is framed as a response curve over the class of basin, and it carries no assessment of the project now in consultation. The question is whether that framing is acceptable, not whether the physics holds."],
-    ["Is there a sea level record inside the Grand Harbour, and at what sampling interval?",
-     "A spectrum would establish whether the basins carry energy near 17 minutes. The 0.2 to 2 cph band is observed at Mellieħa, on another coast, so the present analysis can only infer the Valletta response."],
+    ["What is the extent and availability of the Senglea record, and its device id on the TAD server?",
+     "The gauge inside the Grand Harbour has recorded at five seconds since June 2021, so the band is resolved and the question is one of access rather than existence. The retrieval route is the one the project already uses for Marettimo."],
     ["Has the generation of the wave been modelled, or only its effect on a basin?",
      "The 2007 study imposes the long wave at the offshore boundary and computes the response. Modelling how the atmosphere produces that wave over the shelf is what this study proposes. Whether it is genuinely untouched is known only from a literature search."],
-    ["What is the sampling interval of the PORTO sea level stations?",
-     "The seiche band is 0.2 to 2 cph. At an interval coarser than one minute the model has no observational target within its own frequency range."],
+    ["Is there a current or stratification record inside the harbours, in any form?",
+     "Sea level inside the basin is now covered by Senglea. What no instrument reports is the current field, the stratification of the inner inlets, or the mouth-to-head amplification, which one interior point cannot resolve."],
     ["Is there any wave record beyond the BLUE buoy?",
      "Wave validation presently rests on a single point 3.7 km offshore. The radar reports a derived product whose own accuracy was assessed against models, so it serves as a cross-check rather than a reference."],
     ["What is the levelling datum behind the bathymetry, and how does its zero relate to the tide gauges?",
@@ -481,7 +481,7 @@ function note(s, txt) {
     bold: true, color: WHITE, fontFace: HEAD, isTextBox: true, margin: 0 });
 
   const tl = [
-    ["Late September", "Seiche climatology from the Portomaso and PORTO archives. No model is required."],
+    ["Late September", "Seiche climatology from Senglea, inside the harbour, against Portomaso outside. No model is required."],
     ["19 October", "Delft3D User Days abstract."],
     ["Early October", "Merged bathymetry over the domain, gaps intersected with the coastline."],
     ["2 to 4 November", "Delft3D User Days at Deltares, with the four configuration questions."],

@@ -59,7 +59,8 @@ The availability of observations is the principal justification for the site. Th
 | **PORTO network**, 7 coastal meteorological stations at 1 min, 4 sea level stations | Wind, air temperature, pressure, humidity, heat flux; sea level and sea temperature | Atmospheric forcing and sea level validation. The one-minute pressure record is the only realistic route to resolving seiche triggering |
 | **PORTO stations at Elmo and Kordin**, two of the seven | As above | Both lie on the Grand Harbour, Elmo at the entrance and Kordin on the southern shore, and they are therefore the closest atmospheric record to the basin under study. Identified from the station map in Drago (2018) |
 | **HF radar**, 4 stations over the Malta Channel | Surface currents and waves | Validation of modelled surface currents |
-| **Tide gauges**: Portomaso (MedGLOSS, real time since 2001), Ċirkewwa (IDSL, NEAMTWS), Transport Malta at Marsaxlokk and Mġarr | Sea level | Independent sea level and long records for the seiche climatology |
+| **Senglea**, IDSL radar gauge inside the Grand Harbour, since June 2021, 5 s | Sea level, air temperature, sea-state images every 15 min | **The interior sea level record.** Transmits to the University of Malta and to the JRC TAD server. Five seconds over-resolves the seiche band by a wide margin |
+| **Tide gauges**: Portomaso (MedGLOSS, real time since 2001), Delimara (IDSL, March 2021, 5 s), Marsaxlokk breakwater (Radac WaveGuide, March 2021, 10 Hz) | Sea level | Independent sea level and long records for the seiche climatology. Portomaso, outside both basins, pairs with Senglea inside |
 | **CDI `4036_MEPA`**, a coastal survey encircling the islands, contributed by the host group (EDMO 708) | Bathymetry at 10 m over the whole coastal domain | Obtained 22 September 2026. See [mepa_4036_dataset.md](mepa_4036_dataset.md) |
 | **`MaltaCoastline.shp`**, 26 polygons, 315.4 km2, WGS84 / UTM 33N | Land and water boundary for the Maltese Islands | Obtained 23 September 2026. See [coastline_dataset.md](coastline_dataset.md) |
 | **BathMalta**, University of Malta, Sentinel-2 and Sentinel-3 nearshore satellite-derived bathymetry | Satellite bathymetry over the Maltese nearshore | Appropriate destination for the classifier and SDB line, outside the harbours |
@@ -67,7 +68,7 @@ The availability of observations is the principal justification for the site. Th
 
 Two consequences follow.
 
-**Coverage of the network.** Water level, waves and meteorology are measured offshore and along the coast, which is what renders modelling without a campaign viable. Within the harbours no current, stratification or seiche-amplification record is published, and the nearest sea level station lies outside both basins. Whether that interior gap is genuine or merely unpublished remains an open question for the host group, addressed in Section 5.
+**Coverage of the network.** Water level, waves and meteorology are measured offshore, along the coast and, at Senglea, inside the Grand Harbour, which is what renders modelling without a campaign viable. What remains unmeasured within the harbours is the current field and the stratification, together with the mouth-to-head amplification, which a single interior point cannot resolve. Section 5 treats the residual gap.
 
 **Applicability of the WetWise portal architecture.** The host group operates a public portal with an established audience. Integration of model output into that portal constitutes a more appropriate deliverable than the construction of a second one, and corresponds directly to WETWISE deliverable D.3.3.3.
 
@@ -135,7 +136,25 @@ A Valletta configuration could therefore be stood up on the same infrastructure 
 
 The same report states the design of the sea level network as one permanent coastal station at PortoMaso, with two further stations then planned at Marsaxlokk and at Mġarr Harbour, to be integrated into GLOSS and MedGLOSS and combined with seabed pressure sensors for tsunami early warning. Anomalous sea level phenomena are named explicitly among the purposes.
 
-No station inside the Valletta basins appears in that design. The interior gap recorded in Section 5 is therefore a property of the network as designed rather than an omission in what has been published, which raises the value of establishing whether an older Grand Harbour installation exists in the archive.
+**The network as built departs from that design, and in a direction that matters here.** Two IDSL stations were added in collaboration with the JRC, at Delimara in March 2021 and at **Senglea in June 2021**, the latter inside the Grand Harbour, together with a Radac WaveGuide on the Marsaxlokk breakwater in March 2021. The 2018 report predates all three. Reading the network from that report alone produces the conclusion that no station exists inside the Valletta basins, which was recorded here in error and is corrected.
+
+The current configuration is four sea level stations against seven meteorological ones, which agrees with the count the group publishes.
+
+| Station | From | Sampling | Position |
+|---|---|---|---|
+| **Senglea**, IDSL radar | June 2021 | 5 s | **Inside the Grand Harbour**, on the peninsula between Dockyard Creek and French Creek |
+| Delimara, IDSL radar | March 2021 | 5 s | Southeast coast |
+| Marsaxlokk breakwater, Radac WaveGuide | March 2021 | 10 Hz | Marsaxlokk |
+| Portomaso, MedGLOSS pressure | February 2001 | real time | St Julian's, outside both basins |
+| Mellieħa Bay | 1993 to 2001 | historical | The northern-coast series behind Drago (2009) |
+
+Three consequences follow for the plan.
+
+**The seiche climatology of Valletta can be computed rather than inferred.** Section 5 proposed characterising the target from Portomaso and the PORTO records, and comparing a computation for Valletta against a band observed at Mellieħa on another coast. Senglea removes that step. Roughly five years of interior record at 5 s resolves the 0.2 to 2 cph band with a margin of some three orders of magnitude, and a spectrum computed from it settles directly whether the basin carries energy at its own 12 to 18 minute mode.
+
+**Senglea and Portomaso form an interior and exterior pair.** The amplification between the open coast and the inside of the harbour becomes an observed quantity for at least one interior point, which constrains the model where it was previously unconstrained.
+
+**The retrieval route already exists in the project.** The station transmits to the JRC TAD server, which is the source `StagnoneDT/scripts/download_marettimo_wl_long.py` reads for device 658. The device identifier for Senglea has not been established and the TAD device-list endpoint did not respond to the parameter forms attempted, so it is to be obtained from the host group or from the TAD map.
 
 ---
 
@@ -163,7 +182,7 @@ No station inside the Valletta basins appears in that design. The interior gap r
 
 The decision constitutes a deferral rather than a cancellation. Should the work reach a point at which an interior measurement is demonstrably the limiting factor, a limited deployment may be requested at that stage, on evidence of what is missing rather than in anticipation of it.
 
-**The interior gap is a question for the host group rather than a settled loss.** No current record within the harbours, stratification record for the inner inlets, or measurement of the mouth-to-head amplification of the seiche is presently published, and the nearest sea level station, Portomaso, lies in St Julian's outside both basins. Before that is treated as a fixed constraint, three enquiries are warranted, in order.
+**The interior gap is narrower than this section first recorded.** Sea level inside the Grand Harbour is measured at Senglea from June 2021 at 5 s, which was established on 25 September and is set out in Section 3.3. What remains unmeasured is the current field within the harbours, the stratification of the inner inlets, and the mouth-to-head amplification, which one interior point cannot resolve. Before that residue is treated as a fixed constraint, three enquiries are warranted, in order.
 
 1. **Whether interior data exist in some form.** Historic ADCP deployments, student dissertations, port engineering or dredging surveys, water quality monitoring, or material gathered in connection with the status of the two harbours as heavily modified water bodies under the Water Framework Directive.
 2. **Whether an alternative route exists.** Transport Malta, the port operators, the cruise terminal, the ferry operators and the shipyard may hold operational records. A sensor already moored for another purpose may admit of a secondary use.
@@ -176,14 +195,15 @@ Pending those answers the plan proceeds as though interior validation were unava
 | Source | Quantity validated | Location |
 |---|---|---|
 | BLUE buoy, 10 min, since July 2025 | Offshore waves, wind, currents, temperature, salinity | Interior point, 3.7 km off the Grand Harbour entrance |
-| PORTO sea level stations | Sea level, including the seiche band if the sampling interval permits | Coastal, outside the harbours |
-| Portomaso tide gauge, real time since 2001 | Long sea level record, seiche climatology | St Julian's |
+| Senglea IDSL, 5 s, since June 2021 | Sea level in the seiche band and well beyond it | **Inside the Grand Harbour** |
+| Delimara IDSL, 5 s, and Marsaxlokk breakwater, 10 Hz, both since March 2021 | Sea level | Southeast coast, outside the harbours |
+| Portomaso tide gauge, real time since 2001 | Long sea level record, seiche climatology | St Julian's, the exterior half of the pair with Senglea |
 | HF radar, 4 stations, hourly, 3 km | Surface currents and waves | Malta Channel, offshore |
 | PORTO meteorological stations, 1 min | Atmospheric forcing and the pressure signature of seiche events | 7 coastal stations |
 
-**The first task is characterisation of the target rather than modelling.** Before the mesh exists, the observed seiche climatology is to be extracted from the Portomaso and PORTO records, comprising dominant periods, amplitude distribution, seasonality, the atmospheric conditions accompanying events, and the relation between offshore conditions at BLUE and the coastal response. That analysis defines what the model is required to reproduce and requires no model to conduct. It is scheduled for block G1. Should the sea level stations prove to sample too coarsely to resolve the band 0.2 to 2 cph, the limitation is established in October rather than in March and the study is rescoped accordingly.
+**The first task is characterisation of the target rather than modelling.** Before the mesh exists, the observed seiche climatology is to be extracted from the Senglea, Portomaso and PORTO records, comprising dominant periods, amplitude distribution, seasonality, the atmospheric conditions accompanying events, the amplification between Portomaso and Senglea, and the relation between offshore conditions at BLUE and the harbour response. That analysis defines what the model is required to reproduce and requires no model to conduct. It is scheduled for block G1.
 
-**The sampling interval of the PORTO sea level stations requires confirmation in block B1.** The meteorological stations are documented at one minute; the sea level stations are not documented. Should they also sample at one minute, the seiche band is fully resolved and the absence of dedicated instruments is of limited consequence. Should they sample at ten minutes or coarser, only the long end of the band survives and the study relies instead on the internal consistency of the model together with the Portomaso record.
+**The sampling interval is no longer a threat to the study.** The risk as previously stated was that the sea level stations might sample too coarsely to resolve the band 0.2 to 2 cph, in which case the model would have had no observational target in its own frequency range. The IDSL stations transmit at 5 s and the PORTO network acquires at one minute, so the band is resolved with a wide margin at Senglea, inside the basin under study. What remains to be confirmed in block B1 is the archive extent, the continuity of the Senglea record since June 2021, and the terms of access.
 
 ---
 
@@ -292,7 +312,7 @@ Three working days remain. Each item below has a lead time exceeding them, which
 | **Completed 22 Sep** | Request CDI `4036_MEPA` at native resolution from Prof. Gauci | Met the same day. Two grids at 10 m. See Section 6.3 |
 | Wed 23 | Establish the **levelling datum of `ContoursMalta`** and its offset against the tide gauge zeros, together with the availability of the 2 m products, the existence of a Part 2 of the December 2012 vessel survey, and the licensing terms for both datasets | The vertical reference is established as orthometric. Its relation to the gauges is what a water-level study requires |
 | Wed 23 | Enquire as to **interior data** in any form, including historic ADCP records, student dissertations, port engineering surveys and Water Framework Directive monitoring, and as to alternative routes through the port operators | Section 5 turns on the answer, which determines what the manuscript may claim |
-| Wed 23 | Confirm the **sampling interval of the PORTO sea level stations** | Should it prove coarser than the seiche band the study is rescoped, and establishing this now is preferable to establishing it in March |
+| Wed 23 | ~~Confirm the sampling interval of the PORTO sea level stations~~ **Superseded.** The published record gives 5 s at the IDSL stations and one minute across PORTO. The enquiry becomes the archive extent and continuity of the **Senglea** record and the terms of its access | The band is resolved with a wide margin, so the rescoping this item guarded against does not arise |
 | Thu 24 | Obtain **data access terms in writing** for BLUE, PORTO, the HF radar and the tide gauges, covering archive extent, formats, latency and licensing for publication | A verbal agreement will not satisfy a journal data availability statement |
 | Thu 24 | Agree the **research question and the joint publication** with Prof. Gauci, comprising the seiche response and harbour flushing, authorship and target journal | Everything downstream inherits the decision |
 | Thu 24 | Fix the **domain extent** on a chart and agree the coastline source | Block B3 cannot commence without them, and the coastline carries the planform on which the modes depend |
@@ -325,7 +345,7 @@ The calendar is unchanged. The content of each block is revised.
 
 **Coordinate reference systems of the supplied datasets.** The bathymetric grids are ED50 / UTM 33N without the datum encoded in the file, and the coastline is WGS84 / UTM 33N with the datum encoded correctly. The two differ by approximately 197 m at Malta, some 20 cells at 10 m, and neither may be overlaid on the other without a datum transformation. No error is raised in either direction. Mitigated by explicit assignment in `scripts/build_merged_bathymetry.py`, by verification of the bathymetry against seven control points and of the coastline against the land and water agreement test, and recorded in the project CLAUDE.md so that it survives into later sessions.
 
-**Sampling interval of the coastal sea level stations.** Should it prove too coarse for the seiche band, the model would have no observational target within its own frequency range. Enquiry is scheduled for 23 September. The fallback is the long Portomaso record together with comparison of modal periods against those published by Drago.
+**Sampling interval of the coastal sea level stations. Retired 25 September.** The concern was that the stations might sample too coarsely for the seiche band, leaving the model without an observational target in its own frequency range. The IDSL stations transmit at 5 s and PORTO acquires at one minute, and one of the IDSL stations is inside the Grand Harbour. What replaces it is a smaller risk of access and continuity rather than of resolution.
 
 **Reflection at the open boundary.** Would invalidate every seiche result while producing plausible output. Mitigated by the synthetic long-wave test scheduled for the first week of block B3, in advance of any production run.
 
@@ -341,7 +361,7 @@ Most are for the host group. The first three determine what the study can be.
 
 1. **What is the levelling datum of the `ContoursMalta` dataset, and how does its zero relate to the tide gauge zeros?** The vertical datum of the bathymetry is established as orthometric rather than ellipsoidal, the declaration in the file being a mislabel. The remaining question concerns the realisation, and above all the offset against the gauges used for validation. See [coastline_dataset.md](coastline_dataset.md) and Section 3 of [mepa_4036_dataset.md](mepa_4036_dataset.md).
 2. **Does any interior record exist, in any form?** Historic ADCP, student dissertations, port engineering or dredging surveys, Water Framework Directive monitoring of the two heavily modified water bodies, or operational data held by the port operators, the ferries, the cruise terminal or the shipyard. Section 5.
-3. **What is the sampling interval of the PORTO sea level stations?** Should the band 0.2 to 2 cph be resolved, the absence of dedicated instruments is of limited consequence.
+3. **What is the archive extent and continuity of the Senglea record, and on what terms is it available?** The sampling interval is established at 5 s and the band is therefore resolved, so the question that stood here has been answered and this one replaces it. The device identifier on the JRC TAD server is also wanted, the retrieval route being one the project already uses.
 4. Confirmation that the BLUE archive commences on 4 July 2025 and is continuous. Fourteen months of ten-minute data would already span a complete milgħuba season, which is what renders the G1 climatology feasible.
 5. Whether the eight port-area weather stations referred to at the BLUE launch are the same as the seven PORTO meteorological stations or an additional set, and which of them lie within the harbours.
 6. **Whether any wave record exists beyond the BLUE buoy**, from an earlier deployment, a port authority or a coastal campaign. Wave validation presently rests on a single offshore point, since the radar reports a derived product rather than a measurement.

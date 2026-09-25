@@ -20,7 +20,7 @@ The governing question is whether the framework, forced by observed atmospheric 
 | Bathymetry | Obtained. CDI `4036_MEPA`, 10 m LiDAR and sonar, Maltese Islands. Merged. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md) |
 | Coastline | Obtained. 26 polygons, 315.4 km2, WGS84 / UTM 33N, verified against the bathymetry. See [docs/coastline_dataset.md](docs/coastline_dataset.md) |
 | Aligned basemap | Bathymetry and coastline co-registered in EPSG:4326 in `data/processed/`. 99.51% land and water agreement, median disagreement one cell |
-| Observational basis | Identified. BLUE buoy, PORTO network, HF radar, Portomaso tide gauge. Access terms pending |
+| Observational basis | Identified. BLUE buoy, PORTO network, HF radar, and the **Senglea IDSL gauge inside the Grand Harbour** at 5 s since June 2021, established 25 September. Access terms pending |
 | Field campaign | Not planned. The study proceeds on existing observations |
 | Delft mission | Delft3D User Days 2 to 4 November, inside block B3. Abstract due 19 October. Costs B3 four working days |
 | Research question | Reframed 24 September from model verification to attribution of amplification. Extended 25 September with a sensitivity on the geometry of the harbour mouth. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
