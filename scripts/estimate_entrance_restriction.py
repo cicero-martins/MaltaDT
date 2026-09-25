@@ -14,8 +14,8 @@ precision a model would need, and the output is a curve rather than a verdict.
 
 It is a scoping calculation and not a result. The basin is idealised as a
 Helmholtz resonator and the mouth as a rectangle, whereas the entrance is in
-fact partly closed by the 1910 breakwaters. Its purpose is to establish whether
-the sensitivity is large enough to be worth computing properly.
+fact partly closed by the 1910 breakwaters. It establishes the order of the
+sensitivity and nothing further.
 
 Geometry is taken from `domain_design_estimate.py`, which measured it from the
 supplied bathymetry and coastline. The mouth cross-section follows the value

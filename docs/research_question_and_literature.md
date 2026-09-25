@@ -2,7 +2,7 @@
 
 *Prepared 24 September 2026 for discussion with the host group. Supersedes the question stated in Section 2 of [malta_valletta_model_plan.md](malta_valletta_model_plan.md), which is retained there as the point of departure.*
 
-*Revised 25 September 2026 following a second literature pass over the material in `reference/`. Two documents found in that pass change the assessment materially. The ARTELIA study commissioned by Infrastructure Malta establishes that the Grand Harbour has been modelled for wind-wave agitation and that a protection scheme is before the planning authorities, which yields the counterfactual proposed in Section 4.4. The host group's own design report for the LIFE RBMP project establishes that harbour flushing at the principal harbours is an institutional objective, which re-weights Section 4.3. Sections 2, 4, 5, 6.1, 8, 9 and 10 are affected.*
+*Revised 25 September 2026 on material subsequently located in `reference/`. Two documents change the assessment. The ARTELIA study commissioned by Infrastructure Malta establishes that the Grand Harbour has been modelled for wind-wave agitation and that a protection scheme is in design and public consultation, from which the sensitivity of Section 4.4 follows. The host group's design report for the LIFE RBMP project establishes that harbour flushing at the principal harbours is an institutional objective, which re-weights Section 4.3. Sections 2, 4, 5, 6.1, 8, 9 and 10 are affected.*
 
 ---
 
@@ -67,7 +67,7 @@ Two properties of the scheme bear on the present study. The structures would alt
 
 The supplied coastline was checked for the 1910 structures. The **St Elmo arm is present** as a detached polygon 378 m long and 58 m wide, separated from the shore by 42 m, which is the span carried by the steel bridge and which is correctly open water for a hydrodynamic model. The measured length agrees with the documented 370 m.
 
-The consequence is that the entrance is not the single 400 m opening used for the Helmholtz estimate in [domain_and_discretisation.md](domain_and_discretisation.md). It is a two-part opening partly closed by the historic breakwater, and the cross-section that governs the pumping mode is correspondingly smaller and differently shaped. The estimate should be recomputed from the mesh once it exists rather than from the distance transform of the water mask. The direction of the correction is toward a longer period, that is toward the observed band, which makes it worth doing rather than deferring.
+The consequence is that the entrance is not the single 400 m opening used for the Helmholtz estimate in [domain_and_discretisation.md](domain_and_discretisation.md). It is a two-part opening partly closed by the historic breakwater, and the cross-section that governs the pumping mode is correspondingly smaller and differently shaped. The estimate is to be recomputed from the mesh once it exists rather than from the distance transform of the water mask. The direction of the correction is toward a longer period, that is toward the observed band, so it does not err on the safe side and is scheduled with the mesh rather than after it.
 
 Whether the 120 m Ricasoli arm is represented was not resolved, since it joins the land at Fort Ricasoli and would appear within the mainland polygon rather than as a detached feature. It is added to the checks to run when the mesh is built.
 
@@ -158,7 +158,7 @@ Two readings follow, and they point in opposite directions.
 
 The effect on exchange is separate from the effect on the mode, and it is the larger of the two. The volume passing the mouth per cycle scales with the open section directly rather than with its square root, and residence time responds accordingly. That is the quantity the host group's design document names, and it is not a resonance question at all.
 
-**These figures are a scoping calculation and not a result.** They rest on an idealisation of the basin as a Helmholtz resonator and on a mouth cross-section that Section 2.1 shows to be simplified. Their function is to establish that the sensitivity is large enough to be worth computing properly, which they do. The restriction is swept as a parameter and no particular design is represented.
+**These figures are a scoping calculation and not a result.** They rest on an idealisation of the basin as a Helmholtz resonator and on a mouth cross-section that Section 2.1 shows to be simplified. They establish the order of the sensitivity and nothing further. The restriction is swept as a parameter and no particular design is represented.
 
 ---
 
@@ -174,7 +174,7 @@ The role of the observations is inverted. They cease to be the forcing and becom
 
 **Validation is relocated to the methods.** Whether the model reproduces observed sea level becomes a section of the methods rather than the question of the paper.
 
-**The counterfactual of Section 4.4 is a second pass over the same sweep.** The bathymetry and the land mask are modified to carry the proposed structures and the sweep is repeated, so that the response surface is computed twice and the difference between the two surfaces is the answer. The cost is a doubling of the barotropic runs, which are the inexpensive part of the design, together with a small number of paired three-dimensional runs for the renewal comparison. No new forcing, no new validation and no new configuration is required, which is why the counterfactual is affordable within the period.
+**The counterfactual of Section 4.4 is a second evaluation of the same sweep.** The bathymetry and the land mask are modified to carry a restricted mouth and the sweep is repeated, so that the response surface is computed twice and the difference between the two surfaces is the answer. The cost is a doubling of the barotropic runs, which are the inexpensive part of the design, together with a small number of paired three-dimensional runs for the renewal comparison. No new forcing, no new validation and no new configuration is required, and the counterfactual is affordable within the period on that account.
 
 ---
 
@@ -188,7 +188,7 @@ The hazard is established in the public record. Flooding of low-lying coastal st
 
 **Msida lies at the head of Msida Creek, inside Marsamxett and therefore inside the proposed domain.** The risk recorded in Section 8, that the hazard framing might lack documented consequence, is accordingly reduced. Sliema likewise lies within Marsamxett.
 
-Damage inside the commercial port is documented separately, and it is of a different kind. Mazas and Farrugia record that the storms of February 2019 from the northeast and February 2023 from the east caused significant damage in the port, with significant wave heights reaching 7 to 8 m in the severe directional sectors. Those are wind-wave events and not meteotsunamis, and the two must not be conflated. The distinction sharpens rather than weakens the framing. The harbour has a documented wind-wave problem for which a remedy is before the planning authorities, and a separately documented long-wave problem against which that remedy has not been evaluated.
+Damage inside the commercial port is documented separately, and it is of a different kind. Mazas and Farrugia record that the storms of February 2019 from the northeast and February 2023 from the east caused significant damage in the port, with significant wave heights reaching 7 to 8 m in the severe directional sectors. Those are wind-wave events and not meteotsunamis, and the two are kept distinct throughout. The harbour has a documented wind-wave problem, for which a remedy is in design, and a separately documented long-wave problem, in a frequency band that remedy was not dimensioned against.
 
 ### 6.2 Two pathways, unequally tractable
 

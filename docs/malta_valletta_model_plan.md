@@ -118,7 +118,7 @@ and elsewhere envisages that the suite of local models be deployed as a relocata
 
 Relocatability is the thesis argument of this project stated in the host group's own terms. The framework transfer from the Stagnone to Valletta is a demonstration of exactly that property, and the porting log is the evidence for it. The correspondence is close enough that the transfer log should be presented to the group in that language rather than only as a methodological result for the thesis.
 
-**The infrastructure element is available and is a differentiator.** The Stagnone twin is already containerised and hosted on European public infrastructure rather than running only on local machines.
+**The infrastructure for it already exists.** The Stagnone twin is containerised and hosted on European public infrastructure rather than running only on local machines.
 
 | Component | Present state at the Stagnone |
 |---|---|
@@ -251,7 +251,7 @@ Five works establish the basis for the present study. Their relevance is indicat
 
 **Historical antecedent.** Airy described seiche oscillations in the Grand Harbour in 1878, among the earliest scientific treatments of the phenomenon. The present study would constitute the first three-dimensional coupled wave-hydrodynamic representation of the same basin.
 
-**Material added on 25 September 2026.** A second pass over the literature, prompted by documents supplied to `reference/`, added four items. Their assessment is carried in [research_question_and_literature.md](research_question_and_literature.md) and only their bearing on this plan is recorded here.
+**Material added on 25 September 2026**, from documents supplied to `reference/`. Their assessment is carried in [research_question_and_literature.md](research_question_and_literature.md) and only their bearing on this plan appears below.
 
 - **Mazas, F. and Farrugia, C.** *Protecting Valletta's Grand Harbour against adverse wave conditions.* Coastal Engineering Proceedings 154. ARTELIA and Infrastructure Malta. The Grand Harbour has been modelled for wind-wave agitation in PHAROS, and a protection scheme comprising an outer breakwater, a detached submerged breakwater and two revetments is before the planning authorities. The paper also supplies the directional wave climate off Valletta and records significant damage in the port from the storms of February 2019 and February 2023.
 - **Drago, A.F. (2018).** *Designing an observing and forecasting system for the Maltese Islands.* Progress report, Action A.7, LIFE 16 IPE MT 008. The host group's design document, treated in Section 3.1 above.

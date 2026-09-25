@@ -59,7 +59,33 @@ CHECKS: list[tuple[str, str]] = [
     # Anchored to the start of a line, since a rhetorical label is a heading.
     # The same words inside a sentence are ordinary prose.
     ("rhetorical question as a label",
-     r"^\s*#*\s*\**(Why (not|this|each|it)\b|Why .{0,24}matters)"),
+     r"^\s*#*\s*\**(Why (not|this|each|it)\b|Why .{0,24}matters|"
+     r"(How|What|Whether) .{0,60}\?\s*\**\s*$)"),
+    # Added after a fourth lapse. The three below were the actual forms it took:
+    # evaluative words that sell rather than state, sentences about the document
+    # instead of about the subject, and labels built on an absence.
+    # "compelling" is qualified by a preceding determiner or copula, since as a
+    # verb ("no deadline compelling submission") it is ordinary prose.
+    ("promotional or evaluative wording",
+     r"\b(differentiator|(is|was|a|an|the|most|very) compelling|powerful|"
+     r"invaluable|remarkable|striking|crucially|importantly|elegant|"
+     r"worth (doing|computing|pursuing|putting|having)|sharpens|"
+     r"is a strength|stands out|shows promise)\b"),
+    # "which is itself" alone matched ordinary prose about the subject, so the
+    # pattern names the evaluative nouns that follow it in the failure cases.
+    ("commentary on the document rather than the subject",
+     r"\b(this (slide|deck|table|figure) (is|shows|exists|covers)|"
+     r"the purpose of this|recorded here (is|are)|"
+     r"which is itself a (caution|reminder|warning|sign)|"
+     r"as this document|the present (slide|deck))\b"),
+    ("label built on a negation or a contrast",
+     r"^\s*#*\s*\**(What it does not|What (this|it) is not|Not (a|an|the)\b|"
+     r"The (problem|trouble|difficulty) with)\b"),
+    # A single ongoing effort is described by what it found, not by which sweep
+    # of it did the finding. This was a specific correction.
+    ("narration of the work's own passes",
+     r"\b(second pass|first pass|second sweep|second look|"
+     r"re-?read(ing)? of the literature|revisiting the literature)\b"),
 ]
 
 SKIP_DIRS = {".git", "data", "figures", "model", "__pycache__",
