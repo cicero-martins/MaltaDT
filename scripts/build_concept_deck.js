@@ -1,5 +1,5 @@
 // Deck: Valletta harbour system, model concept and the questions to settle.
-// Built for the meeting with the Oceanography Malta Research Group, 25 September 2026.
+// Built for the meeting with the Oceanography Malta Research Group, September 2026.
 //
 // Requires pptxgenjs, which is not part of the project environment. Install it
 // in a scratch directory and run from there rather than adding node_modules to
@@ -222,8 +222,8 @@ function note(s, txt) {
   ], { x: 9.75, y: 3.15, w: 2.7, h: 1.9, fontSize: 11.5, color: "CADCFC",
        fontFace: BODY, lineSpacing: 15, isTextBox: true, margin: 0 });
 
-  note(s, "A Helmholtz idealisation returns 12 to 18 minutes likewise, and the harbours amplify by less than a tenth across the band.");
-  s.addNotes("The estimate was tested against its two plausible failures, the Helmholtz idealisation and excitation below resonance. The domain follows from this table. Whether the group's harbour records carry energy near 17 minutes is the first outstanding question.");
+  note(s, "A Helmholtz idealisation returns 12 to 18 minutes likewise. The 1910 breakwater partly closes the entrance, which lengthens the period, so the figure awaits the mesh.");
+  s.addNotes("The estimate was tested against its two plausible failures, the Helmholtz idealisation and excitation below resonance. The domain follows from this table. One correction is outstanding and it is not conservative: the coastline carries the St Elmo breakwater as a detached polygon of 378 m, so the mouth is not the single 400 m opening assumed, and a smaller section lengthens the period toward the observed band. Whether the group's harbour records carry energy near 17 minutes is the first outstanding question.");
 }
 
 /* ---------------- 6. the domain ---------------- */
@@ -282,10 +282,50 @@ function note(s, txt) {
   ], { x: 6.85, y: 4.64, w: 5.6, h: 1.3, fontSize: 12, color: "CADCFC",
        fontFace: BODY, lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addNotes("A question for Deltares concerns whether sigma holds from 15 m to 150 m, or whether a z-sigma hybrid is indicated.");
+  note(s, "On the wave side, two nested SWAN grids at 1200 and 250 m. The finer agrees with the group's own downscaling at 1∕500°, arrived at independently.");
+  s.addNotes("A question for Deltares concerns whether sigma holds from 15 m to 150 m, or whether a z-sigma hybrid is indicated. The wave nest was sized from the width of the harbour entrances and landed within a quarter of the resolution the group already uses on this coast, which is an independent check on the choice.");
 }
 
-/* ---------------- 8. the question ---------------- */
+/* ---------------- 8. prior work and setting ---------------- */
+{
+  const s = p.addSlide();
+  titleSlide(s, "PRIOR WORK AND SETTING", "What exists, and what it leaves untreated",
+    "The Grand Harbour has been modelled before, and the host group operates a forecasting system over the same waters.");
+
+  s.addText("The two studies that bear on the site", { x: M, y: 2.3, w: 5.9, h: 0.32,
+    fontSize: 14, bold: true, color: BLUE, fontFace: HEAD, isTextBox: true, margin: 0 });
+  s.addText([
+    { text: "Mazas and Farrugia, ARTELIA and Infrastructure Malta. ", options: { bold: true, breakLine: false } },
+    { text: "The Grand Harbour modelled for wind-wave agitation in PHAROS, against a directional climate hindcast from 1992 to 2019. Damage in the port documented for the storms of February 2019 and February 2023.\n", options: { breakLine: true, paraSpaceAfter: 10 } },
+    { text: "Drago, 2018, the design report of the host group. ", options: { bold: true, breakLine: false } },
+    { text: "A relocatable model setup is requested for ad hoc local domains, and harbour flushing at the five principal harbours appears among the process-model targets, with the Deltares suite among the families to review.", options: {} },
+  ], { x: M, y: 2.7, w: 5.9, h: 2.9, fontSize: 12, color: INK, fontFace: BODY,
+       lineSpacing: 16.5, isTextBox: true, margin: 0 });
+
+  s.addShape(p.ShapeType.roundRect, { x: 6.95, y: 2.3, w: 5.76, h: 3.32,
+    fill: { color: MID }, rectRadius: 0.06 });
+  s.addText("Operated by the host group", { x: 7.25, y: 2.52, w: 5.2, h: 0.3,
+    fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
+  s.addText([
+    { text: "ROSARIO, Princeton Ocean Model, 1∕64° and 1∕96°, nested into CMEMS.", options: { bullet: true, breakLine: true, paraSpaceAfter: 8 } },
+    { text: "SWAN downscaled to the embayments at 1∕500°, about 200 m.", options: { bullet: true, breakLine: true, paraSpaceAfter: 8 } },
+    { text: "ROSARIO-SHYFEM, unstructured, three-dimensional, operational to a four-day forecast, from a few kilometres to 50 m at the coast, with Lagrangian particle tracking.", options: { bullet: true, breakLine: true, paraSpaceAfter: 8 } },
+    { text: "Boundary conditions derived from CMEMS, which is what this project does also.", options: { bullet: true } },
+  ], { x: 7.25, y: 2.9, w: 5.2, h: 2.55, fontSize: 11.5, color: "CADCFC",
+       fontFace: BODY, lineSpacing: 15, isTextBox: true, margin: 0 });
+
+  s.addShape(p.ShapeType.roundRect, { x: M, y: 5.82, w: 12.09, h: 0.92,
+    fill: { color: TINT }, rectRadius: 0.06 });
+  s.addText([
+    { text: "The present work is an independent exercise for the research period. ", options: { bold: true } },
+    { text: "It differs in the resolution inside the basins, 15 to 30 m against 50 m, in the coupling to a spectral wave model, and in the frequency band it addresses.", options: {} },
+  ], { x: M + 0.35, y: 5.99, w: 11.4, h: 0.62, fontSize: 12, color: INK,
+       fontFace: BODY, lineSpacing: 16, isTextBox: true, margin: 0 });
+
+  s.addNotes("Nothing here is claimed as a capability the group lacks. The relocatability requirement in the design report corresponds to the framework-transfer argument of the thesis, and the porting log is the evidence for it.");
+}
+
+/* ---------------- 9. the question ---------------- */
 {
   const s = p.addSlide();
   titleSlide(s, "RESEARCH QUESTION", "A proposed question, for the group to judge",
@@ -306,19 +346,63 @@ function note(s, txt) {
   ], { x: M, y: 4.45, w: 5.7, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addText("Prior work the study must clear", { x: 6.95, y: 4.07, w: 5.7, h: 0.32,
+  s.addText("What the prior work already covers", { x: 6.95, y: 4.07, w: 5.7, h: 0.32,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "Maltese coastal seiches were modelled in 2007, in a two-dimensional depth-averaged POM, for Mellieħa and St Paul's Bay, forced by a prescribed offshore long wave.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "A repetition at Valletta in three dimensions would be incremental.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "The generation side is untreated, since the prior work imposes the offshore wave rather than producing it.", options: { bullet: true } },
+    { text: "The Grand Harbour itself was modelled by ARTELIA in PHAROS, for wind-wave agitation, against a directional climate hindcast from 1992 to 2019.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+    { text: "What neither treats is the generation of the long wave, the circulation of the harbour, or its renewal.", options: { bullet: true } },
   ], { x: 6.95, y: 4.45, w: 5.76, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addNotes("The question is a proposal rather than a decision. Whether the group has work of its own planned on the generation side, and how the effort should be divided if so, is worth putting directly. The applied companion is a map of exposure by inlet and quay, and the fallback, with independent value, is harbour renewal under the Water Framework Directive.");
+  s.addNotes("The question is a proposal rather than a decision. Whether the group has work of its own planned on the generation side, and how the effort would then be divided, should be put to them directly. The applied companion is a map of exposure by inlet and quay, and the renewal question, treated on the following slides, has independent standing under the Water Framework Directive.");
 }
 
-/* ---------------- 9. the design ---------------- */
+/* ---------------- 10. sensitivity of the mouth ---------------- */
+{
+  const s = p.addSlide();
+  titleSlide(s, "A SECOND QUESTION", "The basin is sensitive to the geometry of its mouth",
+    "An academic sensitivity on the class of basin, put to the group for judgement. No particular design is represented.");
+
+  const rows = [
+    ["Restriction of the mouth section", "Pumping period", "Grand Harbour"],
+    ["none", "reference", "12.4 to 17.5 min"],
+    ["25 per cent", "+15.5 %", "14.3 to 20.2 min"],
+    ["50 per cent", "+41.4 %", "17.5 to 24.7 min"],
+    ["66 per cent", "+71.5 %", "21.2 to 30.0 min"],
+  ];
+  s.addTable(rows.map((r, i) => r.map((c, j) => ({ text: c, options: {
+    bold: i === 0 || j === 0, color: i === 0 ? WHITE : INK,
+    fill: { color: i === 0 ? BLUE : (i % 2 ? WHITE : TINT) },
+    fontSize: 12, fontFace: BODY, valign: "middle", align: j ? "right" : "left",
+  } }))), { x: M, y: 2.5, w: 7.1, colW: [3.1, 2.2, 1.8], rowH: 0.4,
+            border: { type: "solid", color: "E2E8EC", pt: 0.5 } });
+
+  s.addText("The period scales as the inverse square root of the open cross-section, so the shift is independent of basin area and of the length of the channel. Exchange scales with the section directly, and responds more strongly still.",
+    { x: M, y: 4.62, w: 7.1, h: 0.8, fontSize: 11.5, color: MUTED, fontFace: BODY,
+      lineSpacing: 15.5, isTextBox: true, margin: 0 });
+
+  s.addShape(p.ShapeType.roundRect, { x: 8.05, y: 2.5, w: 4.66, h: 1.72,
+    fill: { color: TINT }, rectRadius: 0.06 });
+  s.addText("The magnitude in context", { x: 8.35, y: 2.68, w: 4.1, h: 0.3,
+    fontSize: 13.5, bold: true, color: BLUE, fontFace: HEAD, isTextBox: true, margin: 0 });
+  s.addText("A metre of sea level rise displaces these modes by one to four per cent. A restriction of a quarter displaces them four times as far. The geometry of the mouth is the dominant control.",
+    { x: 8.35, y: 3.04, w: 4.1, h: 1.05, fontSize: 11.5, color: INK, fontFace: BODY,
+      lineSpacing: 15.5, isTextBox: true, margin: 0 });
+
+  s.addShape(p.ShapeType.roundRect, { x: 8.05, y: 4.38, w: 4.66, h: 1.72,
+    fill: { color: MID }, rectRadius: 0.06 });
+  s.addText("The limit of the result", { x: 8.35, y: 4.56, w: 4.1, h: 0.3,
+    fontSize: 13.5, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
+  s.addText("Reaching the observed band would require the mouth to lose two thirds of its section. The conclusion that the harbours respond rather than resonate stands.",
+    { x: 8.35, y: 4.92, w: 4.1, h: 1.05, fontSize: 11.5, color: "CADCFC", fontFace: BODY,
+      lineSpacing: 15.5, isTextBox: true, margin: 0 });
+
+  note(s, "The cost is a second evaluation of the same sweep, with no new forcing, no new validation and no new configuration.");
+  s.addNotes("The framing is a response curve over the class of basin. The exact geometry of any proposed structure is neither needed nor used, and the exercise carries no assessment of the project now in consultation. Whether to pursue it at all is the first of the outstanding questions.");
+}
+
+/* ---------------- 11. the design ---------------- */
 {
   const s = p.addSlide();
   titleSlide(s, "EXPERIMENTAL DESIGN", "A parametric sweep in place of a hindcast",
@@ -350,27 +434,27 @@ function note(s, txt) {
        fontFace: BODY, lineSpacing: 15.5, isTextBox: true, margin: 0 });
 
   note(s, "The milgħuba floods Msida, at the head of Msida Creek inside Marsamxett, together with Marsaskala, Xemxija, Marsaxlokk and Sliema.");
-  s.addNotes("A sweep of six speeds by eight directions amounts to forty-eight runs, barotropic and uncoupled, and therefore inexpensive.");
+  s.addNotes("A sweep of six speeds by eight directions amounts to forty-eight runs, barotropic and uncoupled, and therefore inexpensive. The sensitivity of the preceding slide is a second evaluation of the same sweep over a modified mouth, which is why it is affordable within the period.");
 }
 
-/* ---------------- 10. what to settle ---------------- */
+/* ---------------- 12. what to settle ---------------- */
 {
   const s = p.addSlide();
   titleSlide(s, "OUTSTANDING QUESTIONS", "Six questions and their bearing on the study", null);
 
   const qs = [
+    ["Is the sensitivity exercise on the harbour mouth one the group would consider appropriate?",
+     "It is framed as a response curve over the class of basin, and it carries no assessment of the project now in consultation. The question is whether that framing is acceptable, not whether the physics holds."],
     ["Is there a sea level record inside the Grand Harbour, and at what sampling interval?",
      "A spectrum would establish whether the basins carry energy near 17 minutes. The 0.2 to 2 cph band is observed at Mellieħa, on another coast, so the present analysis can only infer the Valletta response."],
     ["Has the generation of the wave been modelled, or only its effect on a basin?",
      "The 2007 study imposes the long wave at the offshore boundary and computes the response. Modelling how the atmosphere produces that wave over the shelf is what this study proposes. Whether it is genuinely untouched is known only from a literature search."],
     ["What is the sampling interval of the PORTO sea level stations?",
      "The seiche band is 0.2 to 2 cph. At an interval coarser than one minute the model has no observational target within its own frequency range."],
-    ["Is there documented damage or disruption inside the commercial port?",
-     "Flooding is documented at Msida and elsewhere. Records of mooring failure or interrupted operations would be held by Transport Malta and the terminals."],
-    ["What is the levelling datum behind the bathymetry, and how does its zero relate to the tide gauges?",
-     "The files declare ellipsoidal heights while the data are orthometric. What remains to be established is the offset against the gauges used for validation."],
     ["Is there any wave record beyond the BLUE buoy?",
      "Wave validation presently rests on a single point 3.7 km offshore. The radar reports a derived product whose own accuracy was assessed against models, so it serves as a cross-check rather than a reference."],
+    ["What is the levelling datum behind the bathymetry, and how does its zero relate to the tide gauges?",
+     "The files declare ellipsoidal heights while the data are orthometric. What remains to be established is the offset against the gauges used for validation."],
   ];
   qs.forEach((q, i) => {
     const col = i % 2, row = Math.floor(i / 2);
@@ -381,10 +465,10 @@ function note(s, txt) {
     s.addText(q[1], { x: x + 0.62, y: y + 0.5, w: 5.28, h: 0.98, fontSize: 11,
       color: MUTED, fontFace: BODY, lineSpacing: 14.5, isTextBox: true, margin: 0 });
   });
-  s.addNotes("These items determine what the study can be, and the remainder is resolvable by execution. The question of whether the group has its own intentions on the generation side belongs with the preceding slide rather than here.");
+  s.addNotes("These items determine what the study can be, and the remainder is resolvable by execution. One question is dropped from the six because the record now answers it in part: damage inside the port is documented for the wind-wave storms of February 2019 and February 2023, and what remains open is disruption attributable to long waves specifically, held by Transport Malta and the terminals.");
 }
 
-/* ---------------- 11. immediate ---------------- */
+/* ---------------- 13. immediate ---------------- */
 {
   const s = p.addSlide();
   s.background = { color: MID };
@@ -403,20 +487,34 @@ function note(s, txt) {
     ["2 to 4 November", "Delft3D User Days at Deltares, with the four configuration questions."],
     ["Late October to November", "Mesh, Riemann boundary verified by synthetic pulse, first runs."],
   ];
+  // The timeline occupies the left column only, so the panel on the right has
+  // its own band. An earlier arrangement ran the descriptions full width and
+  // the two collided at the last two rows.
   tl.forEach((t, i) => {
-    const y = 2.15 + i * 0.86;
+    const y = 2.15 + i * 0.92;
     s.addShape(p.ShapeType.ellipse, { x: M + 0.05, y: y + 0.1, w: 0.17, h: 0.17,
       fill: { color: i === 1 ? ORANGE : "CADCFC" } });
-    s.addText(t[0], { x: M + 0.45, y, w: 2.9, h: 0.33, fontSize: 13, bold: true,
+    s.addText(t[0], { x: M + 0.45, y, w: 2.55, h: 0.33, fontSize: 13, bold: true,
       color: i === 1 ? ORANGE : WHITE, fontFace: BODY, isTextBox: true, margin: 0 });
-    s.addText(t[1], { x: M + 3.45, y, w: 8.6, h: 0.56, fontSize: 12.5,
-      color: "9FB3D1", fontFace: BODY, lineSpacing: 16, isTextBox: true, margin: 0 });
+    s.addText(t[1], { x: M + 3.1, y, w: 3.6, h: 0.72, fontSize: 12,
+      color: "9FB3D1", fontFace: BODY, lineSpacing: 15, isTextBox: true, margin: 0 });
   });
 
+  s.addShape(p.ShapeType.roundRect, { x: 7.5, y: 2.15, w: 5.21, h: 3.4,
+    fill: { color: BLUE, transparency: 30 }, rectRadius: 0.06 });
+  s.addText("Beyond the period", { x: 7.8, y: 2.38, w: 4.6, h: 0.3, fontSize: 14,
+    bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
+  s.addText([
+    { text: "The Stagnone twin runs containerised on the EDITO Datalab and publishes to its object storage.\n", options: { breakLine: true, paraSpaceAfter: 9 } },
+    { text: "A Valletta configuration would take the same route, so the deliverable is a running pilot rather than a set of figures.\n", options: { breakLine: true, paraSpaceAfter: 9 } },
+    { text: "That is the relocatable setup the design report asks for.", options: { bold: true, color: WHITE } },
+  ], { x: 7.8, y: 2.78, w: 4.6, h: 2.5, fontSize: 11.5, color: "DCE7F5",
+       fontFace: BODY, lineSpacing: 15.5, isTextBox: true, margin: 0 });
+
   s.addText("Documents, figures and the reproducible analysis are in the project repository.",
-    { x: M, y: 6.72, w: 11, h: 0.3, fontSize: 11, italic: true, color: "7F93B3",
+    { x: M, y: 6.78, w: 6.4, h: 0.3, fontSize: 11, italic: true, color: "7F93B3",
       fontFace: BODY, isTextBox: true, margin: 0 });
-  s.addNotes("Block B3 loses four working days to Delft and holds fifteen rather than nineteen.");
+  s.addNotes("Block B3 loses four working days to Delft and holds fifteen rather than nineteen. The EDITO deployment is conditional on the configuration proving stable in time, and it belongs to block B6 alongside the integration into the existing ocean.mt portal.");
 }
 
 p.writeFile({ fileName: OUT }).then(() => console.log("written", OUT));
