@@ -89,12 +89,12 @@ function note(s, txt) {
 {
   const s = p.addSlide();
   titleSlide(s, "ORIGIN", "A framework, carried across archetype",
-    "The solver and the assembly are unchanged. The physics is not.");
+    "The solver and the assembly are unchanged, while the governing physics differs.");
 
   s.addText([
-    { text: "The framework comes from the Stagnone di Marsala digital twin, where a coupled Delft3D FM and SWAN model was built for a shallow vegetated lagoon.", options: { breakLine: true, paraSpaceAfter: 10 } },
-    { text: "Carrying it to a second lagoon would test little. A reviewer could anticipate the outcome. Carrying it to a deep engineered harbour tests whether the pipeline is reusable or was fitted to one site.", options: { breakLine: true, paraSpaceAfter: 10 } },
-    { text: "What transfers is the assembly. What does not transfer is itself a result, and it is recorded rather than hidden.", options: {} },
+    { text: "The framework originates in the Stagnone di Marsala digital twin, a coupled Delft3D FM and SWAN model of a shallow vegetated lagoon.", options: { breakLine: true, paraSpaceAfter: 10 } },
+    { text: "A transfer to a second lagoon would remain within a single archetype and would establish little. A transfer to a deep engineered harbour establishes whether the pipeline is reusable or was fitted to one site.", options: { breakLine: true, paraSpaceAfter: 10 } },
+    { text: "The stages that transfer constitute the reuse. Those that do not constitute a finding about where the generality of the framework ends, and they are recorded as such.", options: {} },
   ], { x: M, y: 2.25, w: 5.7, h: 3.0, fontSize: 14.5, color: INK, fontFace: BODY,
        lineSpacing: 22, isTextBox: true, margin: 0 });
 
@@ -116,7 +116,7 @@ function note(s, txt) {
   }))), { x: 6.85, y: 2.25, w: 5.86, colW: [1.86, 2.0, 2.0], rowH: 0.46,
           border: { type: "solid", color: "D6DEE3", pt: 0.5 } });
 
-  note(s, "The transfer effort is logged stage by stage as transferred, re-parameterised, or not applicable. That log is the methodological result.");
+  note(s, "The transfer effort is logged stage by stage as transferred, re-parameterised or not applicable. That log constitutes the methodological result.");
   s.addNotes("Context. The thesis contribution is framework reusability, and Valletta constitutes the harder test.");
 }
 
@@ -142,9 +142,9 @@ function note(s, txt) {
   s.addImage({ path: path.join(FIG, "bathymetry_overview.png"),
     x: 4.55, y: 1.95, w: 5.2, h: 4.44 });
   s.addText([
-    { text: "Two coordinate hazards\n", options: { bold: true, color: INK, breakLine: true } },
-    { text: "The grids carry no datum. Interpreted as WGS84 they are displaced by 197 m, without error.\n", options: { color: MUTED, breakLine: true } },
-    { text: "Bathymetry is ED50, the coastline is WGS84. Neither overlays the other untransformed.", options: { color: MUTED } },
+    { text: "Two coordinate reference conditions\n", options: { bold: true, color: INK, breakLine: true } },
+    { text: "The grids do not encode their datum. Interpreted as WGS84 they are displaced by 197 m, and no error is raised.\n", options: { color: MUTED, breakLine: true } },
+    { text: "The bathymetry is ED50 and the coastline is WGS84, so neither overlays the other without a datum transformation.", options: { color: MUTED } },
   ], { x: 10.05, y: 2.6, w: 2.7, h: 2.2, fontSize: 11.5, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
@@ -156,14 +156,14 @@ function note(s, txt) {
 {
   const s = p.addSlide();
   titleSlide(s, "THE PHENOMENON", "The milgħuba is a meteotsunami",
-    "Rissaga in the Balearics, marrobbio on the Sicilian shelf. Not basin sloshing in general.");
+    "An atmospherically generated long wave, known as rissaga in the Balearics and as marrobbio on the Sicilian shelf.");
 
   const stages = [
-    ["Proudman resonance", "An atmospheric disturbance travelling at √(gh) pumps the sea beneath it.",
+    ["Proudman resonance", "Energy transfers most efficiently when the atmospheric disturbance travels at the celerity of the long wave beneath it.",
      "The Malta Plateau, 99 to 190 m, is resonant with disturbances of 94 to 155 km h⁻¹."],
-    ["Shoaling", "Green's law amplifies the wave as it climbs the approach.",
+    ["Shoaling", "Green's law governs the amplification of the wave over the shoaling approach.",
      "From the plateau into the harbours, a factor of 1.75 to 1.84."],
-    ["Basin resonance", "The harbour geometry amplifies what arrives at its mouth.",
+    ["Basin resonance", "The geometry of the basin amplifies the wave arriving at its mouth.",
      "Quarter-wave and Helmholtz estimates agree at 12 to 18 minutes."],
   ];
   stages.forEach((st, i) => {
@@ -218,12 +218,12 @@ function note(s, txt) {
   s.addText([
     { text: "The harbours respond to a shelf-scale oscillation rather than generating one.\n", options: { breakLine: true } },
     { text: "A domain confined to the harbours holds no resonator in the band, and the available boundary product carries no energy there.\n", options: { breakLine: true } },
-    { text: "The domain must contain the plateau.", options: { bold: true, color: WHITE } },
+    { text: "The domain is therefore required to contain the plateau.", options: { bold: true, color: WHITE } },
   ], { x: 9.75, y: 3.15, w: 2.7, h: 1.9, fontSize: 11.5, color: "CADCFC",
        fontFace: BODY, lineSpacing: 15, isTextBox: true, margin: 0 });
 
-  note(s, "Tested against its two plausible failures. A Helmholtz idealisation returns 12 to 18 minutes also, and the harbours amplify by less than a tenth across most of the band.");
-  s.addNotes("The domain follows from this table. Whether the group's harbour records carry energy near 17 minutes is the first outstanding question.");
+  note(s, "A Helmholtz idealisation returns 12 to 18 minutes likewise, and the harbours amplify by less than a tenth across the band.");
+  s.addNotes("The estimate was tested against its two plausible failures, the Helmholtz idealisation and excitation below resonance. The domain follows from this table. Whether the group's harbour records carry energy near 17 minutes is the first outstanding question.");
 }
 
 /* ---------------- 6. the domain ---------------- */
@@ -299,18 +299,18 @@ function note(s, txt) {
   s.addText("The formulation it replaces", { x: M, y: 3.78, w: 5.7, h: 0.32,
     fontSize: 14, bold: true, color: BLUE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
-    { text: "Whether the model reproduces the observed signal is binary and asymmetric. Affirmed, it confirms what is expected of a mature solver. Denied, it is blamed on the configuration.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "It interrogates the instrument rather than the system, and has no constituency beyond modellers.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "It is relocated to the methods.", options: { bullet: true } },
+    { text: "Whether the model reproduces the observed signal admits a binary and asymmetric answer. An affirmative result confirms what is expected of a mature solver, and a negative result is attributed to the configuration rather than to the physics.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+    { text: "The formulation interrogates the instrument rather than the system, and its answer concerns no constituency beyond the modelling community.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+    { text: "It is accordingly relocated to the methods.", options: { bullet: true } },
   ], { x: M, y: 4.16, w: 5.7, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
-  s.addText("Prior work to be cleared", { x: 6.95, y: 3.78, w: 5.7, h: 0.32,
+  s.addText("Prior work the study must clear", { x: 6.95, y: 3.78, w: 5.7, h: 0.32,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "Maltese coastal seiches were modelled in 2007, in a two-dimensional depth-averaged POM, for Mellieħa and St Paul's Bay, forced by a prescribed offshore long wave.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "Repeating that at Valletta in three dimensions would be incremental.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "The generation side is untouched, because the prior work imposes the wave rather than producing it, and it therefore remains unaddressed.", options: { bullet: true } },
+    { text: "A repetition at Valletta in three dimensions would be incremental.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+    { text: "The generation side is untreated, since the prior work imposes the offshore wave rather than producing it.", options: { bullet: true } },
   ], { x: 6.95, y: 4.16, w: 5.76, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
@@ -321,17 +321,17 @@ function note(s, txt) {
 {
   const s = p.addSlide();
   titleSlide(s, "EXPERIMENTAL DESIGN", "A parametric sweep in place of a hindcast",
-    "ERA5 does not resolve the atmospheric gravity waves that trigger the phenomenon. That has been the largest standing risk.");
+    "ERA5 does not resolve the atmospheric gravity waves that trigger the phenomenon, which has constituted the largest standing risk in the project.");
 
   const steps = [
     ["Sweep", "Impose a moving pressure disturbance and vary its speed, direction, width and duration."],
     ["Response surface", "The output is a transfer function of the geometry, independent of any particular storm."],
-    ["Observations invert", "They cease to be the forcing and become the test: do recorded events occur under the conditions identified as resonant?"],
+    ["Inversion of the observations", "The observations cease to be the forcing and become the test, addressing whether recorded events occur under the conditions identified as resonant."],
   ];
   steps.forEach((st, i) => {
     const y = 2.55 + i * 1.28;
     badge(s, i + 1, M, y, i === 2 ? ORANGE : BLUE);
-    s.addText(st[0], { x: M + 0.68, y: y - 0.02, w: 2.6, h: 0.32, fontSize: 14.5,
+    s.addText(st[0], { x: M + 0.68, y: y - 0.02, w: 3.7, h: 0.32, fontSize: 14.5,
       bold: true, color: INK, fontFace: HEAD, isTextBox: true, margin: 0 });
     s.addText(st[1], { x: M + 0.68, y: y + 0.32, w: 6.6, h: 0.72, fontSize: 12.5,
       color: MUTED, fontFace: BODY, lineSpacing: 17, isTextBox: true, margin: 0 });
@@ -342,7 +342,7 @@ function note(s, txt) {
   s.addText("Bearing beyond the present study", { x: 8.7, y: 2.72, w: 3.75, h: 0.6,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
-    { text: "A response surface is a property of the geometry. Climate change acts on the distribution of the forcing.\n", options: { breakLine: true } },
+    { text: "A response surface is a property of the geometry, whereas climate change acts on the distribution of the forcing.\n", options: { breakLine: true } },
     { text: "The two separate, so the surface is computed once and any later study with synoptic projections may convolve them without repeating the hydrodynamics.\n", options: { breakLine: true } },
     { text: "No climate scenario need be run through the model.", options: { bold: true, color: WHITE } },
   ], { x: 8.7, y: 3.35, w: 3.75, h: 2.3, fontSize: 11.5, color: "CADCFC",
@@ -359,15 +359,15 @@ function note(s, txt) {
 
   const qs = [
     ["Is there a sea level record inside the Grand Harbour, and at what sampling interval?",
-     "A spectrum would settle whether the basins carry energy near 17 minutes. The 0.2 to 2 cph band is observed at Mellieħa, on another coast, and the present analysis can only infer."],
+     "A spectrum would establish whether the basins carry energy near 17 minutes. The 0.2 to 2 cph band is observed at Mellieħa, on another coast, so the present analysis can only infer the Valletta response."],
     ["What is the full extent of prior work on the milgħuba, published or not?",
-     "The contribution rests on the generation side being open. That claim comes from a literature search, not from the authors, who are in this room."],
+     "The contribution rests on the generation side being unaddressed. That claim derives from a literature search rather than from consultation with its authors."],
     ["What is the sampling interval of the PORTO sea level stations?",
-     "The seiche band is 0.2 to 2 cph. Coarser than one minute and the model loses its observational target in its own frequency range."],
+     "The seiche band is 0.2 to 2 cph. At an interval coarser than one minute the model has no observational target within its own frequency range."],
     ["Is there documented damage or disruption inside the commercial port?",
-     "Flooding is documented at Msida and elsewhere. Mooring failure or interrupted operations would be held by Transport Malta and the terminals."],
+     "Flooding is documented at Msida and elsewhere. Records of mooring failure or interrupted operations would be held by Transport Malta and the terminals."],
     ["What is the levelling datum behind the bathymetry, and how does its zero relate to the tide gauges?",
-     "The files declare ellipsoidal heights and the data are orthometric. What remains is the offset against the gauges used for validation."],
+     "The files declare ellipsoidal heights while the data are orthometric. What remains to be established is the offset against the gauges used for validation."],
     ["Would the group regard the attribution question as a contribution, or as their own intention?",
      "Establishing this early avoids a duplication of intent."],
   ];
