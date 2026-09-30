@@ -26,6 +26,7 @@ The governing question is whether the framework, forced by observed atmospheric 
 | Research question | Reframed 24 September from model verification to attribution of amplification. Extended 25 September with a sensitivity on the geometry of the harbour mouth. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
 | Literature | Four items added 25 September from the material in `reference/`. Two change the assessment, the ARTELIA wave study of the Grand Harbour and the host group's 2018 design report |
 | Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
+| Open boundary | Pulse test run 30 September. Riemann reflects 0.3 to 1.3 per cent at normal incidence and 5 to 9 per cent up to 30 degrees, a prescribed level reflects all of it. See [docs/open_boundary_pulse_test.md](docs/open_boundary_pulse_test.md) |
 | Basin modes | Recomputed 30 September from the measured profile. Grand Harbour 14.5 to 18.4 min, Marsamxett 10.4 to 12.8 min. The 1910 breakwater does not shift the mode, since the harbour is not a Helmholtz resonator. See [docs/basin_modes.md](docs/basin_modes.md) |
 | Mesh | Not started. Scheduled for late October |
 | Model | Not started |
