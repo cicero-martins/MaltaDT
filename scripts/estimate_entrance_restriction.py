@@ -1,5 +1,10 @@
 """Sensitivity of the harbour long-wave response to a restriction of the mouth.
 
+Superseded 30 September 2026 by `estimate_basin_modes.py`. The measured Grand
+Harbour profile has no neck, so the Helmholtz scaling below overstates the
+response to a local restriction by a factor of three to ten. The script is kept
+as the record of the earlier scoping and is not to be reused.
+
 The pumping mode of a harbour and the volume it exchanges with the sea are both
 governed by the cross-section of its mouth. This script sweeps a restriction of
 that cross-section and reports what it does to the mode, as an academic

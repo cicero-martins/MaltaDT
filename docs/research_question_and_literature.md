@@ -160,6 +160,8 @@ The effect on exchange is separate from the effect on the mode, and it is the la
 
 **These figures are a scoping calculation and not a result.** They rest on an idealisation of the basin as a Helmholtz resonator and on a mouth cross-section that Section 2.1 shows to be simplified. They establish the order of the sensitivity and nothing further. The restriction is swept as a parameter and no particular design is represented.
 
+*Amended 30 September 2026.* The Helmholtz idealisation does not hold for the Grand Harbour. An eigenvalue calculation on the measured profile, reported in [basin_modes.md](basin_modes.md), finds the section at the entrance within 6 per cent of the median section of the basin, so the inertia of the mode is distributed along the harbour rather than concentrated at the mouth. A restriction of a quarter over a reach of 100 to 500 m then lengthens the period by 1.5 to 4 per cent rather than 15, and a restriction of a half by 4 to 12 per cent rather than 41. The comparison with sea level rise, computed on the same profiles at 3.1 per cent for a metre, changes accordingly. The two perturbations are of the same order, and the statement above that the geometry of the mouth is the dominant control on the mode is withdrawn. The effect on exchange is unaffected and becomes the principal quantity of the counterfactual.
+
 ---
 
 ## 5. Experimental design

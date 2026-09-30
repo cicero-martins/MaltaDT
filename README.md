@@ -25,7 +25,8 @@ The governing question is whether the framework, forced by observed atmospheric 
 | Delft mission | Delft3D User Days 2 to 4 November, inside block B3. Abstract due 19 October. Costs B3 four working days |
 | Research question | Reframed 24 September from model verification to attribution of amplification. Extended 25 September with a sensitivity on the geometry of the harbour mouth. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
 | Literature | Four items added 25 September from the material in `reference/`. Two change the assessment, the ARTELIA wave study of the Grand Harbour and the host group's 2018 design report |
-| Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. The Helmholtz estimate is to be recomputed from the mesh, since the entrance is partly closed by the 1910 breakwater. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
+| Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
+| Basin modes | Recomputed 30 September from the measured profile. Grand Harbour 14.5 to 18.4 min, Marsamxett 10.4 to 12.8 min. The 1910 breakwater does not shift the mode, since the harbour is not a Helmholtz resonator. See [docs/basin_modes.md](docs/basin_modes.md) |
 | Mesh | Not started. Scheduled for late October |
 | Model | Not started |
 | Seiche climatology | Not started. Scheduled for late September, from the Portomaso and PORTO archives |
