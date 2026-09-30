@@ -4,6 +4,18 @@ Coupled wave-hydrodynamic Delft3D FM and SWAN model of the Valletta harbour syst
 
 Distinct from, but methodologically dependent on, `../StagnoneDT`. The scientific contribution of this project is the transfer of the StagnoneDT framework across archetype, from a shallow vegetated micro-tidal lagoon to a deep engineered seiche-dominated harbour.
 
+## Where the inherited knowledge lives
+
+Claude Code keys its memory to the working directory, so the StagnoneDT store does not load here. **It holds roughly half of what this project depends on** and is to be read on demand at
+
+```
+C:\Users\Unipa\.claude\projects\c--Users-Unipa-Documents-StagnoneDT\memory\MEMORY.md
+```
+
+That index is to be consulted **before proposing anything** touching the solver, the forcing chain, mesh construction, coordinate systems, the Lagrangian pipeline or the EDITO infrastructure. The groups on vegetation, sediment and the `v04*` setups are lagoon-specific and do not transfer. The decision not to copy the files is deliberate, since two copies diverge as soon as either project learns something new about the solver. Local memory carries a pointer entry with the mapping from subject to group.
+
+Cross-cutting rules, namely the register, the prose style, the tool traps and the commit cadence, live in `~/.claude/CLAUDE.md` and load in every session.
+
 **The milghuba is a meteotsunami, not a seiche in general**, alongside the rissaga of the Balearics and the marrobbio of Sicily. The governing question is the partition of amplification between Proudman resonance over the Malta Plateau, shoaling on the approach, and resonance of the basins. Prior work already treats Maltese coastal seiches in 2D with prescribed offshore forcing, so the generation side remains unaddressed. The hazard is documented: the milghuba floods Msida, at the head of Msida Creek inside Marsamxett, together with Marsaskala, Xemxija, Marsaxlokk and Sliema. Climate change is a bounded discussion element, since the parametric sweep yields a transfer function of the geometry and climate acts on the input distribution, so the two separate and no climate scenario need be run through the model. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md).
 
 ## Register
