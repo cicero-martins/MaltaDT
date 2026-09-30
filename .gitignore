@@ -14,6 +14,9 @@ model/**/hot_*.nc
 model/**/com.nc
 model/**/TMP_ESMF_*.nc
 
+# Testes sinteticos: regeneraveis pelo script build_* correspondente
+model/tests/
+
 # Rascunhos
 scripts/_*
 notebooks/_*
