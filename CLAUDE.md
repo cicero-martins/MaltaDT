@@ -85,9 +85,9 @@ Two caveats remain. The declared 44 m is a floor on co-registration even though 
 | Portomaso, MedGLOSS | Feb 2001 | real time | St Julian's, outside both basins |
 | Mellieħa Bay | 1993 to 2001 | historical | The series behind Drago (2009) |
 
-Four current stations, matching the seven meteo and four sea level stations the group reports. PORTO acquires at **one-minute** intervals. Senglea and Portomaso give an inside and outside pair for the Grand Harbour, and 5 s over-resolves the 0.2 to 2 cph band by a wide margin. The JRC TAD route is the one `StagnoneDT/scripts/download_marettimo_wl_long.py` already uses for device 658; the Senglea device id is not yet established.
+Four current stations, matching the seven meteo and four sea level stations the group reports. PORTO acquires at **one-minute** intervals. Senglea and Portomaso give an inside and outside pair for the Grand Harbour, and 5 s over-resolves the 0.2 to 2 cph band by a wide margin. **Senglea is JRC TAD device 555** (IDSL-42), found through `TAD_server/api/Groups/GetGeoJSON?group=IDSL`. **It has been offline since 13 December 2024**, covers 43 per cent of its span, and carries upward radar echoes and reference offsets of 1.3 to 2.1 m. Only two windows are usable, 24 June to 31 December 2021 and 1 December 2022 to 31 March 2023, a choice to be confirmed with Prof. Gauci. The spectrum shows permanent modes at 23.0, 16.8, 10.0 and 6.9 minutes, the 23 minute mode dominant and amplified some 2.8 times against Marsaxlokk (device 556), outside the predicted 14.5 to 18.4 minutes. See [docs/senglea_spectrum.md](docs/senglea_spectrum.md).
 
-The interior gap that remains is **currents and stratification**, not sea level. An entry here listing Ċirkewwa as an IDSL station is not corroborated by the Copernicus review and is to be checked.
+The interior gap that remains is **currents and stratification**, not sea level. Ċirkewwa does appear on the TAD server as IDSL-34 (device 533), active to November 2021, though with too little coverage for spectral use.
 
 Portal: `ocean.mt/bluedata`. Model output is to be integrated into this existing portal rather than served through a second one.
 
