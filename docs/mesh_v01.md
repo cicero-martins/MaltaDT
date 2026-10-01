@@ -49,4 +49,41 @@ FM 2026.01 initialises on the mesh and completes two hours of still water with a
 
 **The other embayments with documented milgħuba**, St Paul's Bay and Xemxija, Mellieħa, Marsaskala and Marsaxlokk, are resolved at 120 m. Whether any of them requires the harbour resolution depends on the questions the study retains.
 
+---
+
+## 4. Computational cost and the width of the coastal zones
+
+Three variants were built with the same harbour resolution and narrower coastal zones, by `build_mesh_v01.py --version --near-m --far-m`, and run for six hours with a long wave of 0.15 m amplitude and 25 minute period entering through the eastern boundary, near the mode of the harbours, by `build_mesh_smoke_test.py --forced`. The forcing is strong, with water level reaching ±2 m in the harbours and speed 4.3 m/s at the entrance, and the time step it imposes is therefore a lower bound.
+
+| Variant | 120 m zone | 480 m zone | Faces | Mean time step | Wall time per step | Wall time per simulated day, serial, 2D | Largest water level |
+|---|---|---|---|---|---|---|---|
+| v01 | 2 km | 15 km | 41 353 | 3.7 s | 42.0 ms | 971 s | 2.07 m |
+| v01b | 1 km | 5 km | 26 766 | 3.7 s | 26.4 ms | 611 s | 2.09 m |
+| v01c | 1 km | 10 km | 29 993 | | | | |
+| v01d | 0.5 km | 5 km | 22 719 | 3.7 s | 21.5 ms | 498 s | 2.09 m |
+
+The time step is the same in all three, since it is set by the 15 m cells of the harbour channels, which the variants share. The cost per step is close to 1.0 µs per face, so the cost falls in proportion to the face count, and the largest water level in the harbours changes by 0.02 m. Some 12 000 faces, the 15 and 30 m cells of the harbours and their transition triangles, are common to every variant and set a floor on the count.
+
+The campaign implied by the experimental design was costed on the following assumptions, which are stated so that they can be revised.
+
+| Component | Assumption | Simulated days |
+|---|---|---|
+| Parametric sweep, 2D | 6 speeds × 8 directions × 2 widths, 12 h each, repeated for the restricted mouth | 96 |
+| Renewal, 3D | present and restricted mouth, 60 days each | 120 |
+| Validation hindcast and storm case, 3D | some 40 days | 40 |
+
+The 2D cost is measured. The 3D cost is scaled from the StagnoneDT v04AE configuration, 25 200 faces with a minimum cell of 15 m, 10 sigma layers, salinity and temperature, which takes some 16 minutes of FM time per simulated day on 8 MPI processes, in proportion to the face count. The scaling assumes a comparable time step and carries an uncertainty of a factor of two.
+
+| Variant | 2D sweep, serial total | 2D sweep, 16 runs in parallel | 3D, per simulated day, 8 MPI | 3D, 160 days, 8 MPI |
+|---|---|---|---|---|
+| v01 | 26 h | 1.6 h | 26 min | 70 h |
+| v01b | 16 h | 1.0 h | 17 min | 45 h |
+| v01d | 13 h | 0.8 h | 14 min | 38 h |
+
+Three readings follow. **The 3D renewal runs dominate the cost, not the sweep**, by a factor of three. **The step from v01 to v01b saves 37 per cent throughout** and returns the face count to the 28 500 of the sizing exercise. **Neither variant is prohibitive**, the full campaign occupying some three days of machine time under v01 and two under v01b. The 2D cost is an upper bound, since forcing weaker than the present test allows a time step closer to the 30 s limit, by a factor of up to eight.
+
+The levers that remain are, in order of effect, the resolution of the narrow channels, which sets the time step and would roughly halve the cost at 30 m against the requirement of four cells across a 60 m inlet, the number of sigma layers, and the coastal zones examined here.
+
+---
+
 **The open boundary lies 20 to 60 km from the harbours** and its corners on the open plateau, as recommended by [open_boundary_pulse_test.md](open_boundary_pulse_test.md).

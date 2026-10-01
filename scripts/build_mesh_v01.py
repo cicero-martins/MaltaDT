@@ -93,6 +93,15 @@ PASSES = (("band_960", 960.0), ("coast_far", 480.0), ("band_240", 240.0),
 FM_ORTHO_LIMIT = 0.5
 
 
+def set_variant(version: str, near_m: float, far_m: float) -> None:
+    """Point the outputs and the coastal zone widths at a named variant."""
+    global OUT, FIGURE, NAME, ZONE_COAST_NEAR_M, ZONE_COAST_FAR_M
+    OUT = ROOT / "data" / "processed" / f"mesh_{version}"
+    FIGURE = ROOT / "figures" / f"mesh_{version}.png"
+    NAME = f"malta_{version}"
+    ZONE_COAST_NEAR_M, ZONE_COAST_FAR_M = near_m, far_m
+
+
 def domain_metric():
     """Domain rectangle in UTM 33N covering the nominal box, a whole number of base cells."""
     from pyproj import Transformer
@@ -349,7 +358,14 @@ def main(argv=None) -> int:
     ap.add_argument("--figure", action="store_true")
     ap.add_argument("--figure-only", action="store_true",
                     help="redraw the figure from the written mesh")
+    ap.add_argument("--version", default="v01",
+                    help="name of the variant, used for the output directory and files")
+    ap.add_argument("--near-m", type=float, default=ZONE_COAST_NEAR_M,
+                    help="width of the 120 m zone from the coast")
+    ap.add_argument("--far-m", type=float, default=ZONE_COAST_FAR_M,
+                    help="width of the 480 m zone from the coast")
     args = ap.parse_args(argv)
+    set_variant(args.version, args.near_m, args.far_m)
     if args.figure_only:
         plot_from_file()
         return 0
