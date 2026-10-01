@@ -30,7 +30,7 @@ All generated text, in documents, code comments and commit messages, is written 
 - **Bathymetry obtained** 2026-09-22. CDI `4036_MEPA`, 10 m LiDAR and sonar grids covering the Maltese Islands. Merged product in `data/processed/`. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md).
 - **Coastline obtained** 2026-09-23. 26 polygons, 315.4 km2, WGS84 / UTM 33N. See [docs/coastline_dataset.md](docs/coastline_dataset.md).
 - **No field campaign planned.** The study proceeds on existing observations. Deferred rather than cancelled.
-- **No model built yet.** Mesh construction is scheduled for B3, 27 October to 21 November.
+- **Mesh v01 built 1 October**, ahead of B3. 41 353 faces, 15 m in the narrow harbour channels to 1920 m offshore, accepted by FM 2026.01 in a two-hour still-water run. **Build in UTM 33N and transform the nodes to WGS84**: refined directly in degrees, the quadtree transitions reach orthogonality 1 and FM rejects the network as not orthogonal. See [docs/mesh_v01.md](docs/mesh_v01.md).
 
 Planning documents. [docs/malta_valletta_model_plan.md](docs/malta_valletta_model_plan.md) is the operative plan. [docs/malta_period_plan_2026-2027.md](docs/malta_period_plan_2026-2027.md) holds the block calendar and the parallel commitments at UNIPA.
 
