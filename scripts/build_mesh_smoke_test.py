@@ -9,7 +9,7 @@ stays near zero, and the diagnostic file reports the number of open boundary
 cells and any rejection.
 
 Usage:
-    python build_mesh_smoke_test.py --version v01
+    python build_mesh_smoke_test.py --version v02
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ def forcing_rows(forced: bool, t_stop: float) -> str:
 def split_east(pts):
     """Split the closed domain polyline into its eastern side and the other three.
 
-    The polyline of build_mesh_v01.py starts at the south-east corner and runs
+    The polyline of build_mesh_v02.py starts at the south-east corner and runs
     north along the eastern side, so that side is the leading run of points
     sharing the largest UTM easting.
     """
@@ -185,7 +185,7 @@ def cost_summary(d: Path, version: str, t_stop: float) -> None:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--version", default="v01")
+    ap.add_argument("--version", default="v02")
     ap.add_argument("--forced", action="store_true",
                     help="drive the harbours near their mode, to measure the time step")
     args = ap.parse_args(argv)

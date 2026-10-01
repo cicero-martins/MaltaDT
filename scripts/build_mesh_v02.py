@@ -1,4 +1,4 @@
-"""Build the unstructured mesh of domain B, version 01.
+"""Build the unstructured mesh of domain B, version 02.
 
 Domain B covers the Maltese Islands and the near Malta Plateau, 14.05 to
 15.00 E and 35.70 to 36.30 N, as proposed in docs/domain_and_discretisation.md.
@@ -12,11 +12,18 @@ halves to 960, 480, 240, 120, 60, 30 and 15 m, and each zone is imposed as a
 polygon refined to its target edge.
 
     zone                                              target   sizing value
-    beyond 15 km of the coast                         1920 m   1500 m
-    within 15 km of the coast                          480 m    300 m
-    within 2 km of the coast                           120 m    100 m
+    beyond 5 km of the coast                          1920 m   1500 m
+    within 5 km of the coast                           480 m    300 m
+    within 1 km of the coast                           120 m    100 m
     Valletta harbours and approaches                    30 m     30 m
     Valletta channels narrower than 150 m               15 m     15 m
+
+Version 02 narrows the coastal zones of version 01, which reached 2 km at
+120 m and 15 km at 480 m, to 1 km and 5 km. The time step is set by the 15 m
+channels and is unchanged, so the cost falls with the face count, from 41 353
+to 26 766, while the largest water level in the harbours under a resonant
+long wave changes by 0.02 m (docs/mesh_v01.md, Section 4). Version 01 is
+rebuilt with --version v01 --near-m 2000 --far-m 15000.
 
 A band of the intermediate level, BAND_CELLS cells wide, separates every zone
 from surroundings two levels coarser, so that neighbouring cells differ by one
@@ -51,7 +58,7 @@ corrected in this version, since it falls on the open plateau at depths of
 50 to 190 m.
 
 Usage:
-    python build_mesh_v01.py [--figure]
+    python build_mesh_v02.py [--figure]
 """
 
 from __future__ import annotations
@@ -69,17 +76,17 @@ ROOT = Path(__file__).resolve().parents[1]
 BATHY = ROOT / "data" / "processed" / "mepa_4036_merged_10m_wgs84.tif"
 SHELF = ROOT / "data" / "external" / "emodnet_shelf.tif"
 COAST = ROOT / "data" / "processed" / "malta_coastline_wgs84.gpkg"
-OUT = ROOT / "data" / "processed" / "mesh_v01"
-FIGURE = ROOT / "figures" / "mesh_v01.png"
-NAME = "malta_v01"
+OUT = ROOT / "data" / "processed" / "mesh_v02"
+FIGURE = ROOT / "figures" / "mesh_v02.png"
+NAME = "malta_v02"
 
 CRS = "EPSG:4326"
 METRIC = "EPSG:32633"
 DOMAIN_LONLAT = (14.05, 35.70, 15.00, 36.30)
 BASE_M = 1920.0
 
-ZONE_COAST_FAR_M = 15000.0
-ZONE_COAST_NEAR_M = 2000.0
+ZONE_COAST_FAR_M = 5000.0
+ZONE_COAST_NEAR_M = 1000.0
 HARBOUR_BOX = (14.488, 35.872, 14.535, 35.912)
 NARROW_WIDTH_M = 150.0
 HARBOUR_BUFFER_M = 60.0         # carries the basin zone over the shoreline
@@ -358,7 +365,7 @@ def main(argv=None) -> int:
     ap.add_argument("--figure", action="store_true")
     ap.add_argument("--figure-only", action="store_true",
                     help="redraw the figure from the written mesh")
-    ap.add_argument("--version", default="v01",
+    ap.add_argument("--version", default="v02",
                     help="name of the variant, used for the output directory and files")
     ap.add_argument("--near-m", type=float, default=ZONE_COAST_NEAR_M,
                     help="width of the 120 m zone from the coast")
@@ -448,7 +455,7 @@ def plot(uds, sizes):
         if extent is None:
             ax.set_xlim(grid.node_x.min(), grid.node_x.max())
             ax.set_ylim(grid.node_y.min(), grid.node_y.max())
-            ax.set_title("Domain B, mesh v01, face size", fontsize=9, loc="left")
+            ax.set_title(f"Domain B, mesh {NAME.split('_')[-1]}, face size", fontsize=9, loc="left")
         else:
             ax.set_xlim(extent[0], extent[2])
             ax.set_ylim(extent[1], extent[3])
