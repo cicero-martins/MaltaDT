@@ -97,8 +97,32 @@ The second reading is consistent with the calculation and the first is consisten
 
 ---
 
-## 7. Matters for the host group
+## 7. Reported events against the record
 
-1. The choice of windows, the cause of the gaps of 2022 and of the level shift of 2023, and whether the gauge was relocated.
-2. Dates of milgħuba events reported between June 2021 and March 2023, against which the record can be searched.
-3. Access to the Portomaso record at one-minute resolution or finer, which would give a gauge outside both basins on the same coast and decide between the two readings of Section 6.
+Events of long-period sea level oscillation reported for Malta since 2018, and the state of the public records on each date.
+
+| Date | Type | Reported effects | Source | Senglea, JRC TAD | Other public records |
+|---|---|---|---|---|---|
+| 25 Oct 2018, 22:54 UTC | seismic tsunami, earthquake west of Greece | excursions of some 25 cm at Portomaso | University of Malta, Newspoint, 1 Nov 2018 | before installation | |
+| 18 Jun 2019, from about 02:30 for some 3 h | milgħuba, atmospheric gravity waves from the east | sea bed exposed and quay overtopped in St Paul's Bay, recorded at Portomaso | A. Drago, University of Malta, Newspoint, 21 Jun 2019 | before installation | |
+| 30 Jun 2022 | milgħuba | recession then flooding beyond the shoreline at Marsaskala, St Julian's and Qawra, normal level after some 35 min | Newsbook, 30 Jun 2022 | **no data**, record resumes 1 Jul 01:02 with a decaying 23 minute oscillation of 0.13 m range | Marsaxlokk ended Mar 2022. Portomaso, IOC, no data |
+| 1 Jul 2023, from about 02:30 for some 2 h | milgħuba | flooding at Marsaskala and Xemxija, a car carried into the sea | MaltaToday, 1 Jul 2023 | displaced regime, daytime only, noise of ±0.3 m with downward spikes, **unusable** | Portomaso, IOC, no data |
+| 13 Jun 2024 | meteotsunami | flooding of the main square of Msida near the Workers' Memorial | MaltaToday, 14 Jun 2024, citing the Oceanography Malta Research Group | displaced regime, daytime only, **unusable** | |
+
+The two University of Malta notes are the institutional sources. The events of 2022 and 2023 are documented in the press only, and a statement or record of the host group is to be sought for them. The 2018 event is the observed analogue of the seismic case noted in the literature document as a possible continuation.
+
+**None of the three events since the installation of the Senglea gauge is resolved in the public copy of its record.** On 30 June 2022 the record is absent, and in July 2023 and June 2024 it is in the displaced regime, transmitting by day only, which suggests a failure of power supply as well as of the measurement. The Portomaso station is listed by the IOC monitoring facility with the status "No response to operator email 2023-11-16" and returns no data for either date. The events fall outside the windows because the instrument failed on those dates, not because the selection excluded them.
+
+The displaced regime places the reading some 2 m above the water with a noise of ±0.3 m, which is compatible with the radar ranging to the deck of a vessel or a pontoon beneath it. This is a conjecture to be put to the host group.
+
+---
+
+## 8. Matters for the host group
+
+1. **Sea level from the archive of the group** at Senglea and Delimara, at 5 s or one minute, for 29 June to 2 July 2022, 30 June to 2 July 2023 and 12 to 14 June 2024, since the public copy does not resolve any of them.
+2. **Atmospheric pressure at one minute from the PORTO stations** on the same dates, Elmo, Kordin and Msida first. The pressure signature is the disturbance that forces the milgħuba and the direct input of the parametric sweep.
+3. Whether the IDSL units on the JRC TAD server are the instruments of the group. The dates and positions agree with the Copernicus review, Senglea from June 2021 and an IDSL at Delimara from March 2021, which the server names IDSL-43 Marsaxlokk at 14.5548 E, 35.8316 N, but the correspondence is not confirmed.
+4. The choice of windows, the cause of the gaps of 2022 and of the displaced regime, whether the gauge was relocated, and whether a vessel or pontoon lies beneath it.
+5. Access to the Portomaso record at one-minute resolution or finer, which would give a gauge outside both basins on the same coast and decide between the two readings of Section 6.
+
+The PORTO display of 1 October 2026 lists eight meteorological stations, Mġarr, Ċirkewwa, Qammieħ, Msida, Elmo, Kordin, Delimara and Marsaxlokk, with Qammieħ and Marsaxlokk not reporting. The station at Msida, at 64 m above sea level, stands over the head of Msida Creek where the flooding of 2024 was reported.
