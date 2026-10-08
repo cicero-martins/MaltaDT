@@ -2,37 +2,36 @@
 
 Coupled wave-hydrodynamic model of the Grand Harbour and Marsamxett Harbour, Malta, constructed with Delft3D FM and SWAN coupled through DIMR.
 
-Undertaken during a research period at the Oceanography Malta Research Group, Department of Geosciences, University of Malta, from September 2026 to March 2027, and contributing to deliverable D.3.3.3 of the Interreg VI-A Italia-Malta WETWISE project.
+Undertaken within the Oceanography Malta Research Group, Department of Geosciences, University of Malta, during a research period from the Università degli Studi di Palermo, September 2026 to March 2027, and contributing to deliverable D.3.3.3 of the Interreg VI-A Italia-Malta WETWISE project.
 
 ## Scientific framing
 
-The project tests whether a coupled-physics modelling framework developed for a shallow vegetated micro-tidal lagoon transfers to a hydrodynamically dissimilar setting. The framework originates in the Stagnone di Marsala digital twin (`../StagnoneDT`), where tidal forcing sets the boundary signal and wind drives the circulation over sub-metre depths across a seagrass canopy. The Valletta harbours invert that hierarchy. They are drowned river valleys of 12 to 20 m depth, heavily engineered, without significant canopy, and dominated by the milgħuba, a seiche oscillation in the 0.2 to 2 cph band carrying sufficient energy to mask the tidal signal entirely.
+The project tests whether a coupled-physics modelling framework developed for a shallow vegetated micro-tidal lagoon transfers to a hydrodynamically dissimilar setting. The framework originates in the Stagnone di Marsala digital twin (`../StagnoneDT`), where tidal forcing sets the boundary signal and wind drives the circulation over sub-metre depths across a seagrass canopy. The Valletta harbours invert that hierarchy. They are drowned river valleys of 12 to 20 m depth, heavily engineered, without significant canopy, and subject to the milgħuba, a meteotsunami known as rissaga in the Balearics and as marrobbio in Sicily, an atmospherically generated long wave in the 0.2 to 2 cph band.
 
-The transfer is therefore across archetype rather than within it, which constitutes a stronger test of framework reusability than the transfer to a second lagoon originally proposed.
+The transfer is therefore across archetype rather than within it, which constitutes a stronger test of framework reusability than a transfer to a second lagoon.
 
-The governing question is whether the framework, forced by observed atmospheric conditions from the PORTO coastal network and observed offshore conditions from the BLUE buoy, reproduces the seiche response of the two harbours in period, amplitude and inter-basin phase, and what that response implies for harbour flushing and residence time.
+The governing question is how the amplification between the open sea and the heads of the harbours is partitioned between Proudman resonance over the Malta Plateau, shoaling on the approach and resonance of the basins, and which atmospheric disturbance speeds and directions maximise that chain. Three accompanying questions concern the exposure by inlet and quay, the renewal of harbour water, and the sensitivity of both to the geometry of the harbour mouth. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md).
+
+The results reported below are preliminary. The period estimates are one-dimensional, the observational test rests on a single gauge, and no production run has been made.
 
 ## Status
 
 | Component | State |
 |---|---|
-| Site selection | Fixed 22 September 2026 with the host group |
-| Bathymetry | Obtained. CDI `4036_MEPA`, 10 m LiDAR and sonar, Maltese Islands. Merged. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md) |
-| Coastline | Obtained. 26 polygons, 315.4 km2, WGS84 / UTM 33N, verified against the bathymetry. See [docs/coastline_dataset.md](docs/coastline_dataset.md) |
+| Site | The Valletta harbours, Grand Harbour and Marsamxett |
+| Bathymetry | CDI `4036_MEPA`, 10 m LiDAR and sonar, Maltese Islands, merged. See [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md) |
+| Coastline | 26 polygons, 315.4 km2, WGS84 / UTM 33N, verified against the bathymetry. See [docs/coastline_dataset.md](docs/coastline_dataset.md) |
 | Aligned basemap | Bathymetry and coastline co-registered in EPSG:4326 in `data/processed/`. 99.51% land and water agreement, median disagreement one cell |
-| Observational basis | Identified. BLUE buoy, PORTO network, HF radar, and the **Senglea IDSL gauge inside the Grand Harbour** at 5 s since June 2021, established 25 September. Access terms pending |
+| Observational basis | BLUE buoy, PORTO network, HF radar, and the Senglea IDSL gauge inside the Grand Harbour at 5 s. The public copy of the Senglea record covers 43 per cent of June 2021 to December 2024 and resolves none of the milgħuba events reported in that span |
+| Research question | Attribution of amplification along the generation chain, with three accompanying questions. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
+| Domain and discretisation | Domain B over the Malta Plateau, roughly 86 by 66 km, 15 m in the inlets, 12 to 15 sigma layers foreseen. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
+| Basin modes | First-order estimate from the measured profile. Grand Harbour 14.5 to 18.4 min, Marsamxett 10.4 to 12.8 min, both above the milgħuba band. See [docs/basin_modes.md](docs/basin_modes.md) |
+| Senglea spectrum | Two windows provisionally admitted. Peaks at 23.0, 16.8, 10.0 and 6.9 min, all above the band, the dominant one longer than estimated. See [docs/senglea_spectrum.md](docs/senglea_spectrum.md) |
+| Open boundary | Idealised pulse test. A Riemann boundary reflects 0.3 to 1.3 per cent at normal incidence and 5 to 9 per cent up to 30 degrees, a prescribed level nearly all of it. A residual current, a CMEMS signal and a pressure disturbance crossing the boundary remain to be tested. See [docs/open_boundary_pulse_test.md](docs/open_boundary_pulse_test.md) |
+| Mesh | Version 02. 26 766 faces, 15 m in the narrow harbour channels to 1920 m offshore, built in UTM 33N and transformed to WGS84, accepted by D-Flow FM 2026.01. See [docs/mesh_v02.md](docs/mesh_v02.md) and [docs/mesh_v01.md](docs/mesh_v01.md) |
+| Experimental design | A sweep of 96 idealised pressure disturbances, two-dimensional and barotropic, for the long wave, and a three-dimensional hindcast for validation. Proposed, not yet run |
+| Model runs | Acceptance runs of the mesh only, at rest and under a forced long wave. A pilot scenario and the sweep are planned for October 2026 and the three-dimensional runs for November |
 | Field campaign | Not planned. The study proceeds on existing observations |
-| Delft mission | Delft3D User Days 2 to 4 November, inside block B3. Abstract due 19 October. Costs B3 four working days |
-| Research question | Reframed 24 September from model verification to attribution of amplification. Extended 25 September with a sensitivity on the geometry of the harbour mouth. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md) |
-| Literature | Four items added 25 September from the material in `reference/`. Two change the assessment, the ARTELIA wave study of the Grand Harbour and the host group's 2018 design report |
-| Domain and discretisation | Sized 23 September. Domain B over the plateau, 15 m in the inlets, 12 to 15 sigma layers. See [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md) |
-| Mesh v02 | Working mesh, built 1 October. 26 766 faces, 15 m in the narrow channels to 1920 m offshore, built in UTM and transformed to WGS84, accepted by FM. Selected over v01 (41 353 faces) on measured cost. See [docs/mesh_v02.md](docs/mesh_v02.md) |
-| Senglea gauge | Analysed 1 October. Two usable windows, to be confirmed with the host group. Permanent modes at 23.0, 16.8, 10.0 and 6.9 min, all outside the milgħuba band, the 23 min mode dominant and longer than predicted. See [docs/senglea_spectrum.md](docs/senglea_spectrum.md) |
-| Open boundary | Pulse test run 30 September. Riemann reflects 0.3 to 1.3 per cent at normal incidence and 5 to 9 per cent up to 30 degrees, a prescribed level reflects all of it. See [docs/open_boundary_pulse_test.md](docs/open_boundary_pulse_test.md) |
-| Basin modes | Recomputed 30 September from the measured profile. Grand Harbour 14.5 to 18.4 min, Marsamxett 10.4 to 12.8 min. The 1910 breakwater does not shift the mode, since the harbour is not a Helmholtz resonator. See [docs/basin_modes.md](docs/basin_modes.md) |
-| Mesh | Not started. Scheduled for late October |
-| Model | Not started |
-| Seiche climatology | Not started. Scheduled for late September, from the Portomaso and PORTO archives |
 
 ## Layout
 
@@ -45,17 +44,21 @@ scripts/           reusable tooling
 notebooks/         pipelines, numbered by role
 model/             model configurations and runs
 figures/           generated figures
-reference/         third-party material, including the four PDFs of the 25 September pass
+reference/         third-party material, listed in reference/README.md
 ```
 
 ## Documents
 
-- [docs/malta_valletta_model_plan.md](docs/malta_valletta_model_plan.md), the operative plan: scientific question, model configuration, block allocation, risks
+- [docs/research_question_and_literature.md](docs/research_question_and_literature.md), the research question, the prior work it must clear, and the reading list
+- [docs/malta_valletta_model_plan.md](docs/malta_valletta_model_plan.md), the operative plan, covering the model configuration, the block allocation and the risks
 - [docs/malta_period_plan_2026-2027.md](docs/malta_period_plan_2026-2027.md), the block calendar and the parallel commitments at UNIPA
 - [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md), assessment of the bathymetric dataset
 - [docs/coastline_dataset.md](docs/coastline_dataset.md), assessment of the coastline, including the inference establishing the vertical datum
 - [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md), sizing of the domain, the horizontal resolution and the vertical layering
-- [docs/research_question_and_literature.md](docs/research_question_and_literature.md), the research question, the prior work it must clear, and the reading list
+- [docs/basin_modes.md](docs/basin_modes.md), fundamental long-wave modes of the two harbours from the measured geometry
+- [docs/senglea_spectrum.md](docs/senglea_spectrum.md), quality control and spectrum of the Senglea gauge, and the reported events against the public records
+- [docs/open_boundary_pulse_test.md](docs/open_boundary_pulse_test.md), reflection of the Riemann and prescribed-level boundaries under a synthetic pulse
+- [docs/mesh_v02.md](docs/mesh_v02.md) and [docs/mesh_v01.md](docs/mesh_v01.md), the working mesh, its construction and quality, and the measured cost that selected it
 - [docs/valletta_model_concept_2026-10-08.pptx](docs/valletta_model_concept_2026-10-08.pptx), sixteen slides on the model concept, the estimated and observed basin modes, the mesh, the open boundary, the experimental design and the open questions, prepared for discussion within the Oceanography Malta Research Group. Regenerated by `scripts/build_concept_deck.js`
 - [docs/valletta_model_concept_2026-10-08_short.pptx](docs/valletta_model_concept_2026-10-08_short.pptx), a nine-slide version of the same deck. Regenerated by `scripts/build_concept_deck_short.js`
 - [docs/deck_cover.pptx](docs/deck_cover.pptx), the cover of both decks, edited in PowerPoint. `scripts/copy_deck_cover.ps1` places it over the first slide of a generated deck and repeats its photograph behind the last
@@ -67,7 +70,13 @@ reference/         third-party material, including the four PDFs of the 25 Septe
 
 `scripts/domain_design_estimate.py` sizes the domain, the resolution and the layering from the bathymetry, and `scripts/check_register.py` flags departures from the register the project writes in.
 
-`scripts/estimate_entrance_restriction.py` sweeps a restriction of the harbour mouth and reports what it does to the pumping mode, as an academic sensitivity on the class of basin rather than as an assessment of any design.
+`scripts/estimate_basin_modes.py` solves the one-dimensional long-wave eigenproblem on the measured profile of each harbour and reports the sensitivity of the fundamental mode to the breakwater, to a restriction of the entrance and to sea level rise. `scripts/estimate_entrance_restriction.py` holds the Helmholtz scaling of that sensitivity, which the measured profile shows to overstate it, and is kept for comparison only.
+
+`scripts/build_riemann_pulse_test.py` and `scripts/analyse_riemann_pulse_test.py` build and analyse the synthetic pulse test of the open boundary in D-Flow FM.
+
+`scripts/download_jrc_tad_wl.py` retrieves radar gauge records from the JRC TAD server by device, `scripts/despike_tad_5s.py` removes upward radar echoes from the 5 s samples, `scripts/analyse_senglea_spectrum.py` applies the quality control and computes the spectrum of the Senglea record, and `scripts/figure_senglea_record.py` draws the plates used to inspect it.
+
+`scripts/build_mesh_v02.py` builds the mesh of the domain by zone, and `scripts/build_mesh_smoke_test.py` runs it in D-Flow FM at rest and under a forced long wave, reporting the time step and the wall time.
 
 `scripts/probe_emodnet_bathymetry.py` interrogates the EMODnet Bathymetry services over an arbitrary bounding box, reporting grid resolution, wet-cell coverage and the CDI provenance records actually used by the digital terrain model. It was written to establish whether the public product was adequate for this site, and it is applicable to any coastal domain.
 
