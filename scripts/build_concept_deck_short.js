@@ -263,7 +263,7 @@ function table(s, rows, opts, align) {
   box(s, M, 5.3, 5.95, 1.5, "State of the record",
     "Two windows are provisionally admitted to the analysis, 24 June to 31 December 2021 and 1 December 2022 to 31 March 2023. From April 2023 the level appears displaced by some 2 m and the gauge transmits by day only.", false);
   box(s, 6.76, 5.3, 5.95, 1.5, "Consequence for the study",
-    "None of the three events since installation is resolved in the public copy. The archive of the group, sea level and one-minute pressure, would therefore be the record against which the response surface is tested.", true);
+    "None of the three events since installation is resolved in the public copy. If available an archive of the group, with sea level and one-minute pressure, would therefore be the record against which the response surface is tested.", true);
 
   s.addNotes("The figure shows the one-minute level after quality control and the daily coverage, with the two admitted windows shaded and the three events reported since installation marked in orange. On 30 June 2022 the record is absent and resumes on 1 July. In July 2023 and June 2024 the level sits some 2 m above its earlier position with coverage near a half, the gauge transmitting by day only. Sources for the events. University of Malta Newspoint for 2018 and 2019, Newsbook for 2022, MaltaToday for 2023 and 2024, the last citing the Oceanography Malta Research Group. Portomaso returns no data from the IOC facility on those dates. The choice of windows rests on monthly coverage and stability of the level and is to be confirmed within the group.");
 }
