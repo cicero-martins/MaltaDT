@@ -43,13 +43,16 @@ DOMAINS = [
     ("C", (13.90, 35.60, 15.30, 36.75), INK),
 ]
 
-# Resonators, as label, period in minutes, frequency in cph, category.
+# Resonators, as label, period in minutes, frequency in cph, category. The
+# shelf and the inlets are quarter-wave estimates. The harbours carry the range
+# of the fundamental mode computed on the measured profile by
+# estimate_basin_modes.py, plotted at the geometric mean of its limits.
 RESONATORS = [
     ("Plateau to Sicily\nquarter wave", 156.4, 0.38, "shelf"),
     ("Plateau to Sicily\nhalf wave", 78.2, 0.77, "shelf"),
     ("Near plateau, 25 km", 48.6, 1.24, "shelf"),
-    ("Grand Harbour", 17.2, 3.49, "harbour"),
-    ("Marsamxett", 18.4, 3.26, "harbour"),
+    ("Grand Harbour", "14.5 to 18.4", 3.67, "harbour"),
+    ("Marsamxett", "10.4 to 12.8", 5.20, "harbour"),
     ("Inlet, 1 km", 6.1, 9.76, "inlet"),
     ("Inlet, 600 m", 4.0, 14.86, "inlet"),
 ]
@@ -137,7 +140,8 @@ def main(argv=None) -> int:
         y = len(RESONATORS) - 1 - i
         ax2.plot([f], [y], marker="o", ms=9, color=colours[kind], zorder=4,
                  markeredgecolor=SURFACE, markeredgewidth=2)
-        ax2.text(f * 1.22, y, f"{lab.replace(chr(10), ' ')}  ({T:.0f} min)",
+        ax2.text(f * 1.22, y, f"{lab.replace(chr(10), ' ')}  "
+                 f"({T if isinstance(T, str) else format(T, '.0f')} min)",
                  color=INK, fontsize=8.4, va="center", ha="left", zorder=5)
     ax2.set_xscale("log")
     ax2.set_xlim(0.12, 60)
@@ -149,7 +153,7 @@ def main(argv=None) -> int:
     ax2.xaxis.grid(True, color=GRID, linewidth=0.7)
     ax2.set_axisbelow(True)
     panel(ax2, "(b)  Where each element resonates",
-          "Quarter-wave periods. Shelf in orange, harbours in blue, inlets in grey.")
+          "Shelf in orange, harbours in blue, inlets in grey.")
 
     # ---------- (c) channel width ----------
     ax3 = fig.add_subplot(gs[0, 2])
@@ -195,7 +199,7 @@ def main(argv=None) -> int:
              "inlets resonate above the observed band while the plateau resonates "
              "within it, so the harbours\nrespond to a shelf-scale oscillation rather "
              "than generating one. Domain A holds no resonator in the band and cannot "
-             "produce the signal under study, while\ndomain B costs 28,500 cells "
+             "produce the signal under study, while\ndomain B was sized at 28,500 cells "
              "against 25,900 for domain A, an increase of a tenth for the whole "
              "plateau.",
              color=MUTED, fontsize=8.2, ha="left", va="top")
