@@ -1,7 +1,8 @@
 """Figures for visual inspection of the Senglea sea level record.
 
 Three plates, sharing the quality control and the filters of
-`analyse_senglea_spectrum.py` so that what is seen is what is analysed.
+`analyse_senglea_spectrum.py` so that what is seen is what is analysed, and a
+fourth, compact, of the coverage of the record against the reported events.
 
 1. Record overview. The one-minute level over the whole record, the daily
    coverage, and the daily range of the 0.2 to 10 cph band with the largest
@@ -36,7 +37,14 @@ MIN_DAY_COVERAGE = an.MIN_DAY_COVERAGE
 C_LINE = an.C_SERIES[0]
 C_TEXT2 = an.C_TEXT2
 C_GRID = "#e8e7e3"
+C_EVENT = "#eb6834"
 SURFACE = "#fcfcfb"
+
+# Milghuba events reported since the installation of the gauge, as tabulated in
+# docs/senglea_spectrum.md.
+REPORTED_EVENTS = (("2022-06-30", "30 Jun 2022"),
+                   ("2023-07-01", "1 Jul 2023"),
+                   ("2024-06-13", "13 Jun 2024"))
 
 
 def save(fig, out: Path) -> Path:
@@ -114,6 +122,47 @@ def plate_overview(plt, x: pd.Series, bp: pd.Series, events) -> Path:
     fig.tight_layout()
     out = FIG / "senglea_record_overview.png"
     out = save(fig, out)
+    plt.close(fig)
+    return out
+
+
+def plate_coverage(plt, x: pd.Series) -> Path:
+    """Coverage of the record against the dates of the reported events.
+
+    A compact plate for presentation. The level shows the displaced regime and
+    the daily coverage shows the gaps, with the admitted windows shaded and the
+    reported events marked, none of which falls on a usable stretch.
+    """
+    fig, axes = plt.subplots(2, 1, figsize=(12, 4.6), sharex=True,
+                             gridspec_kw=dict(height_ratios=[1.3, 1]))
+    ax = axes[0]
+    ax.plot(x.index, x, color=C_LINE, lw=0.3)
+    ax.set_ylabel("level, m", fontsize=11)
+
+    ax = axes[1]
+    cover = x.notna().resample("1D").mean() * 100
+    ax.fill_between(cover.index, cover, step="mid", color=C_LINE, alpha=0.6, lw=0)
+    ax.set_ylabel("daily\ncoverage, %", fontsize=11)
+    ax.set_ylim(0, 105)
+
+    for ax in axes:
+        for a, b in an.CLEAN_WINDOWS:
+            ax.axvspan(pd.Timestamp(a), pd.Timestamp(b), color="#cde2fb", alpha=0.6,
+                       zorder=0, lw=0)
+        for date, _ in REPORTED_EVENTS:
+            ax.axvline(pd.Timestamp(date), color=C_EVENT, lw=1.6, zorder=5)
+        ax.tick_params(labelsize=10)
+        style(ax)
+    top = axes[0].get_ylim()[1]
+    for date, label in REPORTED_EVENTS:
+        axes[0].annotate(label, (pd.Timestamp(date), top), xytext=(4, -2),
+                         textcoords="offset points", fontsize=10, color=C_EVENT,
+                         ha="left", va="top", fontweight="bold")
+    axes[0].set_title("Senglea, one-minute level and daily coverage of the public record. "
+                      "Shaded, the windows admitted. Orange, the reported events.",
+                      fontsize=11, loc="left")
+    fig.tight_layout()
+    out = save(fig, FIG / "senglea_coverage_events.png")
     plt.close(fig)
     return out
 
@@ -219,6 +268,7 @@ def main() -> int:
     bp_all = an.bandpass(x_all, an.MILGHUBA[0], 10.0)
     plt = setup()
     for out in (plate_overview(plt, x_all, bp_all, events),
+                plate_coverage(plt, x_all),
                 plate_spectrogram(plt, x, f, psd),
                 plate_events(plt, x, bp, events)):
         print(f"written {out}")
