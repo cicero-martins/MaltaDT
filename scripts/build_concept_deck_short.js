@@ -248,21 +248,24 @@ function table(s, rows, opts, align) {
   titleSlide(s, "OBSERVATIONS", "Reported events against the public record",
     "The public copy of the Senglea record covers 43 per cent of the span from June 2021 to December 2024, and transmission ceased on 13 December 2024.");
 
-  table(s, [
-    ["Date", "Type", "Reported effects", "Senglea, public copy"],
-    ["25 Oct 2018", "seismic tsunami", "excursions of some 25 cm at Portomaso", "before installation"],
-    ["18 Jun 2019", "milgħuba", "sea bed exposed and quay overtopped in St Paul's Bay", "before installation"],
-    ["30 Jun 2022", "milgħuba", "flooding at Marsaskala, St Julian's and Qawra", "no data, record resumes on 1 July"],
-    ["1 Jul 2023", "milgħuba", "flooding at Marsaskala and Xemxija", "displaced level, not usable"],
-    ["13 Jun 2024", "meteotsunami", "flooding of the main square of Msida", "displaced level, not usable"],
-  ], { x: M, y: 2.4, w: 12.09, colW: [1.5, 1.8, 4.9, 3.89], rowH: 0.38 }, () => "left");
+  s.addImage({ path: path.join(FIG, "senglea_coverage_events.png"), x: M, y: 2.25, w: 7.5, h: 2.88 });
 
-  box(s, M, 4.92, 5.95, 1.62, "State of the record",
+  table(s, [
+    ["Date", "Reported effects", "Record"],
+    ["30 Jun 2022", "flooding at Marsaskala, St Julian's and Qawra", "no data"],
+    ["1 Jul 2023", "flooding at Marsaskala and Xemxija", "displaced level, not usable"],
+    ["13 Jun 2024", "flooding of the main square of Msida", "displaced level, not usable"],
+  ], { x: 8.3, y: 2.25, w: 4.41, colW: [1.05, 1.9, 1.46], rowH: 0.5, fontSize: 10.5 }, () => "left");
+  s.addText("Two earlier events, the seismic tsunami of 25 October 2018 and the milgħuba of 18 June 2019, precede the installation of the gauge in June 2021.",
+    { x: 8.3, y: 4.4, w: 4.41, h: 0.7, fontSize: 10.5, color: MUTED, fontFace: BODY,
+      lineSpacing: 14, valign: "top", isTextBox: true, margin: 0 });
+
+  box(s, M, 5.3, 5.95, 1.5, "State of the record",
     "Two windows are provisionally admitted to the analysis, 24 June to 31 December 2021 and 1 December 2022 to 31 March 2023. From April 2023 the level appears displaced by some 2 m and the gauge transmits by day only.", false);
-  box(s, 6.76, 4.92, 5.95, 1.62, "Consequence for the study",
+  box(s, 6.76, 5.3, 5.95, 1.5, "Consequence for the study",
     "None of the three events since installation is resolved in the public copy. The archive of the group, sea level and one-minute pressure, would therefore be the record against which the response surface is tested.", true);
 
-  s.addNotes("Sources. University of Malta Newspoint for 2018 and 2019, Newsbook for 2022, MaltaToday for 2023 and 2024, the last citing the Oceanography Malta Research Group. The choice of windows rests on monthly coverage and stability of the level and is to be confirmed within the group.");
+  s.addNotes("The figure shows the one-minute level after quality control and the daily coverage, with the two admitted windows shaded and the three events reported since installation marked in orange. On 30 June 2022 the record is absent and resumes on 1 July. In July 2023 and June 2024 the level sits some 2 m above its earlier position with coverage near a half, the gauge transmitting by day only. Sources for the events. University of Malta Newspoint for 2018 and 2019, Newsbook for 2022, MaltaToday for 2023 and 2024, the last citing the Oceanography Malta Research Group. Portomaso returns no data from the IOC facility on those dates. The choice of windows rests on monthly coverage and stability of the level and is to be confirmed within the group.");
 }
 
 /* ---------------- 8. open questions ---------------- */
@@ -315,7 +318,7 @@ function table(s, rows, opts, align) {
   const tl = [
     ["To date", "First-order basin modes, pulse test of the boundary, Senglea spectrum, working mesh."],
     ["October", "Boundary tests under pressure forcing, pilot scenario and impulse response, then the sweep of the long wave, barotropic and two-dimensional."],
-    ["2 to 4 November", "Delft3D User Days at Deltares, with the configuration questions."],
+    ["2 to 4 November", "Delft3D User Days at Deltares."],
     ["November", "Three-dimensional runs of the validation hindcast and of renewal, after a first test run in October."],
   ];
   tl.forEach((t, i) => {
