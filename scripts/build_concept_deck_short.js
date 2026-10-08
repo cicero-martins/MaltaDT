@@ -4,9 +4,11 @@
 // Requires pptxgenjs, installed in a scratch directory as for the full deck:
 //     npm install pptxgenjs && node build_concept_deck_short.js out.pptx
 //
-// The cover is a placeholder. The cover of the full deck carries a photograph
-// recoloured in PowerPoint, which pptxgenjs does not reproduce, and it is copied
-// over the placeholder by copy_deck_cover.ps1.
+// The first slide is a placeholder. The cover, docs/deck_cover.pptx, carries a
+// photograph recoloured in PowerPoint, which pptxgenjs does not reproduce.
+// copy_deck_cover.ps1 places it over the placeholder and repeats the photograph
+// behind the last slide:
+//     powershell -File copy_deck_cover.ps1 <docs/deck_cover.pptx> <out.pptx>
 const pptx = require("pptxgenjs");
 const path = require("path");
 
@@ -204,7 +206,7 @@ function table(s, rows, opts, align) {
   box(s, M, 5.5, 5.95, 1.45, "Open boundary",
     "In an idealised pulse test a Riemann boundary reflected 0.3 to 1.3 per cent at normal incidence and 5 to 9 per cent up to 30°, against 94 to 100 per cent for a prescribed level. A residual current and a CMEMS signal remain to be tested.", false);
   box(s, 6.76, 5.5, 5.95, 1.45, "Indicative cost",
-    "Some 16 h for the two-dimensional sweep and of the order of 45 h on 8 processes for the three-dimensional runs, the latter scaled from the Stagnone configuration and uncertain by a factor of two.", true);
+    "Some 8 h for the two-dimensional sweep and of the order of 45 h on 8 processes for the three-dimensional runs, the latter scaled from the Stagnone configuration and uncertain by a factor of two.", true);
 
   s.addNotes("The left panel shows the face size over the domain and the right panel the two harbours. Sigma layers, 12 to 15, are foreseen for the three-dimensional runs, the count being set by residence time. The pulse test releases a Gaussian hump on a flat bed at 150 m and compares each boundary type with a reference domain without a boundary. Corners reflected 24 to 29 per cent, which is why they are kept more than 40 km from the harbours. Open matters on the mesh are one edge near the orthogonality threshold and the gaps of the 10 m grid at the heads of Msida and Pietà Creeks.");
 }
@@ -213,10 +215,10 @@ function table(s, rows, opts, align) {
 {
   const s = p.addSlide();
   titleSlide(s, "PROPOSED DESIGN", "A parametric sweep and its test against observations",
-    "ERA5 does not resolve the atmospheric gravity waves associated with the phenomenon, so a hindcast of individual events is not attempted.");
+    "ERA5 does not resolve the atmospheric gravity waves associated with the milgħuba, so the long wave is studied by a sweep of 96 idealised disturbances, while circulation and waves are validated by a conventional hindcast.");
 
   const steps = [
-    ["Sweep", "A moving pressure disturbance is imposed, and its speed, direction, width and duration are varied."],
+    ["Sweep", "A moving pressure disturbance is imposed in a two-dimensional barotropic run, over 6 speeds, 8 directions and 2 widths."],
     ["Response surface", "The output would be a transfer function of the geometry, independent of any particular storm."],
     ["Test against the observations", "Recorded events would then be located on the surface, to examine whether they occur under the conditions identified as resonant."],
   ];
@@ -298,6 +300,10 @@ function table(s, rows, opts, align) {
 {
   const s = p.addSlide();
   s.background = { color: MID };
+  // A veil over the photograph that copy_deck_cover.ps1 places behind this
+  // slide, so that the text keeps its contrast.
+  s.addShape(p.ShapeType.rect, { x: 0, y: 0, w: W, h: H,
+    fill: { color: MID, transparency: 30 }, line: { color: MID, transparency: 100 } });
   s.addShape(p.ShapeType.ellipse, { x: -1.9, y: 4.2, w: 5.2, h: 5.2,
     fill: { color: BLUE, transparency: 60 } });
 
@@ -308,9 +314,9 @@ function table(s, rows, opts, align) {
 
   const tl = [
     ["To date", "First-order basin modes, pulse test of the boundary, Senglea spectrum, working mesh."],
-    ["October", "Bathymetry at the heads of Msida and Pietà Creeks, remaining boundary tests, response of the mesh to a broadband impulse."],
+    ["October", "Bathymetry at the heads of Msida and Pietà Creeks, remaining boundary tests, impulse response of the mesh, first three-dimensional runs."],
     ["2 to 4 November", "Delft3D User Days at Deltares, with the configuration questions."],
-    ["November", "Parametric sweep in two dimensions, first three-dimensional runs."],
+    ["November", "Sweep of the long wave, barotropic and therefore two-dimensional, and the validation hindcast."],
   ];
   tl.forEach((t, i) => {
     const y = 2.25 + i * 1.02;
@@ -319,7 +325,7 @@ function table(s, rows, opts, align) {
     s.addText(t[0], { x: M + 0.45, y, w: 2.2, h: 0.33, fontSize: 13, bold: true,
       color: WHITE, fontFace: BODY, valign: "top", isTextBox: true, margin: 0 });
     s.addText(t[1], { x: M + 2.7, y, w: 4.0, h: 0.8, fontSize: 12,
-      color: "9FB3D1", fontFace: BODY, lineSpacing: 15, valign: "top", isTextBox: true, margin: 0 });
+      color: "DCE7F5", fontFace: BODY, lineSpacing: 15, valign: "top", isTextBox: true, margin: 0 });
   });
 
   s.addShape(p.ShapeType.roundRect, { x: 7.5, y: 2.15, w: 5.21, h: 2.35,
@@ -332,9 +338,12 @@ function table(s, rows, opts, align) {
   ], { x: 7.8, y: 2.78, w: 4.6, h: 2.2, fontSize: 11.5, color: "DCE7F5",
        fontFace: BODY, lineSpacing: 15.5, valign: "top", isTextBox: true, margin: 0 });
 
-  s.addText("Documents, figures and the reproducible analysis are in the project repository.",
-    { x: M, y: 6.78, w: 6.4, h: 0.3, fontSize: 11, italic: true, color: "7F93B3",
-      fontFace: BODY, isTextBox: true, margin: 0 });
+  s.addText([
+    { text: "Documents, figures and the reproducible analysis: ", options: { italic: true } },
+    { text: "github.com/cicero-martins/MaltaDT", options: { bold: true, color: WHITE,
+      hyperlink: { url: "https://github.com/cicero-martins/MaltaDT" } } },
+  ], { x: M, y: 6.78, w: 9.0, h: 0.3, fontSize: 11.5, color: PALE,
+       fontFace: BODY, isTextBox: true, margin: 0 });
   s.addNotes("The broadband impulse yields the modal structure of the harbours on the mesh, which bears on the two readings of the 23-minute peak. The remaining boundary tests are the residual current and the non-zero incoming signal from CMEMS.");
 }
 
