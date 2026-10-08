@@ -203,11 +203,11 @@ function questions(s, qs, y0, dy, hBody) {
 
   const stages = [
     ["Proudman resonance", "Energy transfers most efficiently when the atmospheric disturbance travels at the celerity of the long wave beneath it.",
-     "The Malta Plateau, 99 to 190 m deep, is resonant with disturbances of 94 to 155 km h⁻¹."],
+     "The Malta Plateau, 99 to 190 m deep, would be resonant with disturbances travelling at 94 to 155 km h⁻¹."],
     ["Shoaling", "Green's law governs the amplification of the wave over the shoaling approach.",
      "From 150 m on the plateau into the harbours, a factor of 1.75 to 1.84."],
     ["Basin resonance", "The geometry of the basin amplifies the wave arriving at its mouth.",
-     "Fundamental modes of 14.5 to 18.4 minutes in the Grand Harbour and 10.4 to 12.8 in Marsamxett."],
+     "First-order estimates place the fundamental modes at 14.5 to 18.4 minutes in the Grand Harbour and 10.4 to 12.8 in Marsamxett."],
   ];
   stages.forEach((st, i) => {
     const x = M + i * 4.12;
@@ -229,7 +229,7 @@ function questions(s, qs, y0, dy, hBody) {
 /* ---------------- 5. natural periods ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "NATURAL PERIODS", "Natural periods against the observed band",
+  titleSlide(s, "NATURAL PERIODS", "First-order estimates of the natural periods",
     "Quarter-wave periods, T = 4L∕√(gh), for the shelf and the inlets, and eigenmodes of the measured profile for the harbours, against the 0.2 to 2 cph band reported by Drago (2009).");
 
   const rows = [
@@ -254,25 +254,25 @@ function questions(s, qs, y0, dy, hBody) {
   })), { x: M, y: 2.5, w: 8.5, colW: [2.85, 1.5, 1.65, 1.55, 0.95], rowH: 0.375,
          border: { type: "solid", color: "E2E8EC", pt: 0.5 } });
 
-  s.addShape(p.ShapeType.roundRect, { x: 9.45, y: 2.5, w: 3.26, h: 3.0,
+  s.addShape(p.ShapeType.roundRect, { x: 9.45, y: 2.5, w: 3.26, h: 3.55,
     fill: { color: MID }, rectRadius: 0.06 });
-  s.addText("Consequence for the domain", { x: 9.75, y: 2.75, w: 2.7, h: 0.32, fontSize: 14,
+  s.addText("Reading for the domain", { x: 9.75, y: 2.75, w: 2.7, h: 0.32, fontSize: 14,
     bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
-    { text: "The harbours respond to a shelf-scale oscillation rather than generating one.\n", options: { breakLine: true } },
-    { text: "A domain confined to the harbours holds no resonator in the band, and the CMEMS boundary product carries no energy there.\n", options: { breakLine: true } },
-    { text: "The domain is therefore required to contain the plateau.", options: { bold: true, color: WHITE } },
-  ], { x: 9.75, y: 3.15, w: 2.7, h: 2.2, fontSize: 11.5, color: PALE,
+    { text: "On these estimates the plateau has natural periods within the band and the harbours above it, which suggests that the harbours respond to a shelf-scale oscillation.\n", options: { breakLine: true } },
+    { text: "A domain confined to the harbours would then hold no resonator in the band.\n", options: { breakLine: true } },
+    { text: "A domain extending over the plateau is therefore proposed.", options: { bold: true, color: WHITE } },
+  ], { x: 9.75, y: 3.15, w: 2.7, h: 2.8, fontSize: 11.5, color: PALE,
        fontFace: BODY, lineSpacing: 15, valign: "top", isTextBox: true, margin: 0 });
 
   note(s, "The upper edge of the band, 2 cph, corresponds to 30 minutes, 1.6 times the upper estimate for the Grand Harbour and 2.3 times that for Marsamxett.");
-  s.addNotes("The domain follows from this table. The harbour rows come from the eigenvalue calculation of the following slide and are tested against the Senglea record on the slide after it.");
+  s.addNotes("The proposed domain follows from this table. The CMEMS boundary product is not expected to carry energy in the band. The harbour rows come from the eigenvalue calculation of the following slide and are tested against the Senglea record on the slide after it.");
 }
 
 /* ---------------- 6. basin modes ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "BASIN MODES", "Fundamental modes from the measured geometry",
+  titleSlide(s, "BASIN MODES", "Estimated modes from the measured geometry",
     "Long-wave eigenproblem of a channel of varying section, g d∕dx(a dη∕dx) + ω² b η = 0, with η = 0 at the mouth and no flux at the head, where a(x) is the cross-section and b(x) the surface width along the geodesic distance from the mouth.");
 
   const h1 = crop(s, "basin_modes.png", 1650, 1350, [725, 5, 1540, 645], M, 2.42, 3.25);
@@ -292,9 +292,9 @@ function questions(s, qs, y0, dy, hBody) {
   (j) => (j < 2 ? "left" : "right"));
 
   box(s, 7.3, 4.72, 5.41, 1.72, "Role of the St Elmo breakwater",
-    "Removing the 378 m breakwater changes the period by 0.1 minute. The section at the entrance, 8,780 m², is within 6 per cent of the median section of the basin, so the inertia of the mode is distributed along the harbour and the basin is not a Helmholtz resonator.", true);
+    "Removing the 378 m breakwater changes the estimate by 0.1 minute. The section at the entrance, 8,780 m², is within 6 per cent of the median section of the basin, which suggests that the inertia of the mode is distributed along the harbour rather than concentrated at the mouth.", true);
 
-  note(s, "T₀ omits and T includes the mouth correction of Rabinovich (2009, eq. 9.16). Branches are taken in phase, so only the fundamental is reported.");
+  note(s, "T₀ omits and T includes the mouth correction of Rabinovich (2009, eq. 9.16). The calculation is one-dimensional and first-order, and only the fundamental is reported.");
   s.addNotes("The quarter-wave resonator is the limit of this equation for a uniform channel and the Helmholtz resonator its limit for a narrow neck ahead of a wide basin, so the geometry selects between the two idealisations. The solver returns the quarter-wave period of a uniform channel to within 0.5 per cent. The supplied coastline carries the St Elmo breakwater as a detached polygon and does not carry the Ricasoli arm as a separate feature, so the opening measures some 400 m. A narrower real opening would create the neck the supplied geometry lacks. The estimate remains first-order until the modes are extracted from the mesh.");
 }
 
@@ -315,15 +315,15 @@ function questions(s, qs, y0, dy, hBody) {
   ], { x: 7.2, y: 2.3, w: 5.51, colW: [0.9, 0.95, 1.56, 2.1], rowH: 0.36, fontSize: 11.5 },
   (j) => (j === 3 ? "left" : (j === 0 ? "left" : "right")));
 
-  box(s, 7.2, 4.24, 5.51, 2.36, "Two readings of the 23-minute peak",
+  box(s, 7.2, 4.2, 5.51, 2.4, "Two readings of the 23-minute peak",
     [
-      { text: "It is the fundamental of the Grand Harbour, which the one-dimensional calculation would then underestimate by about a quarter.", options: { bullet: true, breakLine: true, paraSpaceAfter: 5 } },
-      { text: "The 16.8-minute peak is the fundamental, and the 23-minute peak belongs to the outer approach shared by the two harbours.", options: { bullet: true, breakLine: true, paraSpaceAfter: 5 } },
-      { text: "The modal structure computed by the model, or a second gauge, separates the two.", options: { bold: true, color: WHITE } },
+      { text: "It may be the fundamental of the Grand Harbour, underestimated by about a quarter in the one-dimensional calculation.", options: { bullet: true, breakLine: true, paraSpaceAfter: 5 } },
+      { text: "Alternatively it may belong to the approach shared by the two harbours, the 16.8-minute peak being the fundamental.", options: { bullet: true, breakLine: true, paraSpaceAfter: 5 } },
+      { text: "The modal structure computed by the model, or a second gauge, would separate the two.", options: { bold: true, color: WHITE } },
     ], true);
 
-  note(s, "All peaks lie above the milgħuba band, which holds 12 per cent of the variance between 0.2 and 10 cph. Between 2 and 3 cph the amplitude at Senglea is 2.8 times that at Marsaxlokk.");
-  s.addNotes("Panels, from the upper left. The mean spectrum with its background, the milgħuba band shaded grey and the estimated basin band shaded blue. The ratio of the spectrum to the background, in which the four peaks stand out. The largest oscillation of the admitted windows, 8 November 2021, with a range of 0.35 m at the 23-minute period. The amplitude ratio against the gauges outside the harbour. The four peaks are present on practically every day of both windows, independently of the forcing, and are therefore properties of the geometry. The ratio against Marsaxlokk compares two coastal sites and is not a transfer function from the open sea.");
+  note(s, "In the nine months admitted the peaks lie above the milgħuba band. Between 2 and 3 cph the amplitude at Senglea is 2.8 times that at Marsaxlokk.");
+  s.addNotes("Panels, from the upper left. The mean spectrum with its background, the milgħuba band shaded grey and the estimated basin band shaded blue. The ratio of the spectrum to the background, in which the four peaks stand out. The largest oscillation of the admitted windows, 8 November 2021, with a range of 0.35 m at the 23-minute period. The amplitude ratio against the gauges outside the harbour. The four peaks are present on practically every day of both windows, independently of the forcing, which points to the geometry. The ratio against Marsaxlokk compares two coastal sites and is not a transfer function from the open sea.");
 }
 
 /* ---------------- 8. events against the record ---------------- */
@@ -337,14 +337,14 @@ function questions(s, qs, y0, dy, hBody) {
     ["25 Oct 2018", "seismic tsunami", "excursions of some 25 cm at Portomaso", "before installation"],
     ["18 Jun 2019", "milgħuba", "sea bed exposed and quay overtopped in St Paul's Bay", "before installation"],
     ["30 Jun 2022", "milgħuba", "flooding at Marsaskala, St Julian's and Qawra", "no data, record resumes on 1 July"],
-    ["1 Jul 2023", "milgħuba", "flooding at Marsaskala and Xemxija", "displaced level, unusable"],
-    ["13 Jun 2024", "meteotsunami", "flooding of the main square of Msida", "displaced level, unusable"],
+    ["1 Jul 2023", "milgħuba", "flooding at Marsaskala and Xemxija", "displaced level, not usable"],
+    ["13 Jun 2024", "meteotsunami", "flooding of the main square of Msida", "displaced level, not usable"],
   ], { x: M, y: 2.4, w: 12.09, colW: [1.5, 1.8, 4.9, 3.89], rowH: 0.38 }, () => "left");
 
   box(s, M, 4.92, 5.95, 1.62, "State of the record",
-    "Two windows are admitted to the analysis, 24 June to 31 December 2021 and 1 December 2022 to 31 March 2023, on monthly coverage and stability of the level. From April 2023 the level is displaced by some 2 m and the gauge transmits by day only.", false);
+    "Two windows are provisionally admitted to the analysis, 24 June to 31 December 2021 and 1 December 2022 to 31 March 2023, on monthly coverage and stability of the level. From April 2023 the level appears displaced by some 2 m and the gauge transmits by day only.", false);
   box(s, 6.76, 4.92, 5.95, 1.62, "Consequence for the study",
-    "None of the three events since installation is resolved in the public copy, and Portomaso returns no data from the IOC facility on those dates. The archive of the group, sea level and one-minute pressure, is the record against which the response surface is tested.", true);
+    "None of the three events since installation is resolved in the public copy, and Portomaso returns no data from the IOC facility on those dates. The archive of the group, sea level and one-minute pressure, would therefore be the record against which the response surface is tested.", true);
 
   s.addNotes("Sources. University of Malta Newspoint for 2018 and 2019, Newsbook for 2022, MaltaToday for 2023 and 2024, the last citing the Oceanography Malta Research Group. Upward radar echoes from vessels, rain and spray are removed by the lower envelope of the 5 s samples, and episodes of reference offset of 1.3 to 2.1 m are removed before the spectrum is computed. The choice of windows is to be confirmed within the group. The displaced level is compatible with the radar ranging to a vessel or pontoon beneath it, which is a conjecture.");
 }
@@ -397,11 +397,11 @@ function questions(s, qs, y0, dy, hBody) {
 
   s.addShape(p.ShapeType.roundRect, { x: 6.55, y: 4.08, w: 6.16, h: 2.05,
     fill: { color: MID }, rectRadius: 0.06 });
-  s.addText("Vertical, 12 to 15 sigma layers", { x: 6.85, y: 4.28, w: 5.6, h: 0.3,
+  s.addText("Vertical, 12 to 15 sigma layers foreseen", { x: 6.85, y: 4.28, w: 5.6, h: 0.3,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "The count is set by residence time, not by the seiche, which is barotropic. Fifteen layers give roughly one metre at the bed in the basins.\n", options: { breakLine: true } },
-    { text: "Sigma is defensible only because the domain stops short of the escarpment, where the plateau gradient is one part in a thousand.", options: {} },
+    { text: "Sigma layers are considered defensible because the domain stops short of the escarpment, the plateau gradient being one part in a thousand.", options: {} },
   ], { x: 6.85, y: 4.64, w: 5.6, h: 1.3, fontSize: 12, color: PALE,
        fontFace: BODY, lineSpacing: 16, isTextBox: true, margin: 0 });
 
@@ -412,7 +412,7 @@ function questions(s, qs, y0, dy, hBody) {
 /* ---------------- 11. mesh as built ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "MODEL CONCEPT, MESH", "Mesh of the domain and its measured cost",
+  titleSlide(s, "MODEL CONCEPT, MESH", "Working mesh and its measured cost",
     "Quadtree refinement by zone, built in UTM 33N and transformed to WGS84, accepted by D-Flow FM 2026.01 at rest and under a forced long wave.");
 
   s.addImage({ path: path.join(FIG, "mesh_v02.png"), x: M, y: 2.3, w: 8.4, h: 3.36 });
@@ -433,8 +433,8 @@ function questions(s, qs, y0, dy, hBody) {
   s.addShape(p.ShapeType.roundRect, { x: M, y: 5.82, w: 12.09, h: 0.92,
     fill: { color: TINT }, rectRadius: 0.06 });
   s.addText([
-    { text: "Cost of the campaign. ", options: { bold: true } },
-    { text: "The parametric sweep in two dimensions amounts to some 16 h of serial computation. The three-dimensional runs of renewal and validation, 160 simulated days, amount to some 45 h on 8 MPI processes, scaled from the Stagnone configuration with an uncertainty of a factor of two.", options: {} },
+    { text: "Indicative cost of the campaign. ", options: { bold: true } },
+    { text: "The parametric sweep in two dimensions is estimated at some 16 h of serial computation. The three-dimensional runs of renewal and validation, 160 simulated days, would be of the order of 45 h on 8 MPI processes, scaled from the Stagnone configuration with an uncertainty of a factor of two.", options: {} },
   ], { x: M + 0.35, y: 5.95, w: 11.4, h: 0.68, fontSize: 12, color: INK,
        fontFace: BODY, lineSpacing: 16, isTextBox: true, margin: 0 });
 
@@ -445,7 +445,7 @@ function questions(s, qs, y0, dy, hBody) {
 {
   const s = p.addSlide();
   titleSlide(s, "MODEL CONCEPT, OPEN BOUNDARY", "Reflection of the open boundary under a synthetic pulse",
-    "A Gaussian hump of water level released on a flat bed at 150 m with 1500 m cells, each case compared against a reference domain without a boundary.");
+    "An idealised test, with a Gaussian hump of water level released on a flat bed at 150 m with 1500 m cells and each case compared against a reference domain without a boundary.");
 
   s.addImage({ path: path.join(FIG, "riemann_pulse_test.png"), x: M, y: 2.3, w: 6.15, h: 4.3 });
 
@@ -456,7 +456,7 @@ function questions(s, qs, y0, dy, hBody) {
     ["Corner cells", "24 to 29 %", "103 %"],
   ], { x: 7.05, y: 2.3, w: 5.66, colW: [2.66, 1.4, 1.6], rowH: 0.38 });
 
-  box(s, 7.05, 3.96, 5.66, 1.4, "Configuration adopted",
+  box(s, 7.05, 3.96, 5.66, 1.4, "Working configuration",
     "A Riemann boundary on all open sides, its corners more than 40 km from the harbours, written as one polyline since FM reads only the first polyline of a boundary file.", true);
   box(s, 7.05, 5.5, 5.66, 1.1, "Cases to be tested before production",
     "A residual current across the boundary, a non-zero incoming signal from CMEMS, variable depth along the boundary, and Coriolis.", false);
@@ -467,7 +467,7 @@ function questions(s, qs, y0, dy, hBody) {
 /* ---------------- 13. prior work and setting ---------------- */
 {
   const s = p.addSlide();
-  titleSlide(s, "PRIOR WORK AND SETTING", "Existing work and the matters it leaves untreated",
+  titleSlide(s, "PRIOR WORK AND SETTING", "Existing work and the scope of the present study",
     "The Grand Harbour has been modelled before, and the group operates a forecasting system over the same waters.");
 
   s.addText("The two studies that bear on the site", { x: M, y: 2.3, w: 5.9, h: 0.32,
@@ -519,7 +519,7 @@ function questions(s, qs, y0, dy, hBody) {
     fontSize: 14, bold: true, color: BLUE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "The answer requires a model, since no arrangement of gauges separates the three stages of amplification from one another.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "The prior work treats the response of a basin to a wave already present at its boundary, so the generation side is not repeated.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
+    { text: "The published work treats the response of a basin to a wave already present at its boundary, so the generation side appears to be open.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
     { text: "The formulation depends on the standing of that prior work, on which the judgement of the group is sought.", options: { bullet: true } },
   ], { x: M, y: 4.45, w: 5.7, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
@@ -529,7 +529,7 @@ function questions(s, qs, y0, dy, hBody) {
   s.addText([
     { text: "Maltese coastal seiches were modelled in 2007, in a two-dimensional depth-averaged POM, for Mellieħa and St Paul's Bay, forced by a prescribed offshore long wave.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
     { text: "The Grand Harbour was modelled by ARTELIA in PHAROS, for wind-wave agitation, against a directional climate hindcast from 1992 to 2019.", options: { bullet: true, breakLine: true, paraSpaceAfter: 7 } },
-    { text: "Neither treats the generation of the long wave, the circulation of the harbour, or its renewal.", options: { bullet: true } },
+    { text: "Neither appears to treat the generation of the long wave, the circulation of the harbour, or its renewal.", options: { bullet: true } },
   ], { x: 6.95, y: 4.45, w: 5.76, h: 1.9, fontSize: 12, color: INK, fontFace: BODY,
        lineSpacing: 16, isTextBox: true, margin: 0 });
 
@@ -550,14 +550,14 @@ function questions(s, qs, y0, dy, hBody) {
     ["0.10", "+37.2 %", "+62.5 %", "+84.6 %", "+216 %"],
   ], { x: M, y: 2.5, w: 7.1, colW: [2.3, 1.15, 1.15, 1.15, 1.35], rowH: 0.4, fontSize: 11.5 });
 
-  s.addText("Lengthening of the fundamental period of the Grand Harbour, 16.5 minutes, for a restriction imposed on the measured profile over a reach centred on its narrowest section. The Helmholtz scaling, T ∝ a^(−1∕2), attributes the whole inertia of the mode to the mouth and overstates the shift by a factor of three to ten.",
+  s.addText("Lengthening of the fundamental period of the Grand Harbour, 16.5 minutes, for a restriction imposed on the measured profile over a reach centred on its narrowest section. The Helmholtz scaling, T ∝ a^(−1∕2), attributes the whole inertia of the mode to the mouth and, on this calculation, overstates the shift by a factor of three to ten.",
     { x: M, y: 4.66, w: 7.1, h: 1.1, fontSize: 11.5, color: MUTED, fontFace: BODY,
       lineSpacing: 15.5, isTextBox: true, margin: 0 });
 
   box(s, 8.05, 2.5, 4.66, 1.72, "The magnitude in context",
-    "A metre of sea level rise shortens these modes by 3.1 per cent. A restriction of a quarter lengthens them by 1.5 to 4 per cent. The two perturbations are of the same order.", false);
-  box(s, 8.05, 4.38, 4.66, 1.92, "Exchange as the principal quantity",
-    "Reaching the observed band from 18.4 minutes requires an open fraction near 0.1 over several hundred metres. The volume exchanged per cycle scales with the open section directly, so renewal responds more strongly than the mode.", true);
+    "On the measured profile a metre of sea level rise shortens the estimated modes by 3.1 per cent, and a restriction of a quarter lengthens them by 1.5 to 4 per cent. The two perturbations appear to be of the same order.", false);
+  box(s, 8.05, 4.38, 4.66, 1.92, "Exchange as the quantity of interest",
+    "Reaching the observed band from 18.4 minutes would require an open fraction near 0.1 over several hundred metres. The volume exchanged per cycle scales with the open section directly, so renewal is expected to respond more strongly than the mode.", true);
 
   note(s, "The cost is a second evaluation of the same sweep, with no new forcing, no new validation and no new configuration.");
   s.addNotes("The framing is a response curve over the class of basin. The exact geometry of any proposed structure is neither needed nor used, and the exercise carries no assessment of the project now in consultation. Whether to pursue it is among the open questions.");
@@ -567,12 +567,12 @@ function questions(s, qs, y0, dy, hBody) {
 {
   const s = p.addSlide();
   titleSlide(s, "EXPERIMENTAL DESIGN", "A parametric sweep in place of a hindcast",
-    "ERA5 does not resolve the atmospheric gravity waves that trigger the phenomenon, so a hindcast of individual events is not attempted.");
+    "ERA5 does not resolve the atmospheric gravity waves associated with the phenomenon, so a hindcast of individual events is not attempted.");
 
   const steps = [
     ["Sweep", "A moving pressure disturbance is imposed, and its speed, direction, width and duration are varied."],
-    ["Response surface", "The output is a transfer function of the geometry, independent of any particular storm."],
-    ["Test against the observations", "The observations serve as the test rather than as the forcing, addressing whether recorded events occur under the conditions identified as resonant."],
+    ["Response surface", "The output would be a transfer function of the geometry, independent of any particular storm."],
+    ["Test against the observations", "Recorded events would then be located on the surface, to examine whether they occur under the conditions identified as resonant."],
   ];
   steps.forEach((st, i) => {
     const y = 2.55 + i * 1.28;
@@ -588,13 +588,13 @@ function questions(s, qs, y0, dy, hBody) {
   s.addText("Bearing beyond the present study", { x: 8.7, y: 2.72, w: 3.75, h: 0.6,
     fontSize: 14, bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
-    { text: "A response surface is a property of the geometry, whereas climate change acts on the distribution of the forcing.\n", options: { breakLine: true } },
-    { text: "The two separate, so the surface is computed once and any later study with synoptic projections may convolve them without repeating the hydrodynamics.\n", options: { breakLine: true } },
-    { text: "No climate scenario need be run through the model.", options: { bold: true, color: WHITE } },
+    { text: "A response surface would be a property of the geometry, whereas climate change acts on the distribution of the forcing.\n", options: { breakLine: true } },
+    { text: "The two would then separate, so that a later study with synoptic projections could apply them to the surface without repeating the hydrodynamics.\n", options: { breakLine: true } },
+    { text: "Climate scenarios would then not need to be run through the model.", options: { bold: true, color: WHITE } },
   ], { x: 8.7, y: 3.35, w: 3.75, h: 2.3, fontSize: 11.5, color: PALE,
        fontFace: BODY, lineSpacing: 15.5, isTextBox: true, margin: 0 });
 
-  note(s, "The milgħuba floods Msida, at the head of Msida Creek inside Marsamxett, together with Marsaskala, Xemxija, Marsaxlokk and Sliema.");
+  note(s, "The milgħuba is reported to flood Msida, at the head of Msida Creek inside Marsamxett, together with Marsaskala, Xemxija, Marsaxlokk and Sliema.");
   s.addNotes("Six speeds by eight directions by two widths, twelve hours each, barotropic and uncoupled, with a second evaluation over a modified mouth, amount to 96 simulated days and some 16 hours of serial computation. The dated events of 2019, 2022, 2023 and 2024 are the cases for the test, which is why the one-minute pressure records on those dates head the requests of the following slide.");
 }
 
@@ -612,7 +612,7 @@ function questions(s, qs, y0, dy, hBody) {
     ["History of the Senglea installation",
      "The two windows admitted to the analysis, the cause of the gaps of 2022 and of the displacement of some 2 m from April 2023, whether the gauge was relocated, and whether the IDSL units on the JRC server are the instruments of the group."],
     ["The Portomaso record at one minute or finer",
-     "A gauge outside both basins on the same coast separates the two readings of the 23-minute peak, and extends the event record to the years before the Senglea installation."],
+     "A gauge outside both basins on the same coast would help separate the two readings of the 23-minute peak, and would extend the event record to the years before the Senglea installation."],
   ], 2.6, 1.9, 1.2);
 
   s.addNotes("These four determine whether the response surface can be tested against events at all. Sources for the events of 2022 and 2023 are press reports only, and a statement or record of the group would replace them.");
@@ -650,11 +650,11 @@ function questions(s, qs, y0, dy, hBody) {
 
   s.addText("SEQUENCE", { x: M, y: 0.7, w: 9, h: 0.3, fontSize: 12,
     bold: true, color: ORANGE, charSpacing: 2, fontFace: BODY, isTextBox: true, margin: 0 });
-  s.addText("Sequence to the first production runs", { x: M, y: 1.05, w: 11, h: 0.7, fontSize: 30,
+  s.addText("Planned sequence to the first production runs", { x: M, y: 1.05, w: 11, h: 0.7, fontSize: 30,
     bold: true, color: WHITE, fontFace: HEAD, isTextBox: true, margin: 0 });
 
   const tl = [
-    ["Completed", "Basin modes, pulse test of the boundary, Senglea spectrum, mesh of the domain."],
+    ["To date", "First-order basin modes, pulse test of the boundary, Senglea spectrum, working mesh."],
     ["October", "Bathymetry at the heads of Msida and Pietà Creeks, remaining boundary tests, response of the mesh to a broadband impulse."],
     ["19 October", "Delft3D User Days abstract."],
     ["2 to 4 November", "Delft3D User Days at Deltares, with the configuration questions."],
@@ -678,8 +678,8 @@ function questions(s, qs, y0, dy, hBody) {
     bold: true, color: ORANGE, fontFace: HEAD, isTextBox: true, margin: 0 });
   s.addText([
     { text: "The Stagnone twin runs containerised on the EDITO Datalab and publishes to its object storage.\n", options: { breakLine: true, paraSpaceAfter: 9 } },
-    { text: "A Valletta configuration would take the same route, so the deliverable is a running pilot rather than a set of figures.\n", options: { breakLine: true, paraSpaceAfter: 9 } },
-    { text: "This corresponds to the relocatable setup requested in the design report of the group.", options: { bold: true, color: WHITE } },
+    { text: "A Valletta configuration could take the same route, should it prove stable in time, so that the deliverable would be a running pilot.\n", options: { breakLine: true, paraSpaceAfter: 9 } },
+    { text: "This would correspond to the relocatable setup requested in the design report of the group.", options: { bold: true, color: WHITE } },
   ], { x: 7.8, y: 2.78, w: 4.6, h: 2.5, fontSize: 11.5, color: "DCE7F5",
        fontFace: BODY, lineSpacing: 15.5, isTextBox: true, margin: 0 });
 
