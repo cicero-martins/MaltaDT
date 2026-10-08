@@ -585,10 +585,10 @@ function questions(s, qs, y0, dy, hBody) {
 
   const tl = [
     ["To date", "First-order basin modes, pulse test of the boundary, Senglea spectrum, working mesh."],
-    ["October", "Bathymetry at the heads of Msida and Pietà Creeks, remaining boundary tests, impulse response of the mesh, first three-dimensional runs."],
+    ["October", "Boundary tests under pressure forcing, pilot scenario and impulse response, then the sweep of the long wave, barotropic and two-dimensional."],
     ["19 October", "Delft3D User Days abstract."],
     ["2 to 4 November", "Delft3D User Days at Deltares, with the configuration questions."],
-    ["November", "Sweep of the long wave, barotropic and therefore two-dimensional, and the validation hindcast."],
+    ["November", "Three-dimensional runs of the validation hindcast and of renewal, after a first test run in October."],
   ];
   // The timeline occupies the left column only, so the panel on the right has
   // its own band.
@@ -619,7 +619,7 @@ function questions(s, qs, y0, dy, hBody) {
       hyperlink: { url: "https://github.com/cicero-martins/MaltaDT" } } },
   ], { x: M, y: 6.78, w: 9.0, h: 0.3, fontSize: 11.5, color: PALE,
        fontFace: BODY, isTextBox: true, margin: 0 });
-  s.addNotes("The broadband impulse yields the modal structure of the harbours on the mesh, which decides between the two readings of the 23-minute peak. The remaining boundary tests are the residual current and the non-zero incoming signal from CMEMS. The block of 27 October to 21 November loses four working days to Delft and holds fifteen rather than nineteen. The EDITO deployment is conditional on the configuration proving stable in time, and it belongs to the last block of the period alongside the integration into the ocean.mt portal.");
+  s.addNotes("The broadband impulse yields the modal structure of the harbours on the mesh, which decides between the two readings of the 23-minute peak. The remaining boundary tests are the residual current, the non-zero incoming signal from CMEMS and a pressure disturbance crossing the boundary. The sweep precedes the three-dimensional runs because it needs only the mesh, the boundary and the pressure field, whereas those runs need the full forcing chain. A few scenarios on a larger domain would show whether the extent truncates the Proudman stage. The bathymetry at the heads of Msida and Pietà Creeks is to be completed before the inlets are relied upon. The block of 27 October to 21 November loses four working days to Delft and holds fifteen rather than nineteen. The EDITO deployment is conditional on the configuration proving stable in time, and it belongs to the last block of the period alongside the integration into the ocean.mt portal.");
 }
 
 p.writeFile({ fileName: OUT }).then(() => console.log("written", OUT));
