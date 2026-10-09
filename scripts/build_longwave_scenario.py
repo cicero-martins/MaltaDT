@@ -65,6 +65,9 @@ MIN_STATION_DEPTH = 1.0         # m
 POINTS = {
     "shelf_60km_up": None,                  # on the track, set from the heading
     "shelf_30km_up": None,
+    "plateau_north": (14.60, 36.40),        # fixed points of the shelf
+    "sicily_coast": (14.60, 36.70),
+    "plateau_east": (14.85, 35.90),
     "offshore_4km": (14.548, 35.925),
     "gh_mouth": (14.5225, 35.9010),
     "senglea": (14.5141, 35.8893),
@@ -88,9 +91,14 @@ def track(heading_deg: float):
     return (x, y), (math.sin(a), math.cos(a))
 
 
+T_TOTAL = 0.0                   # s, fixed length of the run when positive
+
+
 def pressure_times(speed: float):
     t_track = 2 * TRACK_HALF / speed
     t_stop = math.ceil((t_track + T_AFTER) / 600.0) * 600.0
+    if T_TOTAL > 0:
+        t_stop = max(T_TOTAL, math.ceil(t_track / 600.0) * 600.0)
     return t_track, t_stop
 
 
@@ -282,7 +290,7 @@ def run(d: Path, case: str) -> int:
 
 
 def main(argv=None) -> int:
-    global P_RISE, RAMP, TRACK_HALF
+    global P_RISE, RAMP, TRACK_HALF, SIGMA_ALONG, T_TOTAL, OUT
     ap = argparse.ArgumentParser()
     ap.add_argument("--mesh", default="outer01", help="outer01, outer02 or v02")
     ap.add_argument("--heading", type=float, default=180.0,
@@ -295,9 +303,16 @@ def main(argv=None) -> int:
     ap.add_argument("--rise", type=float, default=P_RISE, help="pressure rise, Pa")
     ap.add_argument("--ramp", type=float, default=RAMP, help="s")
     ap.add_argument("--track-half", type=float, default=TRACK_HALF, help="m")
+    ap.add_argument("--sigma-along", type=float, default=SIGMA_ALONG, help="m")
+    ap.add_argument("--t-total", type=float, default=0.0,
+                    help="fixed length of the run, s, in place of the track plus T_AFTER")
+    ap.add_argument("--out", default=str(OUT), help="directory of the cases")
+    ap.add_argument("--discard-inputs", action="store_true",
+                    help="remove the pressure file and the mesh copy after the run")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args(argv)
     P_RISE, RAMP, TRACK_HALF = args.rise, args.ramp, args.track_half
+    SIGMA_ALONG, T_TOTAL, OUT = args.sigma_along, args.t_total, Path(args.out)
     t_track, t_stop = pressure_times(args.speed)
     print(f"static response {P_RISE / (RHO * G) * 100:.2f} cm, track of "
           f"{2 * TRACK_HALF / 1e3:.0f} km in {t_track / 3600:.2f} h, run of {t_stop / 3600:.2f} h")
@@ -307,6 +322,9 @@ def main(argv=None) -> int:
     if args.no_run:
         return 0
     rc = run(d, case)
+    if args.discard_inputs:
+        for f in list(d.glob("pressure.nc")) + list(d.glob("*_net.nc")) + list(d.glob("*.cache")):
+            f.unlink()
     print(f"exit {rc}")
     return rc
 
