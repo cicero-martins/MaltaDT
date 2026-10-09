@@ -11,6 +11,9 @@ docs/moving_pressure_channel_test.md shows to send a free wave back.
 
 The run is two-dimensional and barotropic, with a Riemann boundary forced by
 zero on the edge of the domain and no forcing other than the pressure. The
+tide-generating potential, which D-Flow FM applies by default on a spherical
+mesh, is switched off, since over the outer domain it raises the level by 1 to
+2 cm within the run, the size of the static response to the pressure rise. The
 pressure is written as snapshots on a geographic grid and read by D-Flow FM
 with linear interpolation in space and time, updated at every computational
 step. Stations are placed at the nearest cell centres whose nodes all lie
@@ -27,6 +30,7 @@ The heading is the direction of travel in degrees clockwise from north, so
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import shutil
 import subprocess
@@ -48,8 +52,8 @@ P_BACKGROUND = 101325.0         # Pa
 P_RISE = 200.0                  # Pa
 SIGMA_ALONG = 15e3              # m
 SIGMA_ACROSS = 50e3             # m
-TRACK_HALF = 150e3              # m, from the start of the track to the harbours
-RAMP = 1800.0                   # s
+TRACK_HALF = 200e3              # m, from the start of the track to the harbours
+RAMP = 3600.0                   # s
 T_AFTER = 3 * 3600.0            # s, simulated after the disturbance is lowered
 TARGET = (14.5141, 35.9000)     # lon, lat, the track passes here
 PRESSURE_DT = 60.0              # s
@@ -181,6 +185,10 @@ def write_case(mesh: str, heading: float, speed: float, dt_max: float = DT_MAX,
             f.write(f"{lon:.6f} {lat:.6f} '{key}'\n")
             print(f"  station {key:15s} {lon:.4f} E {lat:.4f} N, {moved:6.0f} m from the point")
     t_stop = write_pressure(d / "pressure.nc", bounds, heading, speed)
+    (d / "scenario.json").write_text(json.dumps(dict(
+        mesh=mesh, heading=heading, speed=speed, rise=P_RISE, ramp=RAMP,
+        track_half=TRACK_HALF, sigma_along=SIGMA_ALONG, sigma_across=SIGMA_ACROSS,
+        t_track=2 * TRACK_HALF / speed, t_stop=t_stop, dt_max=dt_max), indent=2))
 
     npts = int((d / f"{name}_bnd.pli").read_text().splitlines()[1].split()[0])
     with open(d / f"{name}_bnd.bc", "w") as f:
@@ -224,6 +232,7 @@ unifFrictCoef         = 0.023
 unifFrictType         = 1
 ag                    = {G}
 rhomean               = {RHO}
+tidalForcing          = 0
 
 [Wind]
 rhoAir                = 1.2
@@ -269,6 +278,7 @@ def run(d: Path, case: str) -> int:
 
 
 def main(argv=None) -> int:
+    global P_RISE, RAMP, TRACK_HALF
     ap = argparse.ArgumentParser()
     ap.add_argument("--mesh", default="outer01", help="outer01 or v02")
     ap.add_argument("--heading", type=float, default=180.0,
@@ -277,8 +287,12 @@ def main(argv=None) -> int:
     ap.add_argument("--dt-max", type=float, default=DT_MAX,
                     help="largest computational step, s")
     ap.add_argument("--tag", default="", help="suffix of the case name")
+    ap.add_argument("--rise", type=float, default=P_RISE, help="pressure rise, Pa")
+    ap.add_argument("--ramp", type=float, default=RAMP, help="s")
+    ap.add_argument("--track-half", type=float, default=TRACK_HALF, help="m")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args(argv)
+    P_RISE, RAMP, TRACK_HALF = args.rise, args.ramp, args.track_half
     t_track, t_stop = pressure_times(args.speed)
     print(f"static response {P_RISE / (RHO * G) * 100:.2f} cm, track of "
           f"{2 * TRACK_HALF / 1e3:.0f} km in {t_track / 3600:.2f} h, run of {t_stop / 3600:.2f} h")
