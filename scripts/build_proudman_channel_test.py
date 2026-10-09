@@ -142,7 +142,7 @@ def write_ext(path: Path, boundary: bool) -> None:
                 "operand             = O\n")
 
 
-def write_mdu(path: Path, name: str, pav_bnd: float) -> None:
+def write_mdu(path: Path, name: str, pav_bnd: float, t_stop: float = T_STOP) -> None:
     text = f"""# Moving pressure disturbance in a channel, case {name}. Written by build_proudman_channel_test.py.
 [General]
 fileVersion           = 1.09
@@ -187,7 +187,7 @@ dtUser                = 30.0
 dtMax                 = 5.0
 dtInit                = 1.0
 tStart                = 0.0
-tStop                 = {T_STOP:.1f}
+tStop                 = {t_stop:.1f}
 
 [External Forcing]
 extForceFile          =
