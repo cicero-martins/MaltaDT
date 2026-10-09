@@ -93,16 +93,29 @@ The interior gap that remains is **currents and stratification**, not sea level.
 
 Portal: `ocean.mt/bluedata`. Model output is to be integrated into this existing portal rather than served through a second one.
 
-## What the host group already operates
+## Modelling systems of the group
 
-From Drago (2018), Action A.7 of LIFE 16 IPE MT 008, in `reference/`. **This project is an independent exercise for the research period, not an alternative to any of it.** The purpose of recording it is to keep claims correctly bounded.
+The systems below are described in Drago (2018), the design report of Action A.7 of LIFE 16 IPE MT 008, in `reference/`. Their status is as stated by Prof. Gauci on 9 October 2026.
 
-- **ROSARIO**, Princeton Ocean Model, 1/64° and 1/96°, nested into CMEMS
-- **WAM** at 1/8°; **SWAN** downscaled to the embayments at **1/500°**, about 200 m
-- **ROSARIO-SHYFEM**, unstructured, 3D, operational to a 4-day forecast, grading from a few km to **50 m** at the coast, over the Maltese Islands and the Malta Channel to southern Sicily, with a Lagrangian particle-tracking component
-- The group derives its boundary conditions from **CMEMS**, which is what this project does too
+- **SWAN**, downscaled to the embayments at **1/500°**, about 200 m, from **WAM** at 1/8°. **Active**, and used together with the HF radar data.
+- **ROSARIO-SHYFEM**, unstructured, 3D, from a few km to **50 m** at the coast, over the Maltese Islands and the Malta Channel to southern Sicily, with a Lagrangian particle-tracking component. **Not running.**
+- **ROSARIO**, Princeton Ocean Model, 1/64° and 1/96°, nested into CMEMS.
+- **The design report was not continued.** It asks for a relocatable model setup for ad hoc local domains and names harbour flushing at the five principal harbours among its process-model targets, and neither was carried out.
 
-The design report asks for a **relocatable model setup** for ad hoc local domains and names harbour flushing at the five principal harbours among its process-model targets, with the Deltares suite among the families to review. Both bear directly on the framework-transfer argument.
+No hydrodynamic model at harbour scale is therefore in operation within the group, and no work on the generation of the long wave over the shelf exists. The present configuration is a process study conducted within the group. An extension to other bays is of possible interest, conditional on the outcome at Valletta.
+
+## Priorities stated by the group
+
+From the meeting with Prof. Gauci of 9 October 2026, held on the concept presentation of 8 October.
+
+- **Circulation inside the harbours is the principal interest.** The milgħuba is relevant at Msida and causes little damage in the harbours as a whole.
+- **Residence time**, for each harbour and by inlet, in particular around Manoel Island in Marsamxett, together with flushing time and temperature.
+- **Currents in support of oil spill assessment** in the industrial area of the Grand Harbour.
+- **Validation against the BLUE buoy.**
+- **Geometry experiments.** The breakwaters as modified in the planned projects, a closure of the gap under the St Elmo bridge, and the effect of new piers such as the one built at Msida. The sensitivity exercise on the harbour mouth was considered appropriate.
+- **Data to be supplied on 12 October 2026.** The archive of sea level and one-minute pressure on the event dates, the history of the Senglea installation with Portomaso, and data for validation.
+
+The two-dimensional sweep of the long wave is retained as the initial test, being inexpensive and informative, and precedes the three-dimensional runs.
 
 ## Inherited from StagnoneDT
 
