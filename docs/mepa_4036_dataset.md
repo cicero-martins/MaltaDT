@@ -76,6 +76,10 @@ The values are therefore orthometric, referenced to a surface approximating mean
 
 ## 4. Resolution relative to the public product
 
+![Bathymetry and coastline of the Maltese Islands](../figures/bathymetry_overview.png)
+
+*Extent and coverage of the merged 10 m bathymetry with the coastline (a), the Valletta harbours at 10 m (b), and the same extent in the EMODnet DTM 2024 at 115 m (c).*
+
 EMODnet publishes the same survey resampled to a grid of 1/16 by 1/16 arc-minute, approximately 115 m. The difference in the number of resolved water cells over the two harbours is given below, together with the representation of inlet widths.
 
 | Measure | EMODnet (115 m) | MEPA (10 m) | Ratio |

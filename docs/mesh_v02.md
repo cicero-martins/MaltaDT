@@ -4,6 +4,10 @@
 
 Version 02 is the working mesh of the project. It differs from version 01 only in the width of the coastal zones, 1 km at 120 m and 5 km at 480 m in place of 2 km and 15 km, and is otherwise built by the same procedure, in UTM 33N with the nodes transformed to WGS84.
 
+![Face size of mesh version 02](../figures/mesh_v02.png)
+
+*Face size of mesh version 02 over domain B (left) and over the Valletta harbours (right), as the square root of the face area on a logarithmic scale. The coastal zones are narrower than in version 01 and the harbours are unchanged.*
+
 | Zone | Target |
 |---|---|
 | Beyond 5 km of the coast | 1920 m |

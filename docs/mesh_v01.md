@@ -24,6 +24,10 @@ The harbours are separated from the sea by the outer section lines of [basin_mod
 
 ## 2. Result
 
+![Face size of mesh version 01](../figures/mesh_v01.png)
+
+*Face size of mesh version 01 over domain B (left) and over the Valletta harbours (right), as the square root of the face area on a logarithmic scale.*
+
 | Quantity | Value |
 |---|---|
 | Faces | 41 353, of which 4 052 transition triangles |

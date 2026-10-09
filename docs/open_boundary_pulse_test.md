@@ -24,6 +24,10 @@ The peak reflection coefficient is max|test − reference| / max|reference|, sig
 
 ## 2. Normal incidence
 
+![Records and reflection coefficients of the pulse test](../figures/riemann_pulse_test.png)
+
+*Water level 20 km inside the boundary of the channel and at a boundary cell of the 120 km basin, for the reference, the prescribed level and the Riemann boundary (top), reflection coefficient of the Riemann boundary against incidence angle beside first-order theory (bottom left), and mean level retained in the 120 km basin (bottom right).*
+
 | Pulse | Station | Riemann, peak | Water level, peak | Riemann, 0.5 cph | 1 cph | 2 cph | 4 cph |
 |---|---|---|---|---|---|---|---|
 | 5 min | 100 km | −0.013 | −0.941 | 0.006 | 0.011 | 0.023 | 0.046 |

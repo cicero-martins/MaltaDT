@@ -6,6 +6,10 @@
 
 ## 1. Method
 
+![Section lines and cross-sections of the two harbours](../figures/basin_modes.png)
+
+*Geodesic distance from the outer section line over the two harbours (top), and the cross-section a(x) along the Grand Harbour, with and without the St Elmo breakwater, and along Marsamxett (bottom). These profiles are the input of the eigenvalue calculation.*
+
 The sizing exercise bracketed the basin period with a quarter-wave and a Helmholtz idealisation, both on nominal dimensions and on an unobstructed mouth 400 m wide. Both are replaced here by the one-dimensional long-wave eigenproblem of a channel of varying section, the Webster equation,
 
 g d/dx ( a(x) dη/dx ) + ω² b(x) η = 0,

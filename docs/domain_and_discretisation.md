@@ -33,6 +33,10 @@ Half the channel length of Marsamxett lies in water narrower than 135 m and a th
 
 ## 2. Domain extent
 
+![Candidate domains, resonant periods and channel widths](../figures/domain_design.png)
+
+*Candidate domains A, B and C over the bathymetry of the Malta Plateau (a), resonant frequency of the shelf, the harbours and the inlets against the milgħuba band of 0.2 to 2 cph (b), and cumulative distribution of the channel width in the two harbours against cells of 15 m (c).*
+
 ### The question is where the seiche energy originates
 
 Quarter-wave periods were computed for each element of the system as T = 4L/√(gh) and set against the milgħuba band of 0.2 to 2 cph reported by Drago (2009), corresponding to periods between 30 minutes and 5 hours.

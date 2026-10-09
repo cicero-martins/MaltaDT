@@ -32,6 +32,10 @@ The window is 5.5 hours, long enough for the slowest disturbance to cross the bo
 
 ## 2. Response against the closed form
 
+![Response to a moving pressure disturbance](../figures/proudman_channel_test.png)
+
+*Water level 300 km from the start at Froude numbers of 0.6 and 1.0, modelled and in closed form (top), peak level in units of the static response against the Froude number at 100 and 300 km (bottom left), and the record 50 km inside the Riemann boundary at Fr = 1.0 beside the reference without a boundary (bottom right).*
+
 Peaks are in units of the static response. The last column is the root mean square departure of the modelled record from the closed form over the window, relative to the peak of the closed form.
 
 | Fr | Station | Peak, closed form | Peak, model | Ratio | RMS / peak |

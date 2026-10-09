@@ -20,6 +20,10 @@ All three are downward-looking radars sampling at 5 s. The device at Ċirkewwa s
 
 ## 2. Quality control
 
+![Senglea record after quality control](../figures/senglea_record_overview.png)
+
+*One-minute level at Senglea after despiking and quality control, with the daily coverage and the daily range of the short-period band, and the two windows admitted to the analysis.*
+
 **Radar echoes.** Anything entering the beam above the water, the hull or superstructure of a vessel, heavy rain or spray, shortens the measured range and appears as a rise of the level. At Senglea these echoes arrive in bursts of several minutes, are always upward and saturate near −0.02 m. In dense bursts they dominate a running median. Since the contamination is one-sided, the water surface is taken as the lower envelope, the 20th percentile of the 5 s samples over one minute, and samples more than 0.08 m above it are discarded. A minute in which more than a quarter of the samples are discarded is set missing. The procedure removes 7.6 per cent of the samples at Senglea and 0.45 per cent at Marsaxlokk, and a clean oscillation of 0.35 m range passes unaltered.
 
 **Reference offsets.** The Senglea record contains episodes of hours during which the level is displaced by 1.3 to 2.1 m, entered and left within one or two minutes, during which the basin oscillation either persists on top of the offset or disappears. These are removed where a step up and a step down of matching size bound them, and wherever the hourly median departs from the three-day median by more than 0.6 m. The tide at Malta reaches some 0.15 m and a surge departs from a three-day median by much less, so the criterion does not reach a physical signal.
@@ -43,6 +47,10 @@ Outside the windows the coverage falls to 58 per cent or less, and from April 20
 
 ## 3. Mean spectrum
 
+![Mean spectrum of the Senglea record](../figures/senglea_spectrum.png)
+
+*Mean spectrum with its running-median background (top left), ratio of the spectrum to the background with the predicted basin band shaded in blue (top right), band-passed level over 12 hours around the largest oscillation of the record (bottom left), and amplitude ratio of Senglea to the gauges outside the harbour (bottom right). The milgħuba band is shaded in grey.*
+
 Welch's method over 207 gap-free segments of 2048 minutes, Hann window, resolution 0.029 cph. Peaks are reported where the spectrum stands at least twice above a background taken as the running median of the log spectrum over a factor of two in frequency.
 
 | Frequency | Period | Peak over background | Relation to the prediction |
@@ -52,6 +60,10 @@ Welch's method over 207 gap-free segments of 2048 minutes, Hann window, resoluti
 | 3.57 cph | 16.8 min | 10.1 | within the predicted band, 14.5 to 18.4 min |
 | 5.98 cph | 10.0 min | 7.6 | |
 | 8.67 cph | 6.9 min | 15.2 | |
+
+![Spectrogram of the Senglea record](../figures/senglea_spectrogram.png)
+
+*Spectrum of each day divided by the background of the mean spectrum, with the median day at the right.*
 
 The spectrogram shows all four principal peaks on practically every day of both windows, in 2021 and in 2022–23 alike, independently of the forcing. They are therefore properties of the geometry. The peak at 6.9 minutes falls within the range of 4 to 6 minutes estimated for the inlets and probably belongs to Dockyard Creek or French Creek, on either side of the gauge.
 
@@ -78,6 +90,10 @@ At the lowest frequencies of the band the two sites oscillate with nearly the sa
 
 ## 5. Events
 
+![Largest oscillations in the Senglea record](../figures/senglea_events.png)
+
+*The six days of largest range in the windows admitted, as level with the tide and as level band-passed between 0.2 and 10 cph, with the range and the dominant period of each.*
+
 The ten days of largest range in the 0.2 to 10 cph band, among days at least 90 per cent covered and with a gap-free window of 12 hours around the maximum, are all oscillations of the 23 minute mode, with a range of 0.26 to 0.35 m and between 2 and 14 per cent of the variance in the milgħuba band. The largest is 8 November 2021, with a range of 0.35 m. The days of 7 and 8 February 2023, with daily ranges of 0.32 and 0.37 m, fall during the easterly storm of February 2023 recorded by Mazas and Farrugia and are excluded from the ranking only for gaps in the window. No event dominated by the milgħuba band, of size comparable to the basin mode, occurs in the nine months admitted.
 
 ---
@@ -98,6 +114,10 @@ The second reading is consistent with the calculation and the first is consisten
 ---
 
 ## 7. Reported events against the record
+
+![Coverage of the Senglea record and reported events](../figures/senglea_coverage_events.png)
+
+*One-minute level and daily coverage of the public Senglea record, with the two windows admitted and the dates of the three milgħuba events reported since the installation of the gauge.*
 
 Events of long-period sea level oscillation reported for Malta since 2018, and the state of the public records on each date.
 
