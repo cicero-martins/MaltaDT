@@ -33,19 +33,17 @@ The anticipated structure of that log, subject to confirmation in execution:
 
 ## 2. Research question
 
-The governing phenomenon is the **milgħuba**, the seiche oscillation of the Maltese harbours. Sea level fluctuations in the band 0.2 to 2 cph carry sufficient energy to mask the tidal signal in its entirety, and they generate rapid alternating currents at the harbour entrances that constitute both a recognised impediment to navigation and a principal mechanism of exchange between the harbours and the open sea. Airy described the phenomenon in the Grand Harbour in 1878. Its modern treatment is due to Drago, of the host group.
+The study addresses the circulation and the renewal of the water of the Grand Harbour and Marsamxett. The principal question, set out with its literature in [research_question_and_literature.md](research_question_and_literature.md), is as follows.
 
-The configuration establishes the transferability test precisely. At the Stagnone the tide supplies the boundary signal and the wind drives the circulation. At Valletta a long-wave resonance governs both. The question, scoped to the 86 working days available, is as follows.
+> What renews the water of the Grand Harbour and of Marsamxett, at what rate for each basin and for each inlet, and how is that renewal partitioned between wind, density differences, the exchange with the shelf and the oscillation driven by long waves?
 
-> Given observed atmospheric forcing from the PORTO coastal network and observed offshore conditions from the BLUE buoy, does the coupled Delft3D FM and SWAN framework reproduce the observed seiche response of the Grand Harbour and Marsamxett in period, amplitude and inter-basin phase, and what does that response imply for harbour flushing and residence time?
+Two questions accompany it. The first is a counterfactual on the geometry of the harbours, namely the sensitivity of renewal and of the long-wave response to the breakwaters as modified in the planned protection scheme, to a closure of the gap under the St Elmo bridge, and to new piers such as the one built at Msida. The second concerns the **milgħuba**, the atmospherically generated long wave in the band 0.2 to 2 cph described for the northern coast by Drago (2009) and in the Grand Harbour by Airy in 1878, and asks how its amplification is partitioned between Proudman resonance over the Malta Plateau, shoaling on the approach and resonance of the basins. It is retained as a contained component, since the milgħuba floods Msida while causing little damage in the harbours as a whole.
 
-The resonant periods are a property of basin geometry, which the model represents. The question is therefore well posed and answerable within the period.
+The expected results are a residence time for each basin and for each inlet, with the inlets around Manoel Island of particular interest to the group, the temperature field, current fields suited to the assessment of oil spills from the industrial area of the Grand Harbour, the response of these to the modified geometries, and a map of exposure to the long wave by inlet.
 
-> **Superseded 2026-09-24.** The question above is retained as the point of departure. It was found to be verification presented as research, and the prior literature was found to include a two-dimensional numerical treatment of Maltese coastal seiches that the formulation does not clear. See [research_question_and_literature.md](research_question_and_literature.md) for the reframing, which moves the question to the partition of amplification between the plateau, the approach and the basins.
+**Limitation of the atmospheric forcing.** ERA5, at 0.25 degrees and hourly resolution, does not resolve the atmospheric gravity waves that trigger the milgħuba. The long wave is therefore studied by a sweep of idealised moving pressure disturbances, two-dimensional and barotropic, and the dated events are located on the resulting response surface through the one-minute pressure records of the coastal stations. The circulation and the renewal are studied by a conventional three-dimensional hindcast, for which ERA5 blended with the stations is adequate.
 
-**Limitation of the atmospheric forcing.** ERA5, at 0.25 degrees and hourly resolution, does not resolve the atmospheric gravity waves that trigger the milgħuba. The model accordingly tests the **response** of the harbours to observed forcing rather than the prediction of the triggering mechanism. The one-minute pressure records from the coastal stations offer a route to an improved forcing field, and whether a propagating pressure disturbance can be reconstructed from them constitutes a secondary question meriting a single experiment rather than a work package. The limitation is stated at the outset rather than left for a reviewer to identify.
-
-**Temporal coverage of the research period.** Milgħuba events are favoured by particular atmospheric conditions, frequently associated with upper-air flow from the southeast, and they concentrate in the autumn and winter storm season. Since no instruments are to be deployed, the relevance of the period differs from that originally envisaged. By block B6 the BLUE and PORTO archives will span a complete winter of events available for analysis as they accumulate, and the host group already publishes event-based analyses of its own network. A storm case study accordingly provides the natural organising structure for the results.
+**Order of the work.** The sweep is run first, as the initial test of the configuration, since its 96 scenarios take some 8 hours of serial computation. The three-dimensional hindcast and the renewal runs follow.
 
 ---
 
@@ -61,7 +59,7 @@ The availability of observations is the principal justification for the site. Th
 | **HF radar**, 4 stations over the Malta Channel | Surface currents and waves | Validation of modelled surface currents |
 | **Senglea**, IDSL radar gauge inside the Grand Harbour, since June 2021, 5 s | Sea level, air temperature, sea-state images every 15 min | **The interior sea level record.** Transmits to the University of Malta and to the JRC TAD server. Five seconds over-resolves the seiche band by a wide margin |
 | **Tide gauges**: Portomaso (MedGLOSS, real time since 2001), Delimara (IDSL, March 2021, 5 s), Marsaxlokk breakwater (Radac WaveGuide, March 2021, 10 Hz) | Sea level | Independent sea level and long records for the seiche climatology. Portomaso, outside both basins, pairs with Senglea inside |
-| **CDI `4036_MEPA`**, a coastal survey encircling the islands, contributed by the host group (EDMO 708) | Bathymetry at 10 m over the whole coastal domain | Obtained 22 September 2026. See [mepa_4036_dataset.md](mepa_4036_dataset.md) |
+| **CDI `4036_MEPA`**, a coastal survey encircling the islands, contributed by the group (EDMO 708) | Bathymetry at 10 m over the whole coastal domain | Obtained 22 September 2026. See [mepa_4036_dataset.md](mepa_4036_dataset.md) |
 | **`MaltaCoastline.shp`**, 26 polygons, 315.4 km2, WGS84 / UTM 33N | Land and water boundary for the Maltese Islands | Obtained 23 September 2026. See [coastline_dataset.md](coastline_dataset.md) |
 | **BathMalta**, University of Malta, Sentinel-2 and Sentinel-3 nearshore satellite-derived bathymetry | Satellite bathymetry over the Maltese nearshore | Appropriate destination for the classifier and SDB line, outside the harbours |
 | **ocean.mt/bluedata** portal | Public live charts and automated bulletins | Existing dissemination route. Portal work becomes integration rather than construction |
@@ -70,44 +68,26 @@ Two consequences follow.
 
 **Coverage of the network.** Water level, waves and meteorology are measured offshore, along the coast and, at Senglea, inside the Grand Harbour, which is what renders modelling without a campaign viable. What remains unmeasured within the harbours is the current field and the stratification, together with the mouth-to-head amplification, which a single interior point cannot resolve. Section 5 treats the residual gap.
 
-**Applicability of the WetWise portal architecture.** The host group operates a public portal with an established audience. Integration of model output into that portal constitutes a more appropriate deliverable than the construction of a second one, and corresponds directly to WETWISE deliverable D.3.3.3.
+**Applicability of the WetWise portal architecture.** The group operates a public portal with an established audience. Integration of model output into that portal constitutes a more appropriate deliverable than the construction of a second one, and corresponds directly to WETWISE deliverable D.3.3.3.
 
-### 3.1 The modelling system the host group already operates
+### 3.1 Modelling systems of the group
 
-Drago (2018), the group's design report for Action A.7 of the LIFE RBMP project, records what exists and what was intended. The document is held at `reference/` and its contents bear on the position of the present work more than any other item found in the literature search.
+Drago (2018), the design report of the group for Action A.7 of the LIFE RBMP project, records the systems that existed at that date and those that were intended. The document is held at `reference/`.
 
-| Component | Configuration as reported in 2018 |
-|---|---|
-| ROSARIO, Princeton Ocean Model | Eddy-resolving, 1/64° and 1/96°, hourly and three-hourly output of temperature, salinity and velocity |
-| WAM | 1/8° over the central Mediterranean |
-| SWAN | Downscaling of the wave forecast to the embayments on a regular grid of **1/500°**, approximately 200 m |
-| SHYFEM | Finite-element, unstructured, over the **Maltese Islands and the Malta Channel to a substantial part of the southern Sicilian coast**, under development for coastal hydrodynamics |
-
-The published record on the last of these carries further detail. ROSARIO-SHYFEM is reported as operational, running daily to a four-day forecast of the three-dimensional fields, with **resolution grading from a few kilometres to 50 m** at the coast, and coupled to a Lagrangian particle-tracking component applied to jellyfish trajectories and, with BFM, to water quality within a marine protected area.
-
-Three matters follow.
-
-**The SHYFEM domain is the domain proposed here, and the resolutions differ by a factor of two to three inside the harbours.**
-
-| | ROSARIO-SHYFEM | Proposed here |
+| Component | Configuration as reported in 2018 | Status in October 2026 |
 |---|---|---|
-| Extent | Maltese Islands and the Malta Channel to southern Sicily | 86 × 66 km over Malta and the near plateau |
-| Coarsest | a few km | 1.5 km |
-| Finest | 50 m at the coast | 15 m in the inlets, 30 m in the basins |
-| Dimensionality | 3D | 3D |
-| Waves | Separate SWAN downscaling at 1/500° | Coupled through DIMR |
-| Lagrangian | Present, with BFM in some applications | OpenDrift, ported from the Stagnone |
-| Mode | Operational, daily, four-day forecast | Process study and hindcast |
+| ROSARIO, Princeton Ocean Model | Eddy-resolving, 1/64° and 1/96°, hourly and three-hourly output of temperature, salinity and velocity | |
+| WAM | 1/8° over the central Mediterranean | |
+| SWAN | Downscaling of the wave forecast to the embayments on a regular grid of **1/500°**, approximately 200 m | **In use**, together with the HF radar data |
+| ROSARIO-SHYFEM | Finite-element, unstructured, three-dimensional, over the Maltese Islands and the Malta Channel to southern Sicily, from a few kilometres to 50 m at the coast, with Lagrangian particle tracking | **Not running** |
 
-The difference is one of resolution inside the basins, of coupling, and of frequency band, rather than of capability. A Lagrangian tool already exists in the group and the renewal question should be positioned accordingly rather than as the provision of something missing.
+The status is as stated by Prof. Gauci on 9 October 2026. The programme of the design report was not continued, so the local-scale models it envisaged in proximity to and inside the five principal harbours, with process models for flushing, siltation, water quality and coastal engineering impact, were not established. No hydrodynamic model at the scale of the harbours is therefore in operation within the group, and the present configuration, at 15 m in the inlets and coupled to SWAN through DIMR, is a process study conducted within it.
 
-**The present work is an independent exercise tied to the research period and does not stand in relation to that system as an alternative to it.** The comparison above is recorded so that the claims made here are correctly bounded, not because the scope depends on it. The operational system is a useful point of reference, and a comparison of the two over the shared extent would be informative if the group had an interest in it, but nothing in the plan requires that comparison to take place.
+**The boundary condition is CMEMS MED-MFC**, which is also the source from which the group derives the boundary conditions of its forecasting models, and which keeps the configuration continuous with the Stagnone.
 
-**The boundary condition remains CMEMS, which is also what the host group uses.** The ROSARIO system is itself nested into CMEMS, and the group derives the boundary conditions for its meteo-marine forecasting models from that source. Taking CMEMS MED-MFC for the open boundary is therefore the same practice as the host group's rather than a departure from it, and it keeps the configuration continuous with the Stagnone. Should that boundary prove limiting in the long-wave band, the ROSARIO output resolves the Malta Channel more finely and can be examined at that point, but the question does not arise at the outset.
+**The SWAN resolution proposed in the sizing exercise agrees with that of the group.** Arrangement C in [domain_and_discretisation.md](domain_and_discretisation.md) proposes a nest at 250 m, arrived at from the width of the harbour entrances, against the 200 m of the downscaling in use. The agreement is independent and supports the choice.
 
-**The SWAN resolution proposed in the sizing exercise agrees with the group's own.** Arrangement C in [domain_and_discretisation.md](domain_and_discretisation.md) proposes a nest at 250 m, arrived at from the width of the harbour entrances. The group operates its downscaling at approximately 200 m. The agreement is independent and it supports the choice.
-
-**Harbour flushing is a stated objective of the design rather than an incidental interest.** The report sets out an intention to establish local-scale models in proximity to and inside the five principal harbours, with process models for flushing, siltation, water quality and coastal engineering impact linked to them, in support of Water Framework Directive and Marine Strategy Framework Directive obligations. It names the Deltares suite among the model families to be reviewed for that role and carries three Deltares staff on its international working group. The renewal question recorded as a fallback in the research-question document is accordingly an institutional objective of the host group, and the framework arriving with this project is one of the candidates that document names.
+**Harbour flushing is a stated objective.** The design report names it among the process models in support of Water Framework Directive and Marine Strategy Framework Directive obligations and lists the Deltares suite among the model families to be reviewed for that role. The circulation inside the harbours is the principal interest stated by the group for the present work, and the renewal question of Section 2 answers to both.
 
 ### 3.2 Relocatability, and the EDITO-hosted pilot
 
@@ -117,7 +97,7 @@ The design report states a requirement that had not previously been connected to
 
 and elsewhere envisages that the suite of local models be deployed as a relocatable version applicable to any area of interest with the same setup and modelling infrastructure.
 
-Relocatability is the thesis argument of this project stated in the host group's own terms. The framework transfer from the Stagnone to Valletta is a demonstration of exactly that property, and the porting log is the evidence for it. The correspondence is close enough that the transfer log should be presented to the group in that language rather than only as a methodological result for the thesis.
+Relocatability is the thesis argument of this project stated in the terms of the group. The framework transfer from the Stagnone to Valletta is a demonstration of exactly that property, and the porting log is the evidence for it. The correspondence is close enough that the transfer log should be presented to the group in that language rather than only as a methodological result for the thesis.
 
 **The infrastructure for it already exists.** The Stagnone twin is containerised and hosted on European public infrastructure rather than running only on local machines.
 
@@ -130,7 +110,7 @@ Relocatability is the thesis argument of this project stated in the host group's
 
 A Valletta configuration could therefore be stood up on the same infrastructure without constructing anything new, which converts the deliverable from a set of result figures into a running pilot that outlives the research period. It also supplies a concrete answer to the relocatability requirement above, since the same container and the same publication route would serve a second domain.
 
-**This is recorded as a possibility conditional on progress rather than as a commitment.** It depends on the model reaching a stable configuration early enough in the period, and it should be raised with the host group only once there is something to show. Its natural place is block B6, alongside the integration into the existing ocean.mt portal, and the two are complementary rather than alternatives, since the portal reaches the group's established audience while the EDITO deployment carries the execution.
+**This is recorded as a possibility conditional on progress rather than as a commitment.** It depends on the model reaching a stable configuration early enough in the period, and it should be raised with the group only once there is something to show. Its natural place is block B6, alongside the integration into the existing ocean.mt portal, and the two are complementary rather than alternatives, since the portal reaches the group's established audience while the EDITO deployment carries the execution.
 
 ### 3.3 The sea level network, and the gap inside the harbours
 
@@ -154,7 +134,7 @@ Three consequences follow for the plan.
 
 **Senglea and Portomaso form an interior and exterior pair.** The amplification between the open coast and the inside of the harbour becomes an observed quantity for at least one interior point, which constrains the model where it was previously unconstrained.
 
-**The retrieval route already exists in the project.** The station transmits to the JRC TAD server, which is the source `StagnoneDT/scripts/download_marettimo_wl_long.py` reads for device 658. The device identifier for Senglea has not been established and the TAD device-list endpoint did not respond to the parameter forms attempted, so it is to be obtained from the host group or from the TAD map.
+**The retrieval route already exists in the project.** The station transmits to the JRC TAD server, which is the source `StagnoneDT/scripts/download_marettimo_wl_long.py` reads for device 658. The device identifier for Senglea has not been established and the TAD device-list endpoint did not respond to the parameter forms attempted, so it is to be obtained from the group or from the TAD map.
 
 ---
 
@@ -179,6 +159,8 @@ Three consequences follow for the plan.
 ## 5. Data basis and the status of field observation
 
 **Working assumption adopted 22 September 2026.** The study proceeds on existing observations, with no field campaign planned. This removes port authority clearance, instrument procurement and weather dependency from the critical path and releases the eight working days of block B2 together with the download and recovery time otherwise required in blocks B4, B5 and B6.
+
+Releases of surface drifters inside the harbours were raised by the group on 9 October 2026 as a possibility. Vessel traffic limits them to short periods or to hours of low traffic, and tracks of a few hours would test the surface currents and the Lagrangian pipeline inside the basins, where no current measurement is otherwise in hand.
 
 The decision constitutes a deferral rather than a cancellation. Should the work reach a point at which an interior measurement is demonstrably the limiting factor, a limited deployment may be requested at that stage, on evidence of what is missing rather than in anticipation of it.
 
@@ -209,7 +191,7 @@ Pending those answers the plan proceeds as though interior validation were unava
 
 ## 6. Bathymetry
 
-The bathymetric basis has changed materially since this plan was first drafted. This section records the assessment of the public product that motivated the request to the host group, and the outcome of that request.
+The bathymetric basis has changed materially since this plan was first drafted. This section records the assessment of the public product that motivated the request to the group, and the outcome of that request.
 
 ### 6.1 Assessment of the EMODnet product
 
@@ -243,7 +225,7 @@ The WFS `source_references` layer returns only GEBCO2024 across the whole Maltes
 
 `4036_MEPA` is not a survey of the Valletta harbours but a national coastal survey encircling the island fringe. A denser probe over the Valletta area at approximately 450 m spacing confirmed it as the dominant source there, covering 32 of 130 sampled points against 12 for the regional CNR-ISMAR product, the remainder being land. It is attributed to EDMO 708, the Oceanography Malta Research Group of the University of Malta.
 
-Requesting the dataset at native resolution therefore constituted a request serving the entire coastal domain rather than a single basin, addressed to the host group's own holding. This established it as the highest-value action available within block B1.
+Requesting the dataset at native resolution therefore constituted a request serving the entire coastal domain rather than a single basin, addressed to the group's own holding. This established it as the highest-value action available within block B1.
 
 ### 6.3 Outcome
 
@@ -259,9 +241,9 @@ The UKHO contributions and the Admiralty electronic navigational charts remain r
 
 Five works establish the basis for the present study. Their relevance is indicated in each case.
 
-1. **Drago, A. (2009).** *Sea level variability and the 'Milgħuba' seiche oscillations in the northern coast of Malta, Central Mediterranean.* Physics and Chemistry of the Earth 34, 948–970. The phenomenon itself, from 43 months of densely sampled sea level at Mellieħa Bay between 1993 and 1996. The work establishes the band 0.2 to 2 cph, the masking of the tidal signal, the interpretation as shelf-scale resonance amplified within the embayments, and the atmospheric triggering. The present study answers to this work, whose author belongs to the host group.
+1. **Drago, A. (2009).** *Sea level variability and the 'Milgħuba' seiche oscillations in the northern coast of Malta, Central Mediterranean.* Physics and Chemistry of the Earth 34, 948–970. The phenomenon itself, from 43 months of densely sampled sea level at Mellieħa Bay between 1993 and 1996. The work establishes the band 0.2 to 2 cph, the masking of the tidal signal, the interpretation as shelf-scale resonance amplified within the embayments, and the atmospheric triggering. The present study answers to this work, whose author belongs to the group.
 
-2. **Drago, A., Sorgente, R. & Ribotti, A. (2003).** *A high resolution hydrodynamic 3-D model simulation of the Malta shelf area.* Annales Geophysicae 21(1), 323–344. ROSARIO-I, a POM-based shelf model at 1.6 km with 15 sigma layers, nested one-way within a coarser Sicily Channel model. The work describes the regional circulation inherited by the open boundary and represents the modelling lineage of the host group, which warrants explicit acknowledgement when a different solver is proposed.
+2. **Drago, A., Sorgente, R. & Ribotti, A. (2003).** *A high resolution hydrodynamic 3-D model simulation of the Malta shelf area.* Annales Geophysicae 21(1), 323–344. ROSARIO-I, a POM-based shelf model at 1.6 km with 15 sigma layers, nested one-way within a coarser Sicily Channel model. The work describes the regional circulation inherited by the open boundary and represents the modelling lineage of the group, which warrants explicit acknowledgement when a different solver is proposed.
 
 3. **Capodici, F., Cosoli, S., Ciraolo, G., Nasello, C., Maltese, A., Poulain, P.-M., Drago, A., Azzopardi, J. & Gauci, A. (2019).** *Validation of HF radar sea surface currents in the Malta-Sicily Channel.* Remote Sensing of Environment 225, 65–76. The work establishes the accuracy of the surface current field against which the model is to be validated, assessed by comparison with drifters, near-surface ADCP measurements and site-to-site baselines. The authorship spans UNIPA and the University of Malta and includes Ciraolo and Maltese, establishing a precedent for the intended joint publication.
 
@@ -274,7 +256,7 @@ Five works establish the basis for the present study. Their relevance is indicat
 **Material added on 25 September 2026**, from documents supplied to `reference/`. Their assessment is carried in [research_question_and_literature.md](research_question_and_literature.md) and only their bearing on this plan appears below.
 
 - **Mazas, F. and Farrugia, C.** *Protecting Valletta's Grand Harbour against adverse wave conditions.* Coastal Engineering Proceedings 154. ARTELIA and Infrastructure Malta. The Grand Harbour has been modelled for wind-wave agitation in PHAROS, and a protection scheme comprising an outer breakwater, a detached submerged breakwater and two revetments is before the planning authorities. The paper also supplies the directional wave climate off Valletta and records significant damage in the port from the storms of February 2019 and February 2023.
-- **Drago, A.F. (2018).** *Designing an observing and forecasting system for the Maltese Islands.* Progress report, Action A.7, LIFE 16 IPE MT 008. The host group's design document, treated in Section 3.1 above.
+- **Drago, A.F. (2018).** *Designing an observing and forecasting system for the Maltese Islands.* Progress report, Action A.7, LIFE 16 IPE MT 008. The group's design document, treated in Section 3.1 above.
 - **Laksono, F.A.T. et al. (2026).** *Exploring the tsunami generation potential of major faults in the Sicilian Channel using 3D numerical modeling.* Ocean Modelling 199, 102625. Delft3D applied to long-wave propagation over the same channel, and the precedent for the Riemann boundary treatment recorded in `CLAUDE.md`.
 - **Balzan, M.V. et al. (2022).** *Assessing nature-based solutions uptake in a Mediterranean climate: insights from the case-study of Malta.* Nature-Based Solutions 2, 100029. A stakeholder and governance analysis, relevant to the framing of the WETWISE deliverable rather than to the physics.
 
@@ -291,7 +273,7 @@ Five works establish the basis for the present study. Their relevance is indicat
 
 **Framework transfer.** Strengthened and extended to a transfer across archetype. It remains the principal deliverable, unchanged in weight.
 
-**Random-Forest bottom-class classifier.** The method does not survive application to a deep harbour of limited optical clarity. Rather than being abandoned it is relocated. BathMalta, the University of Malta project on Sentinel-2 and Sentinel-3 nearshore bathymetry, constitutes the natural collaboration, applied to the Maltese nearshore outside the harbours. The line becomes a parallel joint output with the host group rather than an input to the harbour model. The reduction is genuine and the text of the proposal should be corrected accordingly rather than left to imply otherwise.
+**Random-Forest bottom-class classifier.** The method does not survive application to a deep harbour of limited optical clarity. Rather than being abandoned it is relocated. BathMalta, the University of Malta project on Sentinel-2 and Sentinel-3 nearshore bathymetry, constitutes the natural collaboration, applied to the Maltese nearshore outside the harbours. The line becomes a parallel joint output with the group rather than an input to the harbour model. The reduction is genuine and the text of the proposal should be corrected accordingly rather than left to imply otherwise.
 
 **HF radar.** Strengthened. Four stations cover the Malta Channel with the model domain within their footprint, so the network validates the surface currents of the present model rather than serving only as a cross-check on the Stagnone boundary. The Stagnone cross-check remains available at no additional cost.
 
@@ -305,7 +287,7 @@ Five works establish the basis for the present study. Their relevance is indicat
 
 ## 9. Actions for the remainder of block B1, 23 to 26 September
 
-Three working days remain. Each item below has a lead time exceeding them, which is why it belongs to this block rather than the next. All are enquiries to be put to the host group rather than tasks to be executed independently, and most can only be resolved in person.
+Three working days remain. Each item below has a lead time exceeding them, which is why it belongs to this block rather than the next. All are enquiries to be put to the group rather than tasks to be executed independently, and most can only be resolved in person.
 
 | Status | Action | Justification |
 |---|---|---|
@@ -325,17 +307,15 @@ Three working days remain. Each item below has a lead time exceeding them, which
 
 ## 10. Block allocation
 
-The calendar is unchanged. The content of each block is revised.
-
-- **G1, 27 September to 6 October.** Submission of Stagnone Paper 1, which remains the priority. Retrieval of the Portomaso, PORTO and BLUE archives and characterisation of the observed seiche climatology in advance of any modelling, since that analysis defines what the model is required to reproduce and requires no model to conduct. Construction of the merged bathymetry over the model domain and intersection of its gaps with a coastline. Retrieval of CMEMS and ERA5 forcing for the Maltese domain.
-- **B2, 7 to 17 October.** Released by the decision against a campaign, and best directed to work benefiting from the presence of the host group. Completion of the seiche climatology in collaboration with them, given their familiarity with the events and with the instrumentation. Verification of the harbour planform against local knowledge. First mesh. Resolution of whatever Sections 5 and 6 leave outstanding after block B1.
-- **B3, 27 October to 21 November, 15 working days rather than 19.** The Delft3D User Days occupy 2 to 4 November and the block loses four days with travel. Week one, 27 October to 1 November, is directed at the mesh and the first boundary experiments, so that the configuration questions reach Deltares in concrete form. Weeks three and four carry the depth-field sensitivity on the modal periods, the FM-only run, the SWAN coupling and a first comparison against the coastal sea level records and BLUE. The Riemann boundary verified by synthetic long-wave pulse precedes any production run. See Section 2.1 of the period plan.
+- **G1, 27 September to 6 October.** Bathymetry and coastline merged, working mesh built, basin modes estimated, Riemann boundary tested with a synthetic pulse, Senglea record analysed.
+- **B2, 7 to 17 October.** Concept presented to the group on 8 October and priorities agreed on 9 October. Moving pressure field in D-Flow FM, boundary tests under pressure forcing, linearity check and pilot scenario, then the two-dimensional sweep of the long wave. Receipt of the archive data on 12 October and location of the dated events on the response surface. A first three-dimensional run as a test of the forcing chain.
+- **B3, 27 October to 21 November, 15 working days rather than 19.** The Delft3D User Days occupy 2 to 4 November and the block loses four days with travel. CMEMS and ERA5 forcing, heat flux model, SWAN coupling, and the three-dimensional hindcast of some 40 days with a first comparison against the BLUE buoy, the HF radar and the tide gauges. See Section 2.1 of the period plan.
 - **G3, 22 to 30 November.** Extended runs. Review of the GEE manuscript should the referee reports arrive.
-- **B4, 1 to 19 December.** Seiche validation against the coastal stations, and comparison of modelled modal periods against those reported by Drago and against the analytical estimate. HF radar surface current comparison. Agreement of the structure of the joint manuscript.
+- **B4, 1 to 19 December.** Validation of the hindcast. Renewal run on the present geometry, with tracers by inlet and the OpenDrift pipeline. Construction of the mesh variants for the geometry experiments. Agreement of the structure of the joint manuscript.
 - **G4, 20 December to 18 January.** Background runs, holidays, commitments at UNIPA.
-- **B5, 19 January to 6 February.** Flushing and residence-time experiments through the OpenDrift pipeline, reported as a range rather than a single value, following the Mediterranean harbour literature. Methods and Results drafted. Commencement of the Westrade collaboration. Contribution to deliverable D.3.3.3.
+- **B5, 19 January to 6 February.** Geometry experiments and the runs with one forcing withheld at a time. Residence time by inlet reported as a range, following the Mediterranean harbour literature. Oil drift scenarios for the industrial area of the Grand Harbour. Methods and Results drafted. Commencement of the Westrade collaboration. Contribution to deliverable D.3.3.3.
 - **G5, 7 to 22 February.** Figures and final runs.
-- **B6, 23 February to 27 March.** Storm event case study drawing on the BLUE and PORTO records, which by then span a complete winter. Submission of the joint manuscript. Integration of model output into the existing ocean.mt portal. Should the configuration have proved stable, deployment of the Valletta domain on the EDITO infrastructure as a running pilot, per Section 3.2. Closing seminar. Drafting of the thesis chapter from the porting log, presented against the relocatability requirement stated in the group's own design report.
+- **B6, 23 February to 27 March.** Storm event case study drawing on the BLUE and PORTO records, which by then span a complete winter. Submission of the joint manuscript. Integration of model output into the existing ocean.mt portal. Should the configuration have proved stable, deployment of the Valletta domain on the EDITO infrastructure as a running pilot, per Section 3.2. Closing seminar. Drafting of the thesis chapter from the porting log, presented against the relocatability requirement of the design report.
 
 ---
 
@@ -357,7 +337,7 @@ The calendar is unchanged. The content of each block is revised.
 
 ## 12. Outstanding questions
 
-Most are for the host group. The first three determine what the study can be.
+Most are for the group. The first three determine what the study can be.
 
 1. **What is the levelling datum of the `ContoursMalta` dataset, and how does its zero relate to the tide gauge zeros?** The vertical datum of the bathymetry is established as orthometric rather than ellipsoidal, the declaration in the file being a mislabel. The remaining question concerns the realisation, and above all the offset against the gauges used for validation. See [coastline_dataset.md](coastline_dataset.md) and Section 3 of [mepa_4036_dataset.md](mepa_4036_dataset.md).
 2. **Does any interior record exist, in any form?** Historic ADCP, student dissertations, port engineering or dredging surveys, Water Framework Directive monitoring of the two heavily modified water bodies, or operational data held by the port operators, the ferries, the cruise terminal or the shipyard. Section 5.
