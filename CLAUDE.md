@@ -16,7 +16,7 @@ That index is to be consulted **before proposing anything** touching the solver,
 
 Cross-cutting rules, namely the register, the prose style, the tool traps and the commit cadence, live in `~/.claude/CLAUDE.md` and load in every session.
 
-**The milghuba is a meteotsunami, not a seiche in general**, alongside the rissaga of the Balearics and the marrobbio of Sicily. The governing question is the partition of amplification between Proudman resonance over the Malta Plateau, shoaling on the approach, and resonance of the basins. Prior work already treats Maltese coastal seiches in 2D with prescribed offshore forcing, so the generation side remains unaddressed. The hazard is documented: the milghuba floods Msida, at the head of Msida Creek inside Marsamxett, together with Marsaskala, Xemxija, Marsaxlokk and Sliema. Climate change is a bounded discussion element, since the parametric sweep yields a transfer function of the geometry and climate acts on the input distribution, so the two separate and no climate scenario need be run through the model. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md).
+**The milghuba is a meteotsunami, not a seiche in general**, alongside the rissaga of the Balearics and the marrobbio of Sicily. **The principal question of the study is the renewal and circulation of the harbours, and the milgħuba is a component of it.** For that component the question is the partition of amplification between Proudman resonance over the Malta Plateau, shoaling on the approach, and resonance of the basins. Prior work already treats Maltese coastal seiches in 2D with prescribed offshore forcing, so the generation side remains unaddressed. The hazard is documented: the milghuba floods Msida, at the head of Msida Creek inside Marsamxett, together with Marsaskala, Xemxija, Marsaxlokk and Sliema. Climate change is a bounded discussion element, since the parametric sweep yields a transfer function of the geometry and climate acts on the input distribution, so the two separate and no climate scenario need be run through the model. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md).
 
 ## Register
 
@@ -111,7 +111,8 @@ From the meeting with Prof. Gauci of 9 October 2026, held on the concept present
 - **Circulation inside the harbours is the principal interest.** The milgħuba is relevant at Msida and causes little damage in the harbours as a whole.
 - **Residence time**, for each harbour and by inlet, in particular around Manoel Island in Marsamxett, together with flushing time and temperature.
 - **Currents in support of oil spill assessment** in the industrial area of the Grand Harbour.
-- **Validation against the BLUE buoy.**
+- **Validation against the BLUE buoy.** Drifter releases inside the harbours are a possibility, limited by vessel traffic to short periods or to hours of low traffic.
+- **The principal research question is the renewal and circulation of the harbours**, with the geometry counterfactual and the milgħuba as accompanying components. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md), Section 4.
 - **Geometry experiments.** The breakwaters as modified in the planned projects, a closure of the gap under the St Elmo bridge, and the effect of new piers such as the one built at Msida. The sensitivity exercise on the harbour mouth was considered appropriate.
 - **Data to be supplied on 12 October 2026.** The archive of sea level and one-minute pressure on the event dates, the history of the Senglea installation with Portomaso, and data for validation.
 
