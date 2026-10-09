@@ -169,7 +169,7 @@ def stations(net: Path, heading: float):
 
 
 def write_case(mesh: str, heading: float, speed: float, dt_max: float = DT_MAX,
-               tag: str = "") -> tuple[Path, str, float]:
+               tag: str = "", map_interval: float = 600.0) -> tuple[Path, str, float]:
     name = f"malta_{mesh}"
     src = ROOT / "data" / "processed" / f"mesh_{mesh}"
     case = f"{mesh}_h{heading:03.0f}_u{speed:02.0f}{tag}"
@@ -257,7 +257,11 @@ extForceFileNew       = forcing.ext
 outputDir             = output
 obsFile               = stations_obs.xyn
 hisInterval           = 30.0
-mapInterval           = 600.0
+mapInterval           = {map_interval:.1f}
+wrimap_velocity_vector = 0
+wrimap_upward_velocity_component = 0
+wrimap_taucurrent     = 0
+wrimap_chezy          = 0
 rstInterval           = 0.0
 """)
     return d, case, t_stop
@@ -280,13 +284,14 @@ def run(d: Path, case: str) -> int:
 def main(argv=None) -> int:
     global P_RISE, RAMP, TRACK_HALF
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mesh", default="outer01", help="outer01 or v02")
+    ap.add_argument("--mesh", default="outer01", help="outer01, outer02 or v02")
     ap.add_argument("--heading", type=float, default=180.0,
                     help="direction of travel, degrees clockwise from north")
     ap.add_argument("--speed", type=float, default=31.0, help="m/s")
     ap.add_argument("--dt-max", type=float, default=DT_MAX,
                     help="largest computational step, s")
     ap.add_argument("--tag", default="", help="suffix of the case name")
+    ap.add_argument("--map-interval", type=float, default=600.0, help="s")
     ap.add_argument("--rise", type=float, default=P_RISE, help="pressure rise, Pa")
     ap.add_argument("--ramp", type=float, default=RAMP, help="s")
     ap.add_argument("--track-half", type=float, default=TRACK_HALF, help="m")
@@ -296,7 +301,8 @@ def main(argv=None) -> int:
     t_track, t_stop = pressure_times(args.speed)
     print(f"static response {P_RISE / (RHO * G) * 100:.2f} cm, track of "
           f"{2 * TRACK_HALF / 1e3:.0f} km in {t_track / 3600:.2f} h, run of {t_stop / 3600:.2f} h")
-    d, case, t_stop = write_case(args.mesh, args.heading, args.speed, args.dt_max, args.tag)
+    d, case, t_stop = write_case(args.mesh, args.heading, args.speed, args.dt_max, args.tag,
+                                 args.map_interval)
     print(f"written {d}")
     if args.no_run:
         return 0

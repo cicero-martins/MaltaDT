@@ -89,6 +89,7 @@ def node_bed_level(lon, lat):
 
 
 def main(argv=None) -> int:
+    global OUTER_LONLAT, OUT, FIGURE, NAME, CHANNEL
     import dfm_tools as dfmt
     import geopandas as gpd
     from shapely.geometry import box
@@ -97,7 +98,16 @@ def main(argv=None) -> int:
     ap.add_argument("--figure", action="store_true")
     ap.add_argument("--figure-only", action="store_true",
                     help="redraw the figure from the written mesh")
+    ap.add_argument("--box", type=float, nargs=4, default=OUTER_LONLAT,
+                    metavar=("LON0", "LAT0", "LON1", "LAT1"))
+    ap.add_argument("--name", default="outer01", help="name of the variant")
+    ap.add_argument("--bathymetry", default=str(CHANNEL),
+                    help="EMODnet grid covering the box")
     args = ap.parse_args(argv)
+    OUTER_LONLAT, CHANNEL = tuple(args.box), Path(args.bathymetry)
+    OUT = ROOT / "data" / "processed" / f"mesh_{args.name}"
+    FIGURE = ROOT / "figures" / f"mesh_{args.name}.png"
+    NAME = f"malta_{args.name}"
     if args.figure_only:
         plot_from_file()
         return 0

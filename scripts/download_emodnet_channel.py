@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "external" / "emodnet_channel.tif"
 TILES = ROOT / "data" / "external" / "emodnet_channel_tiles"
 OWS = "https://ows.emodnet-bathymetry.eu"
-BOX = (12.0, 34.0, 18.0, 38.0)      # lon0, lat0, lon1, lat1, whole degrees
+BOX = (12, 34, 18, 38)              # lon0, lat0, lon1, lat1, whole degrees
 DECIMATE = 4
 TIMEOUT = 300
 
@@ -50,18 +50,25 @@ def fetch_tile(lon: int, lat: int) -> Path:
     raise RuntimeError(f"tile {lon} E {lat} N not retrieved")
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    import argparse
+
     import rasterio
     from rasterio.merge import merge
     from rasterio.transform import from_origin
 
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--box", type=int, nargs=4, default=BOX,
+                    metavar=("LON0", "LAT0", "LON1", "LAT1"), help="whole degrees")
+    ap.add_argument("--out", default=str(OUT))
+    args = ap.parse_args(argv)
+    out = Path(args.out)
     TILES.mkdir(parents=True, exist_ok=True)
-    lon0, lat0, lon1, lat1 = BOX
+    lon0, lat0, lon1, lat1 = args.box
     paths = []
     for lat in range(int(lat0), int(lat1)):
         for lon in range(int(lon0), int(lon1)):
             paths.append(fetch_tile(lon, lat))
-            print(f"  {paths[-1].name}  {paths[-1].stat().st_size / 1e6:.1f} MB")
     sources = [rasterio.open(p) for p in paths]
     z, transform = merge(sources, nodata=np.nan, dtype="float32")
     nodata = sources[0].nodata
@@ -77,11 +84,11 @@ def main() -> int:
     with np.errstate(invalid="ignore"):
         coarse = np.nanmean(blocks, axis=(1, 3)).astype("float32")
     t = from_origin(transform.c, transform.f, transform.a * DECIMATE, -transform.e * DECIMATE)
-    with rasterio.open(OUT, "w", driver="GTiff", height=coarse.shape[0], width=coarse.shape[1],
+    with rasterio.open(out, "w", driver="GTiff", height=coarse.shape[0], width=coarse.shape[1],
                        count=1, dtype="float32", crs="EPSG:4326", transform=t,
                        nodata=np.nan, compress="deflate") as dst:
         dst.write(coarse, 1)
-    print(f"written {OUT}, {coarse.shape[1]} x {coarse.shape[0]} cells of "
+    print(f"written {out}, {coarse.shape[1]} x {coarse.shape[0]} cells of "
           f"{t.a * 60:.3f} arc-minute, elevation {np.nanmin(coarse):.0f} to "
           f"{np.nanmax(coarse):.0f} m, without data {np.isnan(coarse).mean():.1%}")
     return 0

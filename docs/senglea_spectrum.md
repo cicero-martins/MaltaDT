@@ -107,6 +107,8 @@ The ten days of largest range in the 0.2 to 10 cph band, among days at least 90 
 1. The 23 minute peak is the fundamental mode of the Grand Harbour and the one-dimensional calculation underestimates it by about a quarter. The calculation omits the two-dimensional contraction at the breakwater, represents the branches as oscillating in phase, and borrows its mouth correction from an open rectangular basin, and each of these lengthens a real mode.
 2. The 16.8 minute peak, inside the predicted band, is the fundamental of the Grand Harbour, and the 23 minute peak belongs to a larger system, the outer approach shared by the two harbours or the two harbours coupled through it.
 
+The two-dimensional model favours the first reading. In the pilot scenarios of [longwave_pilot.md](longwave_pilot.md) the Grand Harbour oscillates at 21.7 to 22.4 minutes after the passage of a pressure disturbance, the whole basin in phase and the amplitude rising from the mouth to the head at Marsa, which is the structure of its fundamental mode.
+
 The second reading is consistent with the calculation and the first is consistent with the dominance of the peak inside the basin. The distinction is made by the modal structure, which the model will provide by its response to a broadband impulse, and would be made observationally by a second gauge, in Marsamxett or at Portomaso outside both basins.
 
 **The milgħuba band is present but not dominant in the window.** Its share of the short-period variance is 12 per cent, and the largest oscillations of the nine months are the basin mode. Whether the record contains a milgħuba event of the kind documented at Msida remains to be established against the dates of reported events, which the host group may hold.
