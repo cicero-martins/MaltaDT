@@ -7,7 +7,7 @@ change to either:
 - a title over the map naming the scenario shown;
 - a vertical bar at the right edge of the map, with a README button and one
   button for each direction of arrival, which opens the page of that scenario
-  at the same view and time;
+  at its start and at the view of the whole domain;
 - a panel at the right, a quarter of the window wide, with the description of
   the scenarios, opened by the README button;
 - markers at the stations whose records are plotted, a click on a marker
@@ -84,14 +84,9 @@ MAP_NEW = """    <div id="map-wrap"><div id="map"></div>
 SCRIPT = """
 <script>
 const SCN=__SET__, SCN_CASE='__CASE__';
-function scnHash(){
-  if(!map)return '';
-  const c=map.getCenter();
-  return '#'+map.getZoom().toFixed(2)+'/'+c.lat.toFixed(5)+'/'+c.lng.toFixed(5)+'/'+currentT;
-}
 function scnGo(c){
   if(c===SCN_CASE)return;
-  location.href='../'+c+'/index.html'+scnHash();
+  location.href='../'+c+'/index.html';
 }
 function toggleReadme(){
   const r=document.getElementById('readme');
@@ -132,13 +127,6 @@ const scnWait=setInterval(()=>{
       .addTo(map).bindTooltip(n,{direction:'top',offset:[0,-6]})
       .on('click',()=>staFocus(n));
   });
-  const m=location.hash.slice(1).split('/').map(Number);
-  if(m.length===4&&m.every(isFinite)){
-    map.setView([m[1],m[2]],m[0],{animate:false});
-    const t=Math.min(Math.max(0,Math.round(m[3])),TIMES.length-1);
-    document.getElementById('tslider').value=t;
-    seek(t);
-  }
 },200);
 </script>
 """
@@ -165,7 +153,7 @@ The eight maps are the scenarios of largest response for each direction.</p>
 <h3>Reading the map</h3>
 <ul>
 <li>The buttons at the right edge of the map change the direction from which the disturbance
-arrives. The view and the time are kept.</li>
+arrives. Each scenario opens at its start and at the view of the whole domain.</li>
 <li>The water level is in centimetres and the currents in metres per second, both for the rise
 of 2 hPa. The response is proportional to the rise within 2 per cent up to 10 hPa.</li>
 <li>Zooming into the harbours brings in a finer grid. The time shown is the time elapsed from the

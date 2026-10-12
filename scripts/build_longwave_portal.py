@@ -148,6 +148,10 @@ def relabel_meta(meta: dict) -> dict:
     for key in ("sta_info", "sta_model", "sta_obs"):
         if key in meta:
             meta[key] = {STATION_LABELS.get(k, k): v for k, v in meta[key].items()}
+    # A scenario opens at its start. The Stagnone portal opens on its liveliest
+    # instant, which suits a run of days and hides the approach of the
+    # disturbance in a run of hours.
+    meta["start_t"] = 0
     return meta
 
 
@@ -223,7 +227,7 @@ def main(argv=None) -> int:
         bw.build()
         # Scale of the particles at harbour zoom, where the currents of a
         # scenario of 2 hPa are of a few centimetres per second.
-        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        meta = relabel_meta(json.loads(meta_path.read_text(encoding="utf-8")))
         fine = meta["grids"]["fine"]
         fine["range"]["vel"] = FINE_VELOCITY_RANGE
         fine["range_max"]["vel"] = max(fine["range_max"]["vel"], 4 * FINE_VELOCITY_RANGE)
