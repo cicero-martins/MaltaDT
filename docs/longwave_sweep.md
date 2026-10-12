@@ -10,6 +10,12 @@ The sweep maps the response of the shelf and of the harbours to an atmospheric p
 
 Each scenario is one pressure rise of 200 Pa, whose static response is 1.99 cm, of Gaussian shape, travelling at constant speed along a straight track of 400 km centred on the Valletta harbours, raised over the first 60 minutes and lowered over the last 60. The run lasts 12 simulated hours on the outer mesh of 35 839 faces, two-dimensional and barotropic, with a Riemann boundary forced by zero and the tide-generating potential switched off.
 
+![Track, footprint and ramp of one scenario](../figures/longwave_scenario_track_ramp.png)
+
+*One scenario, the disturbance arriving from the northeast at 130 km/h. Track of 400 km through the harbours with the footprint of the disturbance at one and two standard deviations at five instants, over the depths of 70 to 190 m (left), amplitude against time and distance travelled, with the two ramps shaded (top right), and pressure rise along the track at the same instants (bottom right). Drawn by `scripts/figure_longwave_scenario.py`.*
+
+The track is the straight line along which the centre of the disturbance moves. The ramp is the interval over which its amplitude changes, from zero to the full rise at the beginning of the track and back to zero at its end, so that the disturbance is at full amplitude over the middle 140 km of the track at 130 km/h and at zero wherever its footprint reaches the open boundary.
+
 | Quantity | Values |
 |---|---|
 | Speed | 26, 29, 33, 36, 40 and 43 m/s, that is 94, 104, 119, 130, 144 and 155 km/h |
