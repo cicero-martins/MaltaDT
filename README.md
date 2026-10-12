@@ -57,6 +57,7 @@ reference/         third-party material, listed in reference/README.md
 - [docs/malta_period_plan_2026-2027.md](docs/malta_period_plan_2026-2027.md), the block calendar and the parallel commitments at UNIPA
 - [docs/mepa_4036_dataset.md](docs/mepa_4036_dataset.md), assessment of the bathymetric dataset
 - [docs/coastline_dataset.md](docs/coastline_dataset.md), assessment of the coastline, including the inference establishing the vertical datum
+- [docs/blue_buoy_dataset.md](docs/blue_buoy_dataset.md), assessment of the BLUE buoy record as supplied, its filled gaps and the spans usable for validation
 - [docs/domain_and_discretisation.md](docs/domain_and_discretisation.md), sizing of the domain, the horizontal resolution and the vertical layering
 - [docs/basin_modes.md](docs/basin_modes.md), fundamental long-wave modes of the two harbours from the measured geometry
 - [docs/senglea_spectrum.md](docs/senglea_spectrum.md), quality control and spectrum of the Senglea gauge, and the reported events against the public records
