@@ -12,7 +12,7 @@ The transfer is therefore across archetype rather than within it, which constitu
 
 The principal question is what renews the water of the two harbours, at what rate for each basin and for each inlet, and how that renewal is partitioned between wind, density differences, the exchange with the shelf and the oscillation driven by long waves. Two questions accompany it. The first is the sensitivity of renewal and of the long-wave response to the geometry of the harbours, namely the breakwaters of the planned protection scheme, the gap under the St Elmo bridge and new piers. The second concerns the milgħuba, which floods Msida at the head of Marsamxett, and asks how its amplification is partitioned between Proudman resonance over the Malta Plateau, shoaling on the approach and resonance of the basins. See [docs/research_question_and_literature.md](docs/research_question_and_literature.md).
 
-The results reported below are preliminary. The period estimates are one-dimensional, the observational test rests on a single gauge, and no production run has been made.
+The results reported below are preliminary. The observational test rests on a single gauge, the long-wave runs are idealised and untested against events, and no three-dimensional run has been made.
 
 ## Status
 
@@ -31,8 +31,9 @@ The results reported below are preliminary. The period estimates are one-dimensi
 | Moving pressure forcing | Idealised channel test. D-Flow FM reproduces the closed form of Proudman resonance within 3.5 per cent at Froude numbers of 0.6 to 1.1. A disturbance crossing the Riemann boundary sends back a free wave of a quarter to a third of the static response, so in the sweep it is raised and lowered inside the domain. A basin of the size of domain B crossed by a resonant pressure band retains 15 to 47 per cent of the response of an unbounded sea, so the sweep requires an outer domain. See [docs/moving_pressure_channel_test.md](docs/moving_pressure_channel_test.md) |
 | Mesh | Version 02. 26 766 faces, 15 m in the narrow harbour channels to 1920 m offshore, built in UTM 33N and transformed to WGS84, accepted by D-Flow FM 2026.01. See [docs/mesh_v02.md](docs/mesh_v02.md) and [docs/mesh_v01.md](docs/mesh_v01.md) |
 | Outer domain and pilot | Mesh of 35 839 faces over the Sicily Channel, 419 by 361 km, coinciding with version 02 inside domain B. In two pilot scenarios domain B returns a fifth to a half of the shelf response, the Grand Harbour rings at 22 minutes in its fundamental mode, beside the 23.0 minutes observed at Senglea, and Marsamxett follows the shelf at 48 to 74 minutes. The response is linear in the pressure rise within 2 per cent up to 10 hPa. See [docs/longwave_pilot.md](docs/longwave_pilot.md) |
-| Experimental design | A sweep of 96 idealised pressure disturbances, two-dimensional and barotropic, for the long wave, run first, then a three-dimensional hindcast, renewal runs with tracers and Lagrangian particles, and their repetition on modified geometries. Proposed, not yet run |
-| Model runs | Acceptance runs of the mesh only, at rest and under a forced long wave. Two pilot scenarios of the long wave have been run. The sweep is planned for October 2026 and the three-dimensional runs for November |
+| Long-wave sweep | 96 scenarios run on the outer mesh. The response is largest for disturbances arriving between north and southeast, with a maximum from the northeast at 130 to 144 km/h of 14 times the static response at Senglea and 17 times at the head of the Grand Harbour for a disturbance 15 km long, and the shorter disturbance excites the 22-minute mode of the Grand Harbour. Not yet tested against events. See [docs/longwave_sweep.md](docs/longwave_sweep.md) |
+| Experimental design | A sweep of 96 idealised pressure disturbances, two-dimensional and barotropic, for the long wave, now run, then a three-dimensional hindcast, renewal runs with tracers and Lagrangian particles, and their repetition on modified geometries. The three-dimensional part is proposed and not yet run |
+| Model runs | Acceptance runs of the mesh only, at rest and under a forced long wave. The pilot scenarios and the sweep of the long wave have been run. The three-dimensional runs are planned for November 2026 |
 | Field campaign | Not planned. The study proceeds on existing observations |
 
 ## Layout
@@ -62,6 +63,7 @@ reference/         third-party material, listed in reference/README.md
 - [docs/open_boundary_pulse_test.md](docs/open_boundary_pulse_test.md), reflection of the Riemann and prescribed-level boundaries under a synthetic pulse
 - [docs/moving_pressure_channel_test.md](docs/moving_pressure_channel_test.md), response to a moving pressure disturbance against the closed form of Proudman resonance, and the signal returned by the Riemann boundary when the disturbance crosses it
 - [docs/longwave_pilot.md](docs/longwave_pilot.md), the outer domain of the sweep, two pilot scenarios on it and on domain B, and the loss on the smaller domain
+- [docs/longwave_sweep.md](docs/longwave_sweep.md), the response of the shelf and the harbours to 96 moving pressure disturbances, by speed, direction and length
 - [docs/mesh_v02.md](docs/mesh_v02.md) and [docs/mesh_v01.md](docs/mesh_v01.md), the working mesh, its construction and quality, and the measured cost that selected it
 - [docs/valletta_model_concept_2026-10-08.pptx](docs/valletta_model_concept_2026-10-08.pptx), sixteen slides on the model concept, the estimated and observed basin modes, the mesh, the open boundary, the experimental design and the open questions, as presented within the Oceanography Malta Research Group on 8 October 2026, with the long wave as the principal question. Regenerated by `scripts/build_concept_deck.js`
 - [docs/valletta_model_concept_2026-10-08_short.pptx](docs/valletta_model_concept_2026-10-08_short.pptx), a nine-slide version of the same deck. Regenerated by `scripts/build_concept_deck_short.js`
@@ -80,7 +82,7 @@ reference/         third-party material, listed in reference/README.md
 
 `scripts/download_jrc_tad_wl.py` retrieves radar gauge records from the JRC TAD server by device, `scripts/despike_tad_5s.py` removes upward radar echoes from the 5 s samples, `scripts/analyse_senglea_spectrum.py` applies the quality control and computes the spectrum of the Senglea record, and `scripts/figure_senglea_record.py` draws the plates used to inspect it.
 
-`scripts/download_emodnet_channel.py` retrieves the EMODnet bathymetry of the Sicily Channel, `scripts/build_mesh_outer.py` builds the outer mesh of the sweep on it, and `scripts/build_longwave_scenario.py` and `scripts/analyse_longwave_scenario.py` build, run and analyse one scenario of a moving pressure disturbance, with `scripts/figure_longwave_modes.py` for the spatial pattern of the oscillations it leaves.
+`scripts/download_emodnet_channel.py` retrieves the EMODnet bathymetry of the Sicily Channel, `scripts/build_mesh_outer.py` builds the outer mesh of the sweep on it, and `scripts/build_longwave_scenario.py` and `scripts/analyse_longwave_scenario.py` build, run and analyse one scenario of a moving pressure disturbance, with `scripts/figure_longwave_modes.py` for the spatial pattern of the oscillations it leaves. `scripts/run_longwave_sweep.py` runs the sweep and `scripts/analyse_longwave_sweep.py` reduces it to the response surface.
 
 `scripts/build_mesh_v02.py` builds the mesh of the domain by zone, and `scripts/build_mesh_smoke_test.py` runs it in D-Flow FM at rest and under a forced long wave, reporting the time step and the wall time.
 
