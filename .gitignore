@@ -43,3 +43,7 @@ __pycache__/
 reference/Laksono2026_tsunamiSicilianchannel.pdf
 # Referencia: monografia com copyright, so local (ver reference/README.md)
 reference/Mei et al. Theory and applications of ocean surface waves, 2005.djvu
+
+# Portal e videos: regeneraveis pelos scripts build_longwave_portal.py e animate_longwave_scenario.py
+outputs/
+figures/videos/
