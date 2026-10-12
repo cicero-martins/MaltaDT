@@ -106,7 +106,7 @@ The free wave released while the amplitude is raised reaches the shelf ahead of 
 | Senglea, French Creek, Dockyard Creek, Marsa | 0.98 | 0.93 to 0.94 |
 | Marsamxett, mouth and inlets | 1.00 | 0.99 to 1.01 |
 
-The ratios are of peaks in units of the static response of each run. The response is proportional to the pressure rise within 2 per cent up to 10 hPa, five times the rise of the pilot and above the jumps of 1 to 5 hPa typical of meteotsunami events, and departs by 6 to 7 per cent inside the Grand Harbour at 30 hPa, where the ringing reaches 2 m. A single amplitude is therefore sufficient for the sweep.
+The ratios are of peaks in units of the static response of each run. The response is proportional to the pressure rise within 2 per cent up to 10 hPa, five times the rise of the pilot, and departs by 6 to 7 per cent inside the Grand Harbour at 30 hPa, where the ringing reaches 2 m. A single amplitude is therefore sufficient for the sweep. The rise of 2 hPa is a working value and carries no statement about the events of Malta, whose pressure jumps are to be taken from the one-minute records of the PORTO network.
 
 ---
 

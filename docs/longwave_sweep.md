@@ -87,6 +87,7 @@ The readings below are from idealised disturbances of one shape and one width on
 
 ## 4. Limits
 
+- **The pressure rise is a working value.** The 2 hPa of the scenarios was chosen for convenience and not from the events of Malta. Since the response is linear, the surface gives amplification factors, and the level reached in an event follows only once the size of its pressure jump, its rate of change and whether it is a single rise or a train of oscillations are read from the records.
 - **One width and one shape.** The disturbance is Gaussian, 50 km across its track, and passes over the harbours. Narrower disturbances and tracks passing to one side were not run.
 - **Pressure alone.** Wind stress, which accompanies the pressure jumps of observed events, is not applied.
 - **Upper bound of the speeds.** The surface is open at 155 km/h for three directions. An extension to 180 km/h would bracket the maximum.
