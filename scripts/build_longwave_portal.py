@@ -48,8 +48,11 @@ FINE_VELOCITY_RANGE = 0.02      # m/s, scale of the particles at harbour zoom
 DEFAULT_CMAP = {"wl": "viridis", "hwav": "haline", "vel": "wetwise-amber"}
 MIN_DEPTH = 0.05                # m
 MALTA_BOX = (14.0, 35.6, 14.8, 36.2)
-STATION_NAMES = ("offshore_4km", "gh_mouth", "senglea", "marsa_head", "mx_mouth",
-                 "msida_head")
+# Stations shown, with the name each carries on the page.
+STATION_LABELS = {"offshore_4km": "Offshore, 4 km", "gh_mouth": "Grand Harbour mouth",
+                  "senglea": "Senglea", "marsa_head": "Marsa",
+                  "mx_mouth": "Marsamxett mouth", "msida_head": "Msida Creek"}
+SET_FILE = OUT / "_set.json"     # written by build_longwave_portal_set.py
 
 # Wording of the page, the Stagnone text on the left and the Valletta text on the right.
 PAGE_TEXT = (
@@ -135,9 +138,17 @@ def stations(case_dir: Path) -> dict:
     for line in (case_dir / "stations_obs.xyn").read_text().splitlines():
         lon, lat, name = line.split()
         name = name.strip("'")
-        if name in STATION_NAMES:
-            out[name] = {"csv": "", "lon": float(lon), "lat": float(lat)}
+        if name in STATION_LABELS:
+            out[STATION_LABELS[name]] = {"csv": "", "lon": float(lon), "lat": float(lat)}
     return out
+
+
+def relabel_meta(meta: dict) -> dict:
+    """Give the stations of a payload written earlier their names on the page."""
+    for key in ("sta_info", "sta_model", "sta_obs"):
+        if key in meta:
+            meta[key] = {STATION_LABELS.get(k, k): v for k, v in meta[key].items()}
+    return meta
 
 
 def main(argv=None) -> int:
@@ -186,6 +197,10 @@ def main(argv=None) -> int:
         page = page.replace(a, b.replace("__STEP__", f"{step_s / 60:.0f} min")
                             .replace("__STEP_MIN__", f"{step_s / 60:g}"))
 
+    if SET_FILE.exists():
+        import longwave_portal_page as lp
+        page = lp.extend(page, json.loads(SET_FILE.read_text(encoding="utf-8")), sc, args.case)
+
     bw.OUT_DIR, bw.DATA_DIR, bw.VEL_DIR = out_dir, out_dir / "data", out_dir / "data" / "vel"
     bw.CACHE = {"coarse": out_dir / "demo_coarse.nc", "fine": out_dir / "demo_fine.nc"}
     bw.HTML = out_dir / "index.html"
@@ -199,13 +214,15 @@ def main(argv=None) -> int:
     bw.SRC_LABEL = args.case
     bw.SRC_DESC = (f"pressure rise of {sc['rise'] / 100:.0f} hPa at {sc['speed'] * 3.6:.0f} km/h, "
                    f"heading {sc['heading']:.0f}, {sc['sigma_along'] / 1e3:.0f} km long")
+    meta_path = out_dir / "data" / "meta.json"
     if args.html_only:
         bw.write_html()
+        meta = relabel_meta(json.loads(meta_path.read_text(encoding="utf-8")))
+        meta_path.write_text(json.dumps(meta), encoding="utf-8")
     else:
         bw.build()
         # Scale of the particles at harbour zoom, where the currents of a
         # scenario of 2 hPa are of a few centimetres per second.
-        meta_path = bw.DATA_DIR / "meta.json"
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
         fine = meta["grids"]["fine"]
         fine["range"]["vel"] = FINE_VELOCITY_RANGE
