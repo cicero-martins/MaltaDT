@@ -40,10 +40,12 @@ OUT = ROOT / "outputs" / "longwave_portal"
 COAST = ROOT / "data" / "processed" / "malta_coastline_wgs84.gpkg"
 CHANNEL = ROOT / "data" / "external" / "emodnet_channel.tif"
 
-COARSE_LON, COARSE_LAT, COARSE_STEP = (12.5, 17.0), (34.5, 37.7), 0.01
-FINE_LON, FINE_LAT, FINE_STEP = (14.485, 14.540), (35.870, 35.915), 0.00015
+COARSE_LON, COARSE_LAT, COARSE_STEP = (12.5, 17.0), (34.5, 37.7), 0.015
+FINE_LON, FINE_LAT, FINE_STEP = (14.485, 14.540), (35.870, 35.915), 0.0002
 HARBOUR_STATS_BOX = (14.490, 14.532, 35.876, 35.908)     # lon0, lon1, lat0, lat1
 ZOOM_FINE = 13
+FINE_VELOCITY_RANGE = 0.02      # m/s, scale of the particles at harbour zoom
+DEFAULT_CMAP = {"wl": "viridis", "hwav": "haline", "vel": "wetwise-amber"}
 MIN_DEPTH = 0.05                # m
 MALTA_BOX = (14.0, 35.6, 14.8, 36.2)
 STATION_NAMES = ("offshore_4km", "gh_mouth", "senglea", "marsa_head", "mx_mouth",
@@ -61,6 +63,13 @@ PAGE_TEXT = (
     ("{key:'hwav',label:'Wave Height',      unit:'m',   sym:false}",
      "{key:'hwav',label:'Current Speed',    unit:'m/s', sym:false}"),
     ("setLoad(34,'Wave height...');", "setLoad(34,'Current speed...');"),
+    ("{key:'vel', label:'Surface Velocity', unit:'m/s', sym:false}",
+     "{key:'vel', label:'Current Velocity', unit:'m/s', sym:false}"),
+    # The clock of the run is elapsed time, the calendar date being arbitrary.
+    ("document.getElementById('tlabel').textContent=TIMES[currentT]||'-';",
+     "document.getElementById('tlabel').textContent=(function(){"
+     "const m=Math.round(currentT*__STEP_MIN__);"
+     "return 't = '+Math.floor(m/60)+' h '+String(m%60).padStart(2,'0')+' min';})();"),
     ("&middot; surface &middot; 30 min", "&middot; depth-averaged &middot; __STEP__"),
     ("'Lagoon detail - '", "'Harbour detail - '"),
     ("zoom in for lagoon detail", "zoom in for harbour detail"),
@@ -138,6 +147,8 @@ def main(argv=None) -> int:
                     help="directory holding the case")
     ap.add_argument("--html-only", action="store_true", help="rewrite the page alone")
     ap.add_argument("--skip-regrid", action="store_true", help="reuse the caches")
+    ap.add_argument("--discard-caches", action="store_true",
+                    help="remove the regridded caches once the payload is written")
     ap.add_argument("--serve", type=int, default=0, metavar="PORT",
                     help="serve the page locally after building it")
     args = ap.parse_args(argv)
@@ -156,23 +167,31 @@ def main(argv=None) -> int:
     if not (args.html_only or args.skip_regrid):
         regrid(case_dir, args.case, out_dir)
 
-    step_s = None
+    # Interval between frames, from the caches or, once they are discarded,
+    # from the payload already written.
+    import pandas as pd
     import xarray as xr
-    with xr.open_dataset(out_dir / "demo_coarse.nc") as c:
-        t = c["time"].values
-        step_s = float((t[1] - t[0]) / np.timedelta64(1, "s"))
+    if (out_dir / "demo_coarse.nc").exists():
+        with xr.open_dataset(out_dir / "demo_coarse.nc") as c:
+            t = c["time"].values
+            step_s = float((t[1] - t[0]) / np.timedelta64(1, "s"))
+    else:
+        times = json.loads((out_dir / "data" / "meta.json").read_text(encoding="utf-8"))["times"]
+        step_s = (pd.Timestamp(times[1]) - pd.Timestamp(times[0])).total_seconds()
     page = bw.PAGE
     for a, b in PAGE_TEXT:
         if a not in page:
             print(f"text not found in the page of the portal: {a}", file=sys.stderr)
             return 1
-        page = page.replace(a, b.replace("__STEP__", f"{step_s / 60:.0f} min"))
+        page = page.replace(a, b.replace("__STEP__", f"{step_s / 60:.0f} min")
+                            .replace("__STEP_MIN__", f"{step_s / 60:g}"))
 
     bw.OUT_DIR, bw.DATA_DIR, bw.VEL_DIR = out_dir, out_dir / "data", out_dir / "data" / "vel"
     bw.CACHE = {"coarse": out_dir / "demo_coarse.nc", "fine": out_dir / "demo_fine.nc"}
     bw.HTML = out_dir / "index.html"
     bw.PAGE = page
     bw.ZOOM_FINE = ZOOM_FINE
+    bw.DEFAULT_CMAP = DEFAULT_CMAP
     bw.LAGOON_STATS_BOX = HARBOUR_STATS_BOX
     bw.STATIONS = stations(case_dir)
     bw.load_station_obs = lambda: {name: None for name in bw.STATIONS}
@@ -184,6 +203,17 @@ def main(argv=None) -> int:
         bw.write_html()
     else:
         bw.build()
+        # Scale of the particles at harbour zoom, where the currents of a
+        # scenario of 2 hPa are of a few centimetres per second.
+        meta_path = bw.DATA_DIR / "meta.json"
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        fine = meta["grids"]["fine"]
+        fine["range"]["vel"] = FINE_VELOCITY_RANGE
+        fine["range_max"]["vel"] = max(fine["range_max"]["vel"], 4 * FINE_VELOCITY_RANGE)
+        meta_path.write_text(json.dumps(meta), encoding="utf-8")
+        for cache in bw.CACHE.values():
+            if args.discard_caches:
+                cache.unlink()
     print(f"page written to {bw.HTML}")
 
     if args.serve:
