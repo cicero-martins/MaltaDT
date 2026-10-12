@@ -1,6 +1,6 @@
 # The BLUE buoy record as supplied
 
-*Received 12 October 2026 from the Oceanography Malta Research Group as `BlueInterpFull.zip`, held at `data/raw/blue_buoy/BlueInterpFull.csv` and not versioned. Assessed by `scripts/assess_blue_buoy.py` and prepared for use by `scripts/prepare_blue_buoy.py`, which writes `data/processed/blue_buoy_10min.csv`. Figure at `figures/blue_buoy_overview.png`.*
+*Received 12 October 2026 from the Oceanography Malta Research Group as `BlueInterpFull.zip`, held at `data/raw/blue_buoy/BlueInterpFull.csv` and not versioned. Assessed by `scripts/assess_blue_buoy.py` and prepared for use by `scripts/prepare_blue_buoy.py`, which writes `data/processed/blue_buoy_10min.csv`. Figures at `figures/blue_buoy_overview.png` and `figures/blue_buoy_treatment.png`.*
 
 The BLUE buoy is moored off the Grand Harbour and is the offshore validation point of the model, the only direct observation of waves in the domain. The file supplied holds its record at ten-minute intervals. It carries no sea level and its pressure is at ten minutes, so it does not serve the test of the long-wave response against the dated milgħuba events, all of which also precede the deployment. That test still depends on the sea level and the one-minute pressure of the PORTO network.
 
@@ -61,6 +61,12 @@ Six matters follow from the table and the figure.
 ## 3. Prepared record
 
 `scripts/prepare_blue_buoy.py` sets missing, variable by variable, the values flagged above, the sea temperature and salinity from 8 November 2025, and three further classes, namely wave values above their 70-minute running median by more than a metre and by more than the median itself, current speeds above 60 cm/s that exceed three times their running median, and pressures on either side of a change above 2 hPa in ten minutes. Rows before the mooring are dropped. The result runs from 28 April 2025 to 11 October 2026.
+
+![BLUE buoy record coloured by treatment](../figures/blue_buoy_treatment.png)
+
+*The record as supplied, with each value coloured by its treatment. Kept values are in blue, filled stretches in orange, spurious values as crimson points, the span with the sensor out of operation in grey and the days before the mooring in purple. The shares in the panel titles are of the whole file, and those of the table below are of the rows at the mooring.*
+
+The figure shows what the criteria leave in place as well as what they remove. Between November 2025 and May 2026 a number of current speeds of 100 to 200 cm/s remain among the kept values, since the criterion removes a value only when it exceeds three times its running median and these occur in clusters. They are kept until their cause is known, and a validation of the currents over those months is to be read with that reservation.
 
 | Variable | Rows retained | Days |
 |---|---|---|

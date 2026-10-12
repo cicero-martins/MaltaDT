@@ -18,11 +18,12 @@ Rows recorded before the buoy reached its mooring are dropped. The result is
 written to data/processed/blue_buoy_10min.csv with missing values left empty.
 
 Usage:
-    python prepare_blue_buoy.py
+    python prepare_blue_buoy.py [--figure]
 """
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -32,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import assess_blue_buoy as ab  # noqa: E402
 
 OUT = ab.ROOT / "data" / "processed" / "blue_buoy_10min.csv"
+FIGURE = ab.ROOT / "figures" / "blue_buoy_treatment.png"
 SENSOR_FAILURE = "2025-11-08 00:00"     # sea temperature and salinity
 SPIKE_ABS = 1.0                         # m, and s for the period
 CURRENT_SPIKE = 60.0                    # cm/s
@@ -48,7 +50,10 @@ GROUPS = {
 }
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--figure", action="store_true")
+    args = ap.parse_args(argv)
     if not ab.SOURCE.exists():
         print(f"missing {ab.SOURCE}", file=sys.stderr)
         return 1
@@ -57,10 +62,11 @@ def main() -> int:
            > ab.MOORING_TOLERANCE_DEG).to_numpy()
     moored = df.index >= df.index[np.flatnonzero(~off)[0]]
 
-    bad = {}
+    bad, filled, spurious = {}, {}, {}
     for lead in GROUPS:
         invalid, held, line = ab.flags(df, lead)
         bad[lead] = invalid | held | line | off
+        filled[lead], spurious[lead] = held | line, invalid.copy()
     # Air pressure and air temperature are reported to 0.1, so an hour without
     # change or four values on a line occur in measured data. Their filled
     # stretches are taken from the wind, which belongs to the same station.
@@ -68,9 +74,11 @@ def main() -> int:
     for lead in ("air_pressure", "air_temperature"):
         invalid, _, _ = ab.flags(df, lead)
         bad[lead] = invalid | held | line | off
+        filled[lead], spurious[lead] = held | line, invalid.copy()
 
+    sensor_out = np.asarray(df.index >= SENSOR_FAILURE)
     for col in ("sea_temperature", "salinity"):
-        bad[col] |= df.index >= SENSOR_FAILURE
+        bad[col] |= sensor_out
 
     hs = df.sig_wave_height.where(~bad["sig_wave_height"])
     med = hs.rolling(7, center=True, min_periods=3).median()
@@ -79,15 +87,18 @@ def main() -> int:
         lo, hi = ab.RANGES[extra]
         wave_spike |= ~df[extra].between(lo, hi).to_numpy()
     bad["sig_wave_height"] |= wave_spike
+    spurious["sig_wave_height"] |= wave_spike
 
     cs = df.current_abs_speed.where(~bad["current_abs_speed"])
     med = cs.rolling(7, center=True, min_periods=3).median()
     current_spike = ((cs > CURRENT_SPIKE) & (cs > 3 * med)).to_numpy()
     bad["current_abs_speed"] |= current_spike
+    spurious["current_abs_speed"] |= current_spike
 
     step = df.air_pressure.diff().abs().gt(PRESSURE_STEP).to_numpy()
     pressure_step = step | np.r_[step[1:], False]
     bad["air_pressure"] |= pressure_step
+    spurious["air_pressure"] |= pressure_step
 
     out = df.copy()
     for lead, cols in GROUPS.items():
@@ -121,7 +132,74 @@ def main() -> int:
     starts = np.flatnonzero((r > 0) & (np.r_[0, r[:-1]] == 0))
     for s in sorted(starts, key=lambda s: -r[s])[:6]:
         print(f"  {out.index[s]} to {out.index[s + int(r[s]) - 1]}  {r[s] / 144:.1f} days")
+    if args.figure:
+        plot(df, bad, filled, spurious, sensor_out, ~np.asarray(moored))
     return 0
+
+
+PLOTTED = (("current_abs_speed", "current speed, cm/s"),
+           ("sig_wave_height", "significant wave height, m"),
+           ("wind_speed", "wind speed, m/s"), ("air_pressure", "air pressure, hPa"),
+           ("sea_temperature", "sea temperature, °C"), ("salinity", "salinity"))
+C_KEPT = "#2a78d6"
+C_FILLED = "#eb6834"
+C_SPURIOUS = "#c2185b"
+C_SENSOR = "#8a8984"
+C_BEFORE = "#7b5ea7"
+
+
+def plot(df, bad, filled, spurious, sensor_out, before) -> None:
+    """The record as supplied, coloured by the reason each value is removed."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    plt.rcParams.update({"font.size": 9, "axes.edgecolor": "#8a8984",
+                         "axes.labelcolor": "#0b0b0b", "xtick.color": "#52514e",
+                         "ytick.color": "#52514e"})
+    fig, axes = plt.subplots(len(PLOTTED), 1, figsize=(12.5, 12), sharex=True)
+    n = len(df)
+    for ax, (col, label) in zip(axes, PLOTTED):
+        lo, hi = ab.RANGES[col]
+        s = df[col].where(df[col].between(lo, hi))
+        is_sensor = sensor_out if col in ("sea_temperature", "salinity") else np.zeros(n, bool)
+        is_before = before
+        is_spur = spurious[col] & ~is_before & ~is_sensor
+        is_fill = filled[col] & ~is_before & ~is_sensor & ~is_spur
+        kept = ~bad[col] & ~is_before
+        ax.plot(df.index, s.where(kept), color=C_KEPT, lw=0.5)
+        ax.plot(df.index, s.where(is_fill), color=C_FILLED, lw=1.1)
+        ax.plot(df.index, s.where(is_sensor), color=C_SENSOR, lw=1.1)
+        ax.plot(df.index, s.where(is_before), color=C_BEFORE, lw=0.8)
+        ax.plot(df.index[is_spur], s[is_spur], ".", color=C_SPURIOUS, ms=4)
+        share = lambda m: f"{100 * m.mean():.1f}"
+        ax.set_title(f"{label}: kept {share(kept)} %, filled {share(is_fill)} %, "
+                     f"spurious {share(is_spur)} %"
+                     + (f", sensor out of operation {share(is_sensor)} %" if is_sensor.any() else "")
+                     + f", before the mooring {share(is_before)} %", fontsize=8.5, loc="left")
+        ax.set_ylabel(label)
+        ax.grid(color="#e8e7e3", lw=0.6)
+        ax.set_axisbelow(True)
+        for side in ("top", "right"):
+            ax.spines[side].set_visible(False)
+    handles = [plt.Line2D([], [], color=C_KEPT, lw=2, label="kept"),
+               plt.Line2D([], [], color=C_FILLED, lw=2,
+                          label="filled stretch, a failure of the buoy: held for an hour "
+                                "or more, or four values or more on a straight line"),
+               plt.Line2D([], [], color=C_SPURIOUS, marker=".", ls="", ms=9,
+                          label="spurious value: outside the physical range, isolated spike, "
+                                "or pressure step above 2 hPa in ten minutes"),
+               plt.Line2D([], [], color=C_SENSOR, lw=2,
+                          label="sensor out of operation, from 8 November 2025"),
+               plt.Line2D([], [], color=C_BEFORE, lw=2,
+                          label="before the mooring, inside the Grand Harbour")]
+    fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.06, 0.0), frameon=False,
+               fontsize=8.5, ncol=1)
+    fig.suptitle("BLUE buoy record as supplied, coloured by the treatment of each value",
+                 fontsize=10, x=0.06, ha="left")
+    fig.tight_layout(rect=(0, 0.09, 1, 0.98))
+    fig.savefig(FIGURE, dpi=140, facecolor="#fcfcfb")
+    print(f"\nfigure written to {FIGURE}")
 
 
 if __name__ == "__main__":
