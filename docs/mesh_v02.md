@@ -25,4 +25,6 @@ Version 02 is the working mesh of the project. It differs from version 01 only i
 | Orthogonality, 99th percentile / maximum | 0.00012 / 0.553 | 0.00011 / 0.553 |
 | Open boundary cells opened by FM | 164 | 239 |
 
-The face count returns to the 28 500 of the sizing exercise. The harbour mesh is identical in both versions, and the matters left open in Section 3 of [mesh_v01.md](mesh_v01.md) carry over unchanged, namely the single edge at 0.553 in the meshkernel measure, the cells straddling the shore, the gaps of the MEPA grid at the heads of Msida and Pietà Creeks, and the resolution of the other embayments with documented milgħuba.
+The face count returns to the 28 500 of the sizing exercise. The harbour mesh is identical in both versions, and the matters left open in Section 3 of [mesh_v01.md](mesh_v01.md) carry over unchanged, namely the single edge at 0.553 in the meshkernel measure, the cells straddling the shore and the resolution of the other embayments with documented milgħuba.
+
+The bed levels of the harbours are corrected in version 02b, which keeps this geometry and replaces the returns from pontoons and vessels and the land levels taken from EMODnet at gaps of the MEPA grid, leaving 110 harbour faces at or above zero against 717. See [harbour_bathymetry_cleaning.md](harbour_bathymetry_cleaning.md).
