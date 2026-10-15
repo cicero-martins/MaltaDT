@@ -16,6 +16,8 @@ model/**/TMP_ESMF_*.nc
 
 # Testes sinteticos: regeneraveis pelo script build_* correspondente
 model/tests/
+# Hindcasts: regeneraveis por build_hindcast_v02.py a partir de data/raw
+model/hindcast/
 
 # Rascunhos
 scripts/_*
