@@ -5,10 +5,10 @@
 # The case directory holds the global MDU, mesh and forcing written by
 # build_hindcast_v02.py. The mesh is partitioned here, on the machine that runs
 # it, since METIS partitions differently on Windows and Linux and partitioned
-# files are not portable. The ranks are pinned to physical cores of socket 0
-# (the even logical CPUs 0, 2, ..., on this machine NUMA node 0 holds the even
-# CPUs and the second hyperthread of core k is CPU k + 48), so that the other
-# socket remains free for SWAN in coupled runs or for serial runs alongside.
+# files are not portable. The ranks are pinned to free physical cores chosen
+# by simit_pick_cores.sh, on socket 0 by preference, the socket of MaltaDT by
+# the convention shared with StagnoneDT, so that runs of the two projects do
+# not share cores. The claim on the cores lasts while this launcher runs.
 # I_MPI_WAIT_MODE=1 lets a waiting rank yield its core, which matters once
 # DIMR alternates FM with SWAN.
 #
@@ -24,7 +24,8 @@ N="$2"
 MDU="${3:-$(basename "$CASE").mdu}"
 [[ -f "$CASE/$MDU" ]] || { echo "ERROR: $CASE/$MDU not found, pass the MDU name"; exit 3; }
 FM="$HOME/Scaricati/delft3dfm/lnx64"
-[[ "$N" -ge 1 && "$N" -le 24 ]] || { echo "ERROR: 1 to 24 partitions, one socket"; exit 2; }
+PICK="$HOME/simit_tools/simit_pick_cores.sh"
+SOCKET="${SIMIT_SOCKET:-0}"
 
 set +u
 source /opt/intel/oneapi/setvars.sh > /dev/null 2>&1 || true
@@ -36,7 +37,9 @@ command -v mpiexec > /dev/null || { echo "ERROR: no mpiexec after sourcing oneAP
 export OMP_NUM_THREADS=1
 export I_MPI_WAIT_MODE=1
 export I_MPI_PIN=1
-export I_MPI_PIN_PROCESSOR_LIST="$(seq -s, 0 2 $((2 * N - 2)))"
+CPUS="$(bash "$PICK" "$N" "$SOCKET" $$)" || { echo "ERROR: no $N free cores"; exit 2; }
+trap 'rm -f "$HOME/.simit_cores/$$.claim"' EXIT
+export I_MPI_PIN_PROCESSOR_LIST="$CPUS"
 
 # Processes of this user whose working directory is the case, a removed copy
 # of it included (readlink then appends " (deleted)")
