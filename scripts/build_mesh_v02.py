@@ -98,6 +98,7 @@ BAND_CELLS = 3
 PASSES = (("band_960", 960.0), ("coast_far", 480.0), ("band_240", 240.0),
           ("coast_near", 120.0), ("band_60", 60.0), ("harbour", 30.0), ("narrow", 15.0))
 FM_ORTHO_LIMIT = 0.5
+HARBOUR_MIN_DEPTH = 0.0         # m, set by --harbour-min-depth
 
 
 def set_variant(version: str, near_m: float, far_m: float) -> None:
@@ -107,6 +108,12 @@ def set_variant(version: str, near_m: float, far_m: float) -> None:
     FIGURE = ROOT / "figures" / f"mesh_{version}.png"
     NAME = f"malta_{version}"
     ZONE_COAST_NEAR_M, ZONE_COAST_FAR_M = near_m, far_m
+
+
+def set_inputs(coast, bathymetry, harbour_min_depth: float = 0.0) -> None:
+    """Point the coastline, the MEPA field and the harbour minimum depth at given values."""
+    global COAST, BATHY, HARBOUR_MIN_DEPTH
+    COAST, BATHY, HARBOUR_MIN_DEPTH = Path(coast), Path(bathymetry), harbour_min_depth
 
 
 def domain_metric():
@@ -316,7 +323,14 @@ def node_bed_level(lon, lat):
     z = sample_raster(BATHY, lon, lat)
     shelf = sample_raster(SHELF, lon, lat)
     src = np.where(np.isfinite(z), 1, np.where(np.isfinite(shelf), 2, 0))
-    return np.where(np.isfinite(z), z, shelf), src
+    z = np.where(np.isfinite(z), z, shelf)
+    if HARBOUR_MIN_DEPTH > 0:
+        # The harbours are lined by quays and hold no intertidal flats, so a node
+        # inside them is kept below a minimum depth
+        lon0, lat0, lon1, lat1 = HARBOUR_BOX
+        inside = (lon > lon0) & (lon < lon1) & (lat > lat0) & (lat < lat1) & (src == 1)
+        z = np.where(inside, np.minimum(z, -HARBOUR_MIN_DEPTH), z)
+    return z, src
 
 
 def face_sizes(g):
@@ -371,8 +385,13 @@ def main(argv=None) -> int:
                     help="width of the 120 m zone from the coast")
     ap.add_argument("--far-m", type=float, default=ZONE_COAST_FAR_M,
                     help="width of the 480 m zone from the coast")
+    ap.add_argument("--coast", default=str(COAST), help="coastline polygons, WGS84")
+    ap.add_argument("--bathymetry", default=str(BATHY), help="MEPA field sampled at the nodes")
+    ap.add_argument("--harbour-min-depth", type=float, default=0.0,
+                    help="minimum depth of the nodes inside HARBOUR_BOX, m, 0 for none")
     args = ap.parse_args(argv)
     set_variant(args.version, args.near_m, args.far_m)
+    set_inputs(args.coast, args.bathymetry, args.harbour_min_depth)
     if args.figure_only:
         plot_from_file()
         return 0

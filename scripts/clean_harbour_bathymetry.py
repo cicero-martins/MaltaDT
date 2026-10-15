@@ -44,7 +44,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "data" / "processed" / "mepa_4036_merged_10m_wgs84.tif"
-COAST = ROOT / "data" / "processed" / "malta_coastline_wgs84.gpkg"
+COAST = ROOT / "data" / "processed" / "malta_coastline_wgs84_open.gpkg"   # edit_coastline_openings.py
 OUT_CLEAN = ROOT / "data" / "processed" / "mepa_4036_merged_10m_wgs84_harbour_clean.tif"
 OUT_MESH = ROOT / "data" / "processed" / "mepa_4036_merged_10m_wgs84_mesh_sampling.tif"
 OUT_FLAG = ROOT / "data" / "processed" / "mepa_4036_harbour_flags.tif"

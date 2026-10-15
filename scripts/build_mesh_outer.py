@@ -103,7 +103,12 @@ def main(argv=None) -> int:
     ap.add_argument("--name", default="outer01", help="name of the variant")
     ap.add_argument("--bathymetry", default=str(CHANNEL),
                     help="EMODnet grid covering the box")
+    ap.add_argument("--coast", default=str(v2.COAST), help="coastline polygons, WGS84")
+    ap.add_argument("--mepa", default=str(v2.BATHY), help="MEPA field sampled at the nodes")
+    ap.add_argument("--harbour-min-depth", type=float, default=0.0,
+                    help="minimum depth of the nodes inside the harbours, m, 0 for none")
     args = ap.parse_args(argv)
+    v2.set_inputs(args.coast, args.mepa, args.harbour_min_depth)
     OUTER_LONLAT, CHANNEL = tuple(args.box), Path(args.bathymetry)
     OUT = ROOT / "data" / "processed" / f"mesh_{args.name}"
     FIGURE = ROOT / "figures" / f"mesh_{args.name}.png"

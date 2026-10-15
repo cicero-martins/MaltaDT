@@ -19,7 +19,8 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 FIGURE = ROOT / "figures" / "mesh_bathymetry_cleaning.png"
 VIEWS = [("Marsamxett", (14.488, 35.893, 14.512, 35.912)),
-         ("Grand Harbour", (14.494, 35.874, 14.530, 35.898))]
+         ("Grand Harbour", (14.494, 35.874, 14.530, 35.898)),
+         ("Manoel Island bridge", (14.4945, 35.9025, 14.4985, 35.9060))]
 
 
 def faces(name):
@@ -43,11 +44,11 @@ def main(argv=None) -> int:
 
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--before", default="v02")
-    ap.add_argument("--after", default="v02b")
+    ap.add_argument("--after", default="v03")
     args = ap.parse_args(argv)
-    coast = gpd.read_file(ROOT / "data" / "processed" / "malta_coastline_wgs84.gpkg")
+    coast = gpd.read_file(ROOT / "data" / "processed" / "malta_coastline_wgs84_open.gpkg")
     data = {k: faces(k) for k in (args.before, args.after)}
-    fig, axes = plt.subplots(2, 2, figsize=(13, 11))
+    fig, axes = plt.subplots(3, 2, figsize=(13, 16))
     for row, (title, b) in zip(axes, VIEWS):
         for ax, key in zip(row, (args.before, args.after)):
             polys, fz, fx, fy = data[key]
@@ -55,7 +56,7 @@ def main(argv=None) -> int:
             p = [polys[k] for k in sel]
             v = fz[sel]
             ax.add_collection(PolyCollection(p, array=np.where(v < 0, v, np.nan), cmap="viridis",
-                                             clim=(-20, 0), edgecolor="none"))
+                                             clim=(-20, 0), edgecolor=(1, 1, 1, 0.3), lw=0.2))
             dry = [q for q, w in zip(p, v) if w >= 0]
             ax.add_collection(PolyCollection(dry, facecolor="#9b968a", edgecolor="#6d685e", lw=0.3))
             coast.boundary.plot(ax=ax, color="k", lw=0.5)
