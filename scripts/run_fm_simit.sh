@@ -38,6 +38,19 @@ export I_MPI_WAIT_MODE=1
 export I_MPI_PIN=1
 export I_MPI_PIN_PROCESSOR_LIST="$(seq -s, 0 2 $((2 * N - 2)))"
 
+# Processes of this user whose working directory is the case, a removed copy
+# of it included (readlink then appends " (deleted)")
+case_pids() {
+    for p in $(pgrep -u "$USER" -f dimr); do
+        [[ "$(readlink "/proc/$p/cwd" 2>/dev/null)" == "$CASE"* ]] && echo "$p"
+    done
+    return 0
+}
+if [[ -n "$(case_pids)" ]]; then
+    echo "ERROR: dimr already running in $CASE: $(case_pids | tr '\n' ' ')"
+    exit 5
+fi
+
 cd "$CASE"
 rm -rf output "${MDU%.mdu}"_0*.mdu *_0[0-9][0-9][0-9]_net.nc *.cache
 if [[ "$N" -gt 1 ]]; then
@@ -62,6 +75,13 @@ cat > dimr_config.xml << EOF
 EOF
 echo "case $CASE, $N partitions, pinned to CPUs $I_MPI_PIN_PROCESSOR_LIST, start $(date -Is)"
 run_dimr.sh -c "$N" -m dimr_config.xml > run.log 2>&1 || echo "run_dimr exit $?"
+# When some ranks abort, mpiexec may return while the others keep waiting for
+# them, pinned to the same cores as the next launch. They are ended here.
+LEFT="$(case_pids)"
+if [[ -n "$LEFT" ]]; then
+    echo "ending ranks left behind: $(echo $LEFT)"
+    kill $LEFT 2> /dev/null; sleep 5; kill -9 $(case_pids) 2> /dev/null || true
+fi
 echo "end $(date -Is)"
 DIA="output/${MDU%.mdu}_0000.dia"
 [[ "$N" -eq 1 ]] && DIA="output/${MDU%.mdu}.dia"
