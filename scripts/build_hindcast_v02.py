@@ -57,6 +57,12 @@ OUT = ROOT / "model" / "hindcast"
 REFDATE = pd.Timestamp("2025-07-01")
 BLUE = (14.5388, 35.9294)
 DROP_POINTS = ("shelf_60km_up", "shelf_30km_up", "sicily_coast")
+# Vertical discretisation, working values
+STRETCH_TOP_PERCENT = 1.0     # top sigma layer, per cent of the column
+NUM_TOP_SIG = 5               # z-sigma: sigma layers on top
+DZ_TOP = 1.0                  # m, z-layer thickness near the surface
+DZ_UNIFORM_ABOVE = -10.0      # m, level above which z-layers are uniform
+SIGMA_GROWTH = 1.2            # growth of z-layer thickness below that level
 
 # ERA5 short name, FM quantity, needed in 2D
 METEO = [
@@ -197,7 +203,44 @@ def write_stations(d: Path) -> dict:
     return st
 
 
+def vertical_keys(args) -> tuple[str, str]:
+    """Geometry and numerics keys of the vertical discretisation.
+
+    sigma: kmx sigma layers of equal thickness.
+    sigma_stretched: kmx sigma layers whose thickness grows geometrically from
+    STRETCH_TOP_PERCENT of the column at the surface toward the bed.
+    zsigma: NumTopSig sigma layers above z-layers of DZ_TOP down to
+    DZ_UNIFORM_ABOVE, growing by SIGMA_GROWTH below it, as recommended in the
+    D-Flow FM manual (Section 10.4) for water deeper than about a kilometre;
+    the number of layers is recounted by FM from the deepest cell.
+    """
+    if args.vertical == "sigma":
+        return f"kmx                   = {args.kmx}\nlayerType             = 1\n", ""
+    if args.vertical == "sigma_stretched":
+        import numpy as np
+        from scipy.optimize import brentq
+        n, top = args.kmx, STRETCH_TOP_PERCENT
+        r = brentq(lambda q: top * (q ** n - 1) / (q - 1) - 100.0, 1.0001, 2.0)
+        pct = top * r ** np.arange(n)[::-1]          # listed from the bed to the surface
+        # FM requires the percentages to add up to 100 as written, so the
+        # rounding residual goes into the bed layer, the thickest
+        pct = np.round(pct * 100.0 / pct.sum(), 3)
+        pct[0] = round(100.0 - pct[1:].sum(), 3)
+        coef = " ".join(f"{x:.3f}" for x in pct)
+        return (f"kmx                   = {n}\nlayerType             = 1\n"
+                f"stretchType           = 1\nstretchCoef           = {coef}\n"), ""
+    if args.vertical == "zsigma":
+        geom = (f"kmx                   = {args.kmx}\nlayerType             = 2\n"
+                f"numTopSig             = {NUM_TOP_SIG}\nnumTopSigUniform      = 0\n"
+                f"dzTop                 = {DZ_TOP}\nfloorLevTopLay        = {-DZ_TOP}\n"
+                f"dzTopUniAboveZ        = {DZ_UNIFORM_ABOVE}\n"
+                f"sigmaGrowthFactor     = {SIGMA_GROWTH}\n")
+        return geom, "keepZLayeringAtBed    = 2\nzlayercenterbedvel    = 1\n"
+    raise ValueError(args.vertical)
+
+
 def write_mdu(d: Path, case: str, args, start, stop, three_d: bool, ext_old: bool) -> None:
+    vert_geom, vert_num = vertical_keys(args) if three_d else ("kmx                   = 0\n", "")
     physics_3d = f"""salinity              = 1
 temperature           = 5
 iniWithNudge          = 2
@@ -210,7 +253,7 @@ idensform             = 2
 turbulenceAdvection   = 3
 vertAdvTypSal         = 4
 vertAdvTypTem         = 4
-""" if three_d else ""
+""" + vert_num if three_d else ""
     (d / f"{case}.mdu").write_text(f"""# Hindcast {case}, written by build_hindcast_v02.py.
 [General]
 fileVersion           = 1.09
@@ -223,9 +266,7 @@ pathsRelativeToParent = 0
 netFile               = {NAME}_net.nc
 bedLevType            = 3
 waterLevIni           = 0.0
-kmx                   = {args.kmx}
-layerType             = 1
-angLat                = 36.0
+{vert_geom}angLat                = 36.0
 angLon                = 14.5
 
 [Numerics]
@@ -294,7 +335,8 @@ def main(argv=None) -> int:
     global MESH_VERSION, MESH, NAME
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--mesh", default=MESH_VERSION, help="v02 or v03")
-    ap.add_argument("--kmx", type=int, default=0, help="number of sigma layers, 0 for 2D")
+    ap.add_argument("--kmx", type=int, default=0, help="number of layers, 0 for 2D")
+    ap.add_argument("--vertical", default="sigma", choices=("sigma", "sigma_stretched", "zsigma"))
     ap.add_argument("--start", default="2025-07-22")
     ap.add_argument("--stop", default="2025-07-24")
     ap.add_argument("--tag", default="")
@@ -317,7 +359,8 @@ def main(argv=None) -> int:
 
     start, stop = pd.Timestamp(args.start), pd.Timestamp(args.stop)
     three_d = args.kmx > 0
-    case = f"{MESH_VERSION}_{'3d' if three_d else '2d'}{args.kmx if three_d else ''}_{start:%m%d}_{stop:%m%d}{args.tag}"
+    vtag = {"sigma": "", "sigma_stretched": "s", "zsigma": "z"}[args.vertical]
+    case = f"{MESH_VERSION}_{'3d' if three_d else '2d'}{args.kmx if three_d else ''}{vtag if three_d else ''}_{start:%m%d}_{stop:%m%d}{args.tag}"
     d = OUT / case
     if d.exists():
         shutil.rmtree(d)
@@ -338,7 +381,8 @@ def main(argv=None) -> int:
     st = write_stations(d)
     write_mdu(d, case, args, start, stop, three_d, three_d)
     (d / "case.json").write_text(json.dumps(dict(
-        case=case, start=str(start), stop=str(stop), kmx=args.kmx, zos_offset=offset,
+        case=case, start=str(start), stop=str(stop), kmx=args.kmx, vertical=args.vertical,
+        zos_offset=offset,
         tidal_forcing=args.tidal_forcing, pavbnd=args.pavbnd, riemann_factor=args.riemann_factor,
         refdate=str(REFDATE),
         stations={k: v[:2] for k, v in st.items()}), indent=2))

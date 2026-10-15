@@ -60,7 +60,9 @@ def collect():
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--figure", action="store_true")
+    ap.add_argument("--mesh", default=sw.MESH, help="outer mesh of the sweep")
     args = ap.parse_args(argv)
+    sw.set_mesh(args.mesh)
 
     df = collect()
     if df.empty:

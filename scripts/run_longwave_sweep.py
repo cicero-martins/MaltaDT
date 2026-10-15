@@ -32,12 +32,21 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "model" / "tests" / "longwave_sweep"
-MESH = "outer01"
+MESH = "outer03"
+OUT = ROOT / "model" / "tests" / f"longwave_sweep_{MESH}"
 SPEEDS = (26, 29, 33, 36, 40, 43)                 # m/s
 HEADINGS = (0, 45, 90, 135, 180, 225, 270, 315)   # degrees, direction of travel
 SIGMAS_KM = (15, 30)
 T_TOTAL = 12 * 3600.0
+
+
+def set_mesh(mesh: str) -> None:
+    """Point the sweep at an outer mesh, each mesh with its own directory of cases."""
+    global MESH, OUT
+    MESH = mesh
+    # the sweep of 9 October on outer01 kept the directory without suffix
+    name = "longwave_sweep" if mesh == "outer01" else f"longwave_sweep_{mesh}"
+    OUT = ROOT / "model" / "tests" / name
 
 
 def scenarios():
@@ -66,7 +75,9 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--list", action="store_true", help="print the scenarios and stop")
+    ap.add_argument("--mesh", default=MESH, help="outer mesh, outer01 or outer03")
     args = ap.parse_args(argv)
+    set_mesh(args.mesh)
     todo = list(scenarios())
     if args.list:
         for sc in todo:

@@ -58,6 +58,12 @@ cd "$CASE"
 rm -rf output "${MDU%.mdu}"_0*.mdu *_0[0-9][0-9][0-9]_net.nc *.cache
 if [[ "$N" -gt 1 ]]; then
     run_dflowfm.sh --partition:ndomains="$N":icgsolver=6 "$MDU" > partition.log 2>&1
+    # The partitioner returns success after an error in the MDU, so the
+    # partitioned files are checked before any rank is started
+    if [[ ! -f "${MDU%.mdu}_$(printf %04d $((N - 1))).mdu" ]] || grep -q "\*\* ERROR" partition.log; then
+        echo "ERROR: partitioning failed:"; grep "\*\* ERROR" partition.log | head -5
+        exit 6
+    fi
     PROCS="$(seq -s' ' 0 $((N - 1)))"
 else
     PROCS="0"

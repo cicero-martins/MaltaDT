@@ -122,6 +122,53 @@ def compare_forcing(t0, t1) -> dict:
             "pressure_hpa": stats(p / 100.0, hourly(blue.air_pressure))}
 
 
+def layer_levels(st: xr.Dataset, meta: dict) -> np.ndarray:
+    """Level of the layer centres at a station, time by layer, counted from the bed.
+
+    The history file of FM 2026.01 carries no layer levels, so they are rebuilt
+    from the rules written into the MDU by build_hindcast_v02.py. In a z-sigma
+    model the layer index is that of the global z-layer, counted from the
+    deepest layer of the domain, so the levels are placed from the top down
+    and layers below the bed are left as they fall, their values being empty.
+    """
+    import build_hindcast_v02 as bh
+
+    if "zcoordinate_c" in st:
+        return st["zcoordinate_c"].values
+    wl = st["waterlevel"].values
+    bed = float(st["bedlevel"])
+    kmx = st.sizes["laydim"]
+    vertical = meta.get("vertical", "sigma")
+    if vertical in ("sigma", "sigma_stretched"):
+        if vertical == "sigma":
+            thick = np.full(kmx, 1.0 / kmx)
+        else:
+            r = _stretch_ratio(kmx, bh.STRETCH_TOP_PERCENT)
+            thick = bh.STRETCH_TOP_PERCENT * r ** np.arange(kmx)[::-1]
+            thick /= thick.sum()
+        frac = np.cumsum(thick) - thick / 2
+        return bed + (wl[:, None] - bed) * frac[None, :]
+    # z-sigma: NUM_TOP_SIG sigma layers between the z-sigma interface and the
+    # water level, then z-layers of DZ_TOP to DZ_UNIFORM_ABOVE, growing below
+    nsig = bh.NUM_TOP_SIG
+    zsig = -bh.DZ_TOP - bh.DZ_TOP * (nsig - 1)
+    z = np.empty((wl.size, kmx))
+    frac = (np.arange(nsig) + 0.5) / nsig
+    z[:, kmx - nsig:] = zsig + (wl[:, None] - zsig) * frac[None, :]
+    top, dz = zsig, bh.DZ_TOP
+    for k in range(kmx - nsig - 1, -1, -1):
+        if top <= bh.DZ_UNIFORM_ABOVE:
+            dz *= bh.SIGMA_GROWTH
+        z[:, k] = top - dz / 2
+        top -= dz
+    return z
+
+
+def _stretch_ratio(n: int, top: float) -> float:
+    from scipy.optimize import brentq
+    return brentq(lambda q: top * (q ** n - 1) / (q - 1) - 100.0, 1.0001, 2.0)
+
+
 def compare_buoy(his: xr.Dataset, meta: dict, t0, t1) -> dict:
     """Model and CMEMS against the buoy at a set of depths below the surface."""
     blue = pd.read_csv(BLUE_CSV, parse_dates=["timestamp"], index_col="timestamp")[t0:t1]
@@ -130,15 +177,7 @@ def compare_buoy(his: xr.Dataset, meta: dict, t0, t1) -> dict:
     st = his.sel(station="blue_buoy")
     wl = st["waterlevel"].to_series()
     index = wl.index
-    if "zcoordinate_c" in st:
-        zc = st["zcoordinate_c"].values
-    else:
-        # Uniform sigma layers counted from the bed, the history file of FM
-        # 2026.01 carrying no layer levels
-        kmx = st.sizes["laydim"]
-        frac = (np.arange(kmx) + 0.5) / kmx
-        bed = float(st["bedlevel"])
-        zc = bed + (wl.values[:, None] - bed) * frac[None, :]
+    zc = layer_levels(st, meta)
     var = {"u": "x_velocity", "v": "y_velocity", "temperature": "temperature", "salinity": "salinity"}
     out = {"model": {}, "model_daily": {}, "cmems": {}}
     for depth in DEPTHS:
