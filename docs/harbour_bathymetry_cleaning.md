@@ -4,52 +4,59 @@
 
 ## 1. Returns from pontoons and vessels
 
-The merged 10 m field of 4036_MEPA ([mepa_4036_dataset.md](mepa_4036_dataset.md)) holds, along the marina pontoons of Ta' Xbiex, Msida, Pietà and the creeks of the Grand Harbour, rows of cells without a value and rows of values near or above zero in water several metres deep. Both are aligned with the piers. They are read here as the LiDAR survey recording the deck of a floating pontoon or the hull of a moored vessel, or no usable return, in place of the seabed. The reading is consistent with the layout of the pontoons and remains to be confirmed against imagery.
+The merged 10 m field of 4036_MEPA ([mepa_4036_dataset.md](mepa_4036_dataset.md)) holds, along the marina pontoons of Ta' Xbiex, Msida, Pietà and the creeks of the Grand Harbour, rows of cells without a value and rows of values near or above zero in water several metres deep, aligned with the piers. At the head of the Grand Harbour, at Marsa, it holds contiguous patches of levels up to +14 m. These are read as the LiDAR survey recording the decks of floating pontoons and the hulls of moored vessels, or no usable return, in place of the seabed. Aerial imagery shows a marina of pontoons for small craft at the head of Msida Creek and, at Marsa, a shipyard basin with large vessels and barges moored alongside the quays, both in water.
 
-Within a box enclosing both harbours, 14.480 to 14.540 E and 35.870 to 35.915 N, a water cell is removed when it carries no value, when its level is at or above −0.5 m more than 20 m from the coastline, or when it stands more than 2.5 m above the median of the valid water cells in a window of 7 by 7 cells, again more than 20 m from the coastline. The removed set is widened by one cell, since the edge of a deck or hull yields mixed returns. The removed cells are filled by inverse-distance interpolation from the remaining water cells, land cells being excluded as sources. The limits are working values. The distance from the coastline protects the shallow fringe along the quays, which a window spanning the fringe and the channel would otherwise read as a spike, and the limit of 2.5 m spares the break of slope at the edge of the dredged channels, which a limit of 1.5 m removed.
+Within a box enclosing both harbours, 14.480 to 14.540 E and 35.870 to 35.915 N, a water cell of the coastline polygon is removed when
+
+- it carries no value,
+- its level is at or above +0.3 m, at any distance from the coastline, since a bed above mean sea level inside the water polygon is a deck, a hull or a quay, the emerged part of a beach lying on the land side of the coastline,
+- its level is at or above −0.5 m more than 20 m from the coastline, or
+- it stands more than 2.5 m above the median of the valid water cells in a window of 7 by 7 cells, again more than 20 m from the coastline.
+
+The removed set is widened by one cell, since the edge of a deck or hull yields mixed returns, and the removed cells are filled by inverse-distance interpolation from the remaining water cells within 300 m, land cells being excluded as sources. The limits are working values. The distance from the coastline in the last two criteria protects the shallow fringe along the quays, which a window spanning the fringe and the channel would otherwise read as a spike, and the limit of 2.5 m spares the break of slope at the edge of the dredged channels, which a limit of 1.5 m removed. The criterion at +0.3 m is the one that reaches the vessels at Marsa, which lie alongside the quays and are wider than the window of the spike test.
 
 | Criterion | Cells | Share of harbour water |
 |---|---|---|
 | No value | 904 | 1.2 % |
-| At or above −0.5 m, beyond 20 m from the coast | 108 | 0.1 % |
+| At or above +0.3 m, or at or above −0.5 m beyond 20 m from the coast | 434 | 0.6 % |
 | More than 2.5 m above the local median | 561 | 0.8 % |
-| Edge, one cell | 3 823 | 5.1 % |
-| All | 5 396 | 7.2 % |
+| Edge, one cell | 4 208 | 5.6 % |
+| All | 6 107 | 8.2 % |
 
-The level of the removed cells that carried a value changes by a median of −0.80 m, between −6.85 and +2.00 m for 90 per cent of them. Harbour water cells at or above zero fall from 579 to 508, those remaining lying within 20 m of the coast.
+The level of the removed cells that carried a value changes by a median of −1.19 m, between −8.25 and +1.47 m for 90 per cent of them. Harbour water cells at or above zero fall from 579 to 65.
 
 ![Merged field, removed cells and cleaned field in the two harbours](../figures/bathymetry_harbour_cleaning.png)
 
 *Bed level of the merged field as supplied (left), cells removed by criterion over the field in grey (centre) and the field after removal and interpolation (right), for Marsamxett (top) and the Grand Harbour (bottom). Levels at or above zero in light grey, no value in white.*
 
+The interpolated bed under the vessels at Marsa follows the surrounding basin, some 2 to 4 m. A shipyard basin holding vessels of this size is likely to be deeper, so the bed there is a lower bound on the depth until a survey of the basin is in hand.
+
 ## 2. Sampling of the mesh
 
-The node levels of version 02 are bilinear samples of the merged field, and a sample is without value as soon as one of the four surrounding cells is a gap or lies outside the field. Such a node took the EMODnet level, whose cells of some 115 m inside the harbours are land. Inside the harbour box 710 nodes received EMODnet levels, 662 of them at or above zero with a median of +5.8 m and up to +15.4 m. Together with the pontoon returns this left 717 harbour faces at or above zero, the whole marina basin at the head of Msida Creek among them.
+The node levels of version 02 are bilinear samples of the merged field, and a sample is without value as soon as one of the four surrounding cells is a gap or lies outside the field. Such a node took the EMODnet level, whose cells of some 115 m inside the harbours are land. Inside the harbour box 710 nodes received EMODnet levels, 662 of them at or above zero with a median of +5.8 m and up to +15.4 m. Together with the returns from pontoons and vessels this left 717 harbour faces at or above zero, the marina basin at the head of Msida Creek and the shipyard basin at Marsa among them.
 
 The mesh is now sampled on a second field in which, in addition, land cells within 30 m of water take the level of the nearest water cell. A node on the coastline then samples the bed beside the quay wall rather than the level of the quay, and a node near the shore no longer meets a gap. Cells farther from water keep no value, and where the field has none, outside the MEPA coverage, the node keeps its level, so that the EMODnet levels offshore are unchanged.
 
 | Quantity | Version 02 | Version 02b |
 |---|---|---|
-| Harbour faces with mean bed at or above 0 m | 717 | 110 |
-| of which in the view of Marsamxett below | 418 | 26 |
-| of which in the view of the Grand Harbour below | 412 | 85 |
-| Nodes changed by more than 1 cm | | 3 277 of 26 712 |
+| Harbour faces with mean bed at or above 0 m | 717 | 12 |
+| of which in the view of Marsamxett below | 418 | 9 |
+| of which in the view of the Grand Harbour below | 412 | 1 |
+| Nodes changed by more than 1 cm | | 3 423 of 26 712 |
 | Faces outside the harbours changed by more than 0.5 m | | 537 of 17 662 |
 
-The faces outside the harbours that change are coastal faces elsewhere in domain B, whose shore nodes no longer sample the topography. The same 3 277 nodes change in the outer mesh, whose cells inside domain B coincide with version 02.
+The faces outside the harbours that change are coastal faces elsewhere in domain B, whose shore nodes no longer sample the topography. The same 3 423 nodes change in the outer mesh, whose cells inside domain B coincide with version 02.
 
 ![Face bed levels of versions 02 and 02b](../figures/mesh_bathymetry_cleaning.png)
 
 *Face bed level, the mean of the node levels as computed under bedLevType = 3, in Marsamxett (top) and the Grand Harbour (bottom) for version 02 (left) and version 02b (right). Faces at or above zero in grey.*
 
-The faces that remain at or above zero lie mostly at the head of Marsa, where the survey itself returns levels near zero over the inner basin. Whether these are the bed or a further class of return is not established.
-
 ## 3. Consequences for the results to date
 
-The sweep of the long wave ([longwave_sweep.md](longwave_sweep.md)) and the interactive maps were computed on the outer mesh with the levels of version 02, so with the marina basin at the head of Msida Creek dry and the station at the head placed 261 m from the intended point. The responses at the heads of Msida and Pietà Creeks, and to a lesser degree at Marsa, are expected to change on version 02b, and the sweep is to be repeated on outer01b before those values are used. The response at Senglea and off the harbours, where the bed is unchanged, is not expected to change materially.
+The sweep of the long wave ([longwave_sweep.md](longwave_sweep.md)) and the interactive maps were computed on the outer mesh with the levels of version 02, so with the marina basin at the head of Msida Creek and the shipyard basin at Marsa dry, and with the station at the head of Msida Creek placed 261 m from the intended point. The responses at Marsa and at the heads of Msida and Pietà Creeks are expected to change on version 02b, and the sweep is to be repeated on outer01b before those values are used. The response at Senglea and off the harbours, where the bed is unchanged, is not expected to change materially.
 
 ## 4. Matters open
 
-1. Confirmation of the pontoon and vessel returns against imagery or the pontoons mapped in OpenStreetMap, which would also fix the three limits.
-2. The bed at the head of Marsa.
+1. Confirmation of the three limits against the pontoons mapped in imagery or in OpenStreetMap.
+2. The depth of the shipyard basin at Marsa beneath the moored vessels.
 3. The removed cells mark the footprint of pontoons and moored vessels at the time of the survey, and serve as a first map of the floating structures, whose effect on the surface flow can be represented in D-Flow FM through a forced ice cover of prescribed thickness and area fraction (User Manual, Sections 12.14 and 16). The fixed piers on piles can be represented by the rigid vegetation model of cylinders (Section 13.4).

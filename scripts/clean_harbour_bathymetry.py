@@ -7,6 +7,9 @@ zero, aligned with the piers, within water several metres deep. Within the
 harbour box a water cell of the merged 10 m field is flagged when
 
 - it carries no value,
+- its level is at or above ABOVE_LIMIT, at any distance from the coastline,
+  since a bed above mean sea level inside the water polygon is the deck of a
+  vessel or pontoon, as at the shipyard at the head of Marsa, or a quay,
 - its level is at or above SHALLOW_LIMIT and it lies more than COAST_BUFFER_M
   from the coastline, so that the natural shallow fringe along the shore is
   kept, or
@@ -49,10 +52,11 @@ FIGURE = ROOT / "figures" / "bathymetry_harbour_cleaning.png"
 
 HARBOUR_BOX = (14.480, 35.870, 14.540, 35.915)   # lon0, lat0, lon1, lat1, both harbours
 SHALLOW_LIMIT = -0.5        # m
+ABOVE_LIMIT = 0.3           # m
 COAST_BUFFER_M = 20.0       # m
 SPIKE_LIMIT = 2.5           # m
 SPIKE_WINDOW = 7            # cells
-FILL_SEARCH_M = 150.0       # m, search radius of the interpolation
+FILL_SEARCH_M = 300.0       # m, search radius of the interpolation
 LAND_FILL_M = 30.0          # m
 
 FLAG_NODATA, FLAG_SHALLOW, FLAG_SPIKE, FLAG_DILATED = 1, 2, 3, 4
@@ -102,7 +106,10 @@ def main(argv=None) -> int:
     inside = box & water
     flags = np.zeros(z.shape, dtype="uint8")
     flags[inside & ~np.isfinite(z)] = FLAG_NODATA
-    flags[(flags == 0) & inside & (z >= SHALLOW_LIMIT) & (dist_coast > COAST_BUFFER_M)] = FLAG_SHALLOW
+    # A bed above mean sea level inside the water polygon is a vessel, a pontoon or a
+    # quay, the emerged part of a beach lying on the land side of the coastline
+    flags[(flags == 0) & inside & (((z >= SHALLOW_LIMIT) & (dist_coast > COAST_BUFFER_M))
+                                    | (z >= ABOVE_LIMIT))] = FLAG_SHALLOW
     # Near the shore the window mixes the shallow fringe with the channel, which
     # would read the fringe as a spike, so the spike test applies offshore of it
     flags[(flags == 0) & inside & np.isfinite(med) & (z - med > SPIKE_LIMIT)
@@ -140,7 +147,7 @@ def main(argv=None) -> int:
 
     n_in = int(inside.sum())
     print(f"harbour water cells {n_in}")
-    for name, v in (("no data", FLAG_NODATA), ("shallow away from coast", FLAG_SHALLOW),
+    for name, v in (("no data", FLAG_NODATA), ("shallow or above sea", FLAG_SHALLOW),
                     ("upward spike", FLAG_SPIKE), ("dilation", FLAG_DILATED)):
         print(f"  {name:24s} {(flags == v).sum():6d} ({(flags == v).sum() / n_in:.1%})")
     print(f"  flagged in all          {bad.sum():6d} ({bad.sum() / n_in:.1%}), left unfilled {unfilled.sum()}")
@@ -192,7 +199,7 @@ def figure(z, clean, flags, t, coast):
         fig.colorbar(im, ax=row[2], shrink=0.75, label="bed level, m")
     from matplotlib.patches import Patch
     axes[0, 1].legend(handles=[Patch(color=c, label=l) for c, l in zip(
-        fcmap.colors, ["no value", f"at or above {SHALLOW_LIMIT} m, over {COAST_BUFFER_M:.0f} m from coast",
+        fcmap.colors, ["no value", f"above +{ABOVE_LIMIT} m, or above {SHALLOW_LIMIT} m over {COAST_BUFFER_M:.0f} m from coast",
                        f"over {SPIKE_LIMIT} m above local median", "edge, one cell"])],
         loc="lower left", fontsize=7.5, framealpha=0.9)
     fig.tight_layout()
