@@ -128,18 +128,30 @@ def compare_buoy(his: xr.Dataset, meta: dict, t0, t1) -> dict:
     obs = {"u": blue.current_u / 100.0, "v": blue.current_v / 100.0,
            "temperature": blue.sea_temperature, "salinity": blue.salinity}
     st = his.sel(station="blue_buoy")
-    zc = st["zcoordinate_c"].to_pandas()
     wl = st["waterlevel"].to_series()
+    index = wl.index
+    if "zcoordinate_c" in st:
+        zc = st["zcoordinate_c"].values
+    else:
+        # Uniform sigma layers counted from the bed, the history file of FM
+        # 2026.01 carrying no layer levels
+        kmx = st.sizes["laydim"]
+        frac = (np.arange(kmx) + 0.5) / kmx
+        bed = float(st["bedlevel"])
+        zc = bed + (wl.values[:, None] - bed) * frac[None, :]
     var = {"u": "x_velocity", "v": "y_velocity", "temperature": "temperature", "salinity": "salinity"}
-    out = {"model": {}, "cmems": {}}
+    out = {"model": {}, "model_daily": {}, "cmems": {}}
     for depth in DEPTHS:
         target = wl.values[:, None] - depth
-        k = np.abs(zc.values - target).argmin(axis=1)
-        row = {}
+        k = np.abs(zc - target).argmin(axis=1)
+        row, daily = {}, {}
         for key, name in var.items():
-            vals = st[name].values[np.arange(len(k)), k]
-            row[key] = stats(pd.Series(vals, index=zc.index)[t0:t1], obs[key].resample("10min").mean())
+            series = pd.Series(st[name].values[np.arange(len(k)), k], index=index)[t0:t1]
+            row[key] = stats(series, obs[key].resample("10min").mean())
+            # daily means, on the footing of the daily CMEMS fields
+            daily[key] = stats(series.resample("1D").mean(), obs[key].resample("1D").mean())
         out["model"][f"{depth:g} m"] = row
+        out["model_daily"][f"{depth:g} m"] = daily
     lon, lat = BLUE
     files = {"u": ("uo", "uo"), "v": ("vo", "vo"), "temperature": ("thetao", "thetao"),
              "salinity": ("so", "so")}
@@ -178,6 +190,18 @@ def main(argv=None) -> int:
     for k, s in res["forcing"].items():
         print(f"  {k:13s} n {s['n']}  bias {s['bias']:+.2f}  rmse {s['rmse']:.2f}  r {s['r']:.3f}  "
               f"std ratio {s['std_ratio']:.2f}")
+    if "buoy" in res:
+        for src, label in (("model", "model, 10 min"), ("model_daily", "model, daily"),
+                           ("cmems", "CMEMS, daily")):
+            print(f"BLUE against {label}")
+            for depth, row in res["buoy"][src].items():
+                cells = []
+                for key, s in row.items():
+                    if s.get("n", 0) < 3:
+                        cells.append(f"{key} n<3")
+                        continue
+                    cells.append(f"{key} bias {s['bias']:+.2f} rmse {s['rmse']:.2f} r {s['r']:+.2f}")
+                print(f"  {depth:>5s}  " + " | ".join(cells))
     return 0
 
 
