@@ -1,0 +1,2 @@
+# Shell scripts run on simit-server and must keep LF line endings
+*.sh text eol=lf
