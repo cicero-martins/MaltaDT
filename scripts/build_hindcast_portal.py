@@ -66,8 +66,13 @@ def regrid(case_dir: Path, case: str, out_dir: Path) -> None:
         "mesh2d_ucy": ds["mesh2d_ucy"].values.astype(np.float32) * dry,
         "mesh2d_hwav": ds["mesh2d_tem1"].values.astype(np.float32) * dry,        # degC
     }
-    args = (ds["mesh2d_face_x"].values, ds["mesh2d_face_y"].values,
-            ds["mesh2d_face_x_bnd"].values, ds["mesh2d_face_y_bnd"].values,
+    xb, yb = ds["mesh2d_face_x_bnd"].values, ds["mesh2d_face_y_bnd"].values
+    if "mesh2d_face_x" in ds.variables:
+        cx, cy = ds["mesh2d_face_x"].values, ds["mesh2d_face_y"].values
+    else:
+        # mean of the face nodes, for a surface file written without the centres
+        cx, cy = np.nanmean(xb, axis=1), np.nanmean(yb, axis=1)
+    args = (cx, cy, xb, yb,
             ds["time"].values, data, out_dir)
     rw.regrid("coarse", COARSE_LON, COARSE_LAT, COARSE_STEP, *args)
     rw.regrid("fine", lw.FINE_LON, lw.FINE_LAT, lw.FINE_STEP, *args)

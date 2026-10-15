@@ -47,8 +47,8 @@ def main(argv=None) -> int:
             if v in sel:
                 out[v] = sel[v].isel(mesh2d_nLayers=-1).load()
         out["globalnr"] = sel["mesh2d_flowelem_globalnr"].load()
-        parts.append(xr.Dataset(out).drop_vars([c for c in ("mesh2d_face_x", "mesh2d_face_y")
-                                                 if c in xr.Dataset(out).coords], errors="ignore"))
+        # the face centres are coordinates in FM output and are kept as variables
+        parts.append(xr.Dataset(out).reset_coords())
         print(f"  {f.name}: {own.size} own faces of {ds.sizes['mesh2d_nFaces']}", flush=True)
         ds.close()
     merged = xr.concat(parts, dim="mesh2d_nFaces")
