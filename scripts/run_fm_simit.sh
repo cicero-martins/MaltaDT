@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+#
+# Partition and run one D-Flow FM case on simit-server under Intel MPI.
+#
+# The case directory holds the global MDU, mesh and forcing written by
+# build_hindcast_v02.py. The mesh is partitioned here, on the machine that runs
+# it, since METIS partitions differently on Windows and Linux and partitioned
+# files are not portable. The ranks are pinned to physical cores of socket 0
+# (the even logical CPUs 0, 2, ..., on this machine NUMA node 0 holds the even
+# CPUs and the second hyperthread of core k is CPU k + 48), so that the other
+# socket remains free for SWAN in coupled runs or for serial runs alongside.
+# I_MPI_WAIT_MODE=1 lets a waiting rank yield its core, which matters once
+# DIMR alternates FM with SWAN.
+#
+# Usage, on simit-server:
+#     bash run_fm_simit.sh <case_dir> <n_partitions> [<mdu>]
+#
+set -euo pipefail
+
+CASE="$(realpath "$1")"
+N="$2"
+# build_hindcast_v02.py names the MDU after the case directory. A pattern on
+# the partition suffix _NNNN.mdu would also match a case named after its dates.
+MDU="${3:-$(basename "$CASE").mdu}"
+[[ -f "$CASE/$MDU" ]] || { echo "ERROR: $CASE/$MDU not found, pass the MDU name"; exit 3; }
+FM="$HOME/Scaricati/delft3dfm/lnx64"
+[[ "$N" -ge 1 && "$N" -le 24 ]] || { echo "ERROR: 1 to 24 partitions, one socket"; exit 2; }
+
+set +u
+source /opt/intel/oneapi/setvars.sh > /dev/null 2>&1 || true
+set -u
+export PATH="$FM/bin:$PATH"
+export LD_LIBRARY_PATH="$FM/lib:${LD_LIBRARY_PATH:-}"
+command -v mpiexec > /dev/null || { echo "ERROR: no mpiexec after sourcing oneAPI"; exit 4; }
+
+export OMP_NUM_THREADS=1
+export I_MPI_WAIT_MODE=1
+export I_MPI_PIN=1
+export I_MPI_PIN_PROCESSOR_LIST="$(seq -s, 0 2 $((2 * N - 2)))"
+
+cd "$CASE"
+rm -rf output "${MDU%.mdu}"_0*.mdu *_0[0-9][0-9][0-9]_net.nc *.cache
+if [[ "$N" -gt 1 ]]; then
+    run_dflowfm.sh --partition:ndomains="$N":icgsolver=6 "$MDU" > partition.log 2>&1
+    PROCS="$(seq -s' ' 0 $((N - 1)))"
+else
+    PROCS="0"
+fi
+cat > dimr_config.xml << EOF
+<?xml version="1.0" encoding="utf-8"?>
+<dimrConfig xmlns="http://schemas.deltares.nl/dimr">
+  <documentation><fileVersion>1.3</fileVersion><createdBy>run_fm_simit.sh</createdBy></documentation>
+  <control><start name="DFlowFM"/></control>
+  <component name="DFlowFM">
+    <library>dflowfm</library>
+    <process>$PROCS</process>
+    <workingDir>.</workingDir>
+    <inputFile>$MDU</inputFile>
+    <mpiCommunicator>DFM_COMM_DFMWORLD</mpiCommunicator>
+  </component>
+</dimrConfig>
+EOF
+echo "case $CASE, $N partitions, pinned to CPUs $I_MPI_PIN_PROCESSOR_LIST, start $(date -Is)"
+run_dimr.sh -c "$N" -m dimr_config.xml > run.log 2>&1 || echo "run_dimr exit $?"
+echo "end $(date -Is)"
+DIA="output/${MDU%.mdu}_0000.dia"
+[[ "$N" -eq 1 ]] && DIA="output/${MDU%.mdu}.dia"
+grep -hE "total time in timeloop|average timestep|nr of timesteps|\*\* ERROR" "$DIA" || true
