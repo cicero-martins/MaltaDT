@@ -41,6 +41,10 @@ VARIABLES = {
     "tcc": "total_cloud_cover",
     "ssr": "surface_net_solar_radiation",
     "strd": "surface_thermal_radiation_downwards",
+    # surface fluxes of ERA5 itself, for comparison with those of the heat flux model
+    "slhf": "surface_latent_heat_flux",
+    "sshf": "surface_sensible_heat_flux",
+    "str": "surface_net_thermal_radiation",
 }
 
 

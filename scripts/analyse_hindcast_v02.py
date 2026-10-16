@@ -182,7 +182,8 @@ def compare_buoy(his: xr.Dataset, meta: dict, t0, t1) -> dict:
     out = {"model": {}, "model_daily": {}, "cmems": {}}
     for depth in DEPTHS:
         target = wl.values[:, None] - depth
-        k = np.abs(zc - target).argmin(axis=1)
+        # layers below the bed carry no level in z-layer output
+        k = np.nanargmin(np.abs(zc - target), axis=1)
         row, daily = {}, {}
         for key, name in var.items():
             series = pd.Series(st[name].values[np.arange(len(k)), k], index=index)[t0:t1]

@@ -56,7 +56,7 @@ def layer_series(st, name, depth):
     kmx = st.sizes["laydim"]
     frac = (np.arange(kmx) + 0.5) / kmx
     zc = bed + (wl[:, None] - bed) * frac[None, :]
-    k = np.abs(zc - (wl[:, None] - depth)).argmin(axis=1)
+    k = np.nanargmin(np.abs(zc - (wl[:, None] - depth)), axis=1)
     return pd.Series(st[name].values[np.arange(len(k)), k], index=st["time"].values)
 
 
