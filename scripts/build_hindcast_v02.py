@@ -13,9 +13,10 @@ nudging file with iniWithNudge = 2, which initialises without nudging.
 
 The surface is forced by hourly ERA5, wind at 10 m and mean sea level pressure,
 and in three dimensions dew point, air temperature, cloud cover, net solar and
-downward thermal radiation for the composite heat flux model. The boundary
-velocity is not prescribed, since dfm_tools.cmems_nc_to_bc fails on the vector
-quantity against hydrolib-core 1.0.
+downward thermal radiation for the composite heat flux model. With
+--boundary-velocity the daily CMEMS current enters as advection velocity at the
+boundary, written by write_uv_boundary, since dfm_tools.cmems_nc_to_bc fails on
+the vector quantity against hydrolib-core 1.0.
 
 Stations are the points of build_longwave_scenario.py inside domain B,
 together with the BLUE buoy, each in the nearest cell whose nodes all lie below
@@ -125,6 +126,58 @@ def write_ts_boundary(d: Path, start: pd.Timestamp, stop: pd.Timestamp) -> list[
         blocks.append(f"[Boundary]\nquantity     = {quantity}\n"
                       f"locationFile = {NAME}_bnd.pli\nforcingFile  = {bc.name}\n")
     return blocks
+
+
+def write_uv_boundary(d: Path, start: pd.Timestamp, stop: pd.Timestamp) -> str:
+    """Advection velocity at the boundary from the daily CMEMS currents; returns the ext block.
+
+    The vector part of dfmt.cmems_nc_to_bc fails against hydrolib-core 1.0, so
+    the t3d file is written here in the layout of the scalar files, with the
+    two components interleaved by level. Land and bed gaps of the 4.2 km grid
+    are filled as for the initial fields, downward from the deepest value and
+    then horizontally, before the bilinear interpolation to the nodes.
+    """
+    from dfm_tools.xarray_helpers import interpolate_na_multidim
+
+    pts = np.loadtxt(d / f"{NAME}_bnd.pli", skiprows=2)
+    uo = xr.open_dataset(next(CMEMS.glob("cmems_uo_*.nc"))).uo
+    vo = xr.open_dataset(next(CMEMS.glob("cmems_vo_*.nc"))).vo
+    window = slice(start.floor("D"), stop.ceil("D"))
+    nodes = dict(longitude=xr.DataArray(pts[:, 0], dims="p"),
+                 latitude=xr.DataArray(pts[:, 1], dims="p"))
+    comp = []
+    for da in (uo, vo):
+        da = da.sel(time=window)
+        da = interpolate_na_multidim(da, ["depth"])
+        da = interpolate_na_multidim(da, ["latitude", "longitude"])
+        comp.append(da.interp(**nodes).transpose("p", "time", "depth").values)
+    u, v = comp
+    if np.isnan(u).any() or np.isnan(v).any():
+        raise RuntimeError("current missing at boundary nodes")
+    times = pd.to_datetime(uo.sel(time=window).time.values)
+    minutes = (times - REFDATE).total_seconds() / 60.0
+    levels = " ".join(f"{-z:.4f}" for z in uo.depth.values)
+    nz = uo.sizes["depth"]
+    header = "".join(f"quantity          = {c}\nunit              = m s-1\n"
+                     f"vertPositionIndex = {k}\n" for k in range(1, nz + 1) for c in ("ux", "uy"))
+    name = f"uxuyadvectionvelocitybnd_CMEMS_{NAME}_bnd.bc"
+    with open(d / name, "w") as f:
+        f.write("[General]\nfileVersion = 1.01\nfileType    = boundConds\n\n")
+        for p in range(pts.shape[0]):
+            f.write(f"[Forcing]\nname              = {NAME}_bnd_{p + 1:04d}\n"
+                    "function          = t3d\noffset            = 0.0\nfactor            = 1.0\n"
+                    f"vertPositions     = {levels}\nvertInterpolation = linear\n"
+                    "vertPositionType  = ZDatum\ntimeInterpolation = linear\n"
+                    "quantity          = time\n"
+                    f"unit              = minutes since {REFDATE:%Y-%m-%d %H:%M:%S} +00:00\n"
+                    "vector            = uxuyadvectionvelocitybnd:ux,uy\n" + header)
+            for it, t in enumerate(minutes):
+                row = np.empty(2 * nz)
+                row[0::2], row[1::2] = u[p, it], v[p, it]
+                f.write(f"{t:.1f} " + " ".join(f"{x:.4f}" for x in row) + "\n")
+            f.write("\n")
+    return (f"[Boundary]\nquantity     = uxuyadvectionvelocitybnd\n"
+            f"locationFile = {NAME}_bnd.pli\nforcingFile  = {name}\n")
 
 
 def write_initial_ts(d: Path, start: pd.Timestamp) -> str:
@@ -351,6 +404,8 @@ def main(argv=None) -> int:
     ap.add_argument("--map-interval", type=float, default=3600.0)
     ap.add_argument("--secchi", type=float, default=10.0, help="working value, m")
     ap.add_argument("--parallel", type=int, default=1, help="number of MPI domains")
+    ap.add_argument("--boundary-velocity", action="store_true",
+                    help="prescribe the CMEMS current as advection velocity at the boundary (3D)")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args(argv)
     MESH_VERSION = args.mesh
@@ -374,6 +429,8 @@ def main(argv=None) -> int:
               f"forcingFile  = {NAME}_bnd.bc\n"]
     if three_d:
         blocks += write_ts_boundary(d, start, stop)
+        if args.boundary_velocity:
+            blocks.append(write_uv_boundary(d, start, stop))
         (d / "initial.ext").write_text(write_initial_ts(d, start))
     blocks += write_meteo(d, start, stop, three_d)
     (d / "forcing.ext").write_text("[General]\nfileVersion = 2.01\nfileType    = extForce\n\n"
@@ -382,7 +439,7 @@ def main(argv=None) -> int:
     write_mdu(d, case, args, start, stop, three_d, three_d)
     (d / "case.json").write_text(json.dumps(dict(
         case=case, start=str(start), stop=str(stop), kmx=args.kmx, vertical=args.vertical,
-        zos_offset=offset,
+        zos_offset=offset, boundary_velocity=args.boundary_velocity,
         tidal_forcing=args.tidal_forcing, pavbnd=args.pavbnd, riemann_factor=args.riemann_factor,
         refdate=str(REFDATE),
         stations={k: v[:2] for k, v in st.items()}), indent=2))
