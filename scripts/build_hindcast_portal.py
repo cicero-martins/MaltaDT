@@ -118,7 +118,8 @@ def main(argv=None) -> int:
     bw.build_land_geojson = lw.land_geojson
     bw.SRC_LABEL = args.case
     bw.SRC_DESC = (f"{meta_case['start'][:10]} to {meta_case['stop'][:10]}, "
-                   f"{meta_case['kmx']} layers, {meta_case.get('vertical', 'sigma')}")
+                   f"{meta_case['kmx']} layers, {meta_case.get('vertical', 'sigma').replace('_', ' ')}"
+                   + (", CMEMS current at the boundary" if meta_case.get("boundary_velocity") else ""))
     bw.build()
     meta_path = out_dir / "data" / "meta.json"
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
