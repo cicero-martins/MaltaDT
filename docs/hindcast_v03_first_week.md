@@ -11,10 +11,10 @@ The validation window is 25 July to 1 August 2025, preceded by three days of spi
 | Element | Setting |
 |---|---|
 | Mesh | v03, 26 767 faces ([harbour_bathymetry_cleaning.md](harbour_bathymetry_cleaning.md)) |
-| Vertical | 20 sigma layers of equal thickness, a working value |
+| Vertical | 20 sigma layers of equal thickness in the reference case, a working value, with the variants of Section 5 |
 | Open boundary | Riemann, forced by half the CMEMS sea surface height of the analysis-forecast product at 15 minutes, less its mean over the run along the boundary (−0.29 m) |
 | Boundary salinity and temperature | daily CMEMS reanalysis, `cmems_mod_med_phy-{sal,temp}_my_4.2km_P1D-m` |
-| Boundary velocity | none, the vector quantity of `dfm_tools.cmems_nc_to_bc` failing against hydrolib-core 1.0 |
+| Boundary velocity | none in the reference case; in the variants of Section 5 the daily CMEMS current, written as `uxuyadvectionvelocitybnd` by `write_uv_boundary` in the builder, since the vector quantity of `dfm_tools.cmems_nc_to_bc` fails against hydrolib-core 1.0 |
 | Initial salinity and temperature | daily CMEMS reanalysis of 22 July, through the nudging file with `iniWithNudge = 2` |
 | Surface | hourly ERA5, wind at 10 m and mean sea level pressure, and dew point, air temperature, cloud cover and net solar and downward thermal radiation for the composite heat flux model (`temperature = 5`) |
 | Turbulence | k-ε |
@@ -53,9 +53,9 @@ The level follows the CMEMS height over the whole week, including the rise of th
 
 ![Current and temperature at the BLUE buoy](../figures/hindcast_week_blue.png)
 
-*Eastward (top) and northward (centre) current and sea temperature (bottom) at the BLUE buoy, against the top layer of the model, the layer nearest 20 m and the daily CMEMS field at 1 m. Spin-up shaded.*
+*Eastward (top) and northward (centre) current and sea temperature (bottom) at the BLUE buoy, against the top layer of the reference case, the layer nearest 20 m and the daily CMEMS field at 1 m. Spin-up shaded.*
 
-| Against the buoy, 25 July to 1 August | u bias, RMS, r | v bias, RMS, r | Temperature bias, RMS, r |
+| Reference case against the buoy, 25 July to 1 August | u bias, RMS, r | v bias, RMS, r | Temperature bias, RMS, r |
 |---|---|---|---|
 | Model, top layer, 10 min | +0.13, 0.18 m/s, 0.13 | −0.14, 0.17 m/s, 0.72 | −0.99, 1.25 °C, 0.85 |
 | Model, layer nearest 20 m, 10 min | +0.08, 0.10 m/s, 0.30 | 0.00, 0.12 m/s, 0.24 | −2.86, 3.59 °C, −0.43 |
@@ -73,15 +73,65 @@ The level follows the CMEMS height over the whole week, including the rise of th
 
 During spin-up the top layer warms at the northern edge of the domain and cools at the stations near the coast of Malta, most at the mouth of the Grand Harbour, where the 21 m column is resolved by layers of about 1 m. The cooling under a heat gain points to vertical mixing that brings the colder water of the thermocline to the surface near the coast. Two elements of the configuration bear on it, the thickness of the surface layer over the deeper water, which cannot hold a near-surface warm layer of a metre or two, and the sigma layers over the steep slopes of the domain, which reaches 1 157 m. The CMEMS system, whose vertical levels are about 1 m thick near the surface, follows the buoy within 0.1 to 0.3 °C.
 
-## 5. Cost on simit-server
+## 5. Vertical discretisation and boundary velocity
 
-The run used 12 MPI partitions pinned to physical cores of socket 0 of simit-server, two Xeon Gold 5220R of 24 cores. Six hours of the same configuration took 215, 165, 152 and 142 s on 8, 12, 16 and 24 partitions, and 12 partitions are retained, since beyond them the gain falls to 8 and 7 per cent per step while the time of the pressure solver rises. The partition count is held for the family of three-dimensional runs, since a change of partitioning alters the results in the third decimal.
+Three further cases share the reference configuration and change one or two elements of it. The stretched case keeps 20 sigma layers and sets the top one to 1 per cent of the column, the thickness growing geometrically toward the bed by a factor of about 1.15, so that the top layer is 1.0 m thick at the BLUE station against 5.2 m with layers of equal thickness. The two cases with boundary velocity add the daily CMEMS current at the open boundary to the uniform and to the stretched layers.
 
-The ten days took 6.8 hours, against some 2 hours projected from the first six hours. The mean time step over the run was 6.2 s, against 12.2 s over the first six hours, as the currents strengthened under the wind, and the first hour and part of the night shared their cores with other runs on the server. The cost of a three-dimensional run is therefore estimated from a full window rather than from its first hours, which places 40 days of the same configuration near 14 hours.
+| Case, daily means at the buoy, 25 July to 1 August | u bias, RMS | v bias, RMS, r | Temperature bias, RMS | Level against CMEMS at BLUE, r, ratio of standard deviations |
+|---|---|---|---|---|
+| Uniform sigma | +0.12, 0.14 m/s | −0.14, 0.15 m/s, 0.90 | −0.94, 1.11 °C | 0.983, 0.95 |
+| Uniform sigma, boundary velocity | +0.02, 0.09 m/s | −0.06, 0.09 m/s, 1.00 | −0.96, 1.08 °C | 0.982, 1.03 |
+| Stretched sigma | −0.01, 0.08 m/s | +0.01, 0.06 m/s, 0.97 | −1.48, 1.51 °C | 0.905, 0.84 |
+| Stretched sigma, boundary velocity | +0.01, 0.12 m/s | −0.02, 0.09 m/s, 0.99 | −1.37, 1.41 °C | 0.935, 0.93 |
+| CMEMS, 1 m | +0.20, 0.22 m/s | −0.21, 0.23 m/s, 0.99 | −0.10, 0.24 °C |  |
 
-## 6. Matters open
+Model values are those of the top layer, biases taken as model less buoy.
 
-1. **Depth of the current and temperature measurements of the buoy**, on which the reading of Section 4 depends. It is the first item of the questions in [blue_buoy_dataset.md](blue_buoy_dataset.md).
-2. **Vertical discretisation.** Thinner surface layers, by stretched sigma layers or by z-layers below a few sigma layers, are to be tested against the cooling of Section 4, together with the vertical mixing of the k-ε model. The choice between sigma and z-layers is the open configuration question of block B3 in the plan.
-3. **Velocity at the open boundary**, absent in this run, which requires the vector part of the boundary chain to be rewritten.
-4. **Surface currents of the HF radar** for the same window, which would test the surface layer where the buoy may not.
+Either change removes most of the bias of the current at the buoy, the boundary velocity by supplying the flow that crosses the boundary and the thin surface layer by resolving the shear under the wind. With the boundary velocity the uniform layers keep the agreement of the level with CMEMS, and the stretched layers recover part of the level lost against the uniform case. The temperature of the top layer is insensitive to the boundary velocity. With the stretched layers the calm days are warmer by some 0.6 °C, closer to the buoy, and the days after the wind of 27 July colder, so that over the week the bias grows from about −1.0 to −1.4 °C.
+
+A fourth case, with five sigma layers over z-layers 1 m thick down to −10 m and thickening by a factor of 1.2 below, 39 layers at the deepest cell, developed an oscillation of the level that grew to some 60 cm over the run, and is set aside without a diagnosis.
+
+The stretched layers with boundary velocity are retained as the working configuration, since they give the closest current at the buoy, a level within 2.1 cm of CMEMS in the root mean square of the anomalies and the fewest spurious surface currents of Section 7.
+
+## 6. Surface heat fluxes against ERA5
+
+The net heat fluxes of the composite model at the BLUE station are set against the fluxes of ERA5 at the same point, which are computed by the atmospheric model and are independent of the ocean model.
+
+| Mean flux at the BLUE station, 25 to 31 July, W/m² | Latent | Sensible | Net longwave | Net solar |
+|---|---|---|---|---|
+| ERA5 | −144 | −3 | −85 | 299 |
+| Uniform sigma | −133 | +1 | −82 | 299 |
+| Uniform sigma, boundary velocity | −132 | +1 | −81 | 299 |
+| Stretched sigma | −112 | +8 | −79 | 299 |
+| Stretched sigma, boundary velocity | −118 | +6 | −80 | 299 |
+
+The model loses less heat through the surface than ERA5, by 11 to 32 W/m² in the latent flux, as a colder surface evaporates less. An excess loss at the surface is therefore excluded as the cause of the cooling after the wind, which points to the redistribution of heat within the column and across the domain, by coastal upwelling under the northwesterly wind or by the vertical mixing of the k-ε model. The comparison is limited to the week and to one point.
+
+## 7. Spurious surface currents after the wind
+
+After the wind of 27 July the top layer of the deep cells southwest of Malta carries daily mean currents of 1.2 to 2.4 m/s, which persist to the end of the run after the wind has fallen, while the layers below remain near 0.1 to 0.4 m/s and the daily CMEMS current over the same area does not exceed 0.3 m/s. A daily mean of that size sustained over three days is not consistent with the forcing, and the currents are taken as numerical.
+
+| Case, top layer over 25 July to 1 August | Faces deeper than 100 m with a maximum above 1 m/s | Faces with a 95th percentile above 0.9 m/s lying on a refinement transition |
+|---|---|---|
+| Uniform sigma | 2 321 of 7 199 | 44 % of 1 680 |
+| Uniform sigma, boundary velocity | 249 | 70 % of 180 |
+| Stretched sigma | 22 |  |
+| Stretched sigma, boundary velocity | 43 | 82 % of 61 |
+
+A face is counted on a transition when a face within 1.6 cell widths differs from it in size by more than a factor of 1.4, which holds for 38 per cent of the faces deeper than 100 m.
+
+The boundary velocity reduces the affected area by an order of magnitude under uniform layers, and the stretched layers reduce it further. In the working configuration the remaining faces lie on the slope southwest of Malta, at 14.25 to 14.34 E and 35.76 to 35.83 N over 200 to 360 m with bed slopes near 0.1, and mostly on the transitions of the quadtree, where the cells take the intermediate sizes of 680 to 1 360 m. Two causes are consistent with that distribution, the explicit vertical advection of momentum (`vertAdvTypMom = 6`) on cells of irregular shape and the error of the horizontal pressure gradient of sigma layers over a steep slope. The area lies away from the harbours and from the BLUE station, and the diagnosis is deferred, a run with implicit vertical advection of momentum (`vertAdvTypMom = 3`) being the first test that would separate the two.
+
+## 8. Cost on simit-server
+
+The runs used 12 MPI partitions pinned to physical cores of socket 0 of simit-server, two Xeon Gold 5220R of 24 cores. Six hours of the same configuration took 215, 165, 152 and 142 s on 8, 12, 16 and 24 partitions, and 12 partitions are retained, since beyond them the gain falls to 8 and 7 per cent per step while the time of the pressure solver rises. The partition count is held for the family of three-dimensional runs, since a change of partitioning alters the results in the third decimal.
+
+The ten days of the reference case took 6.8 hours, against some 2 hours projected from the first six hours, and part of the run shared its cores with other runs on the server. The two cases with boundary velocity, run side by side on separate cores with the server otherwise idle, took 5.4 and 5.3 hours, at mean time steps of 5.7 and 5.9 s. In every case the step falls from 12 to 15 s before the wind to about 2.5 s on 28 and 29 July and recovers to 6 to 11 s from 30 July. The fall is set by the criterion of the time step, since D-Flow FM 2026.01 applies `autoTimeStep = 5` by default in three dimensions, which includes the vertical fluxes through the thin layers of the shallow cells, while the horizontal Courant number in the harbour channels stays near 0.05. The Technical Reference of D-Flow FM describes this criterion as the only one without observed instabilities in three-dimensional runs with salinity, at a step some four times smaller than the horizontal criterion, and it is kept. The cost of a three-dimensional run is therefore estimated from a full window rather than from its first hours, which places 40 days of the working configuration near 21 hours.
+
+## 9. Matters open
+
+1. **Depth of the current and temperature measurements of the buoy**, on which the reading of Sections 4 and 5 depends. It is the first item of the questions in [blue_buoy_dataset.md](blue_buoy_dataset.md).
+2. **Temperature of the surface layer**, about 1.4 °C below the buoy in the working configuration and independent of the boundary velocity and of the surface fluxes. The vertical mixing of the k-ε model and the coastal upwelling remain to be separated. A departure of that size does not bear on the questions of circulation and renewal at this stage of the study, and is left open.
+3. **Spurious surface currents of Section 7**, confined to the slope southwest of Malta in the working configuration, to be diagnosed when a run reaches that area or the renewal shows an influence from it.
+4. **The z-sigma case**, set aside without a diagnosis of its oscillation.
+5. **Surface currents of the HF radar** for the same window, which would test the surface layer where the buoy may not.
