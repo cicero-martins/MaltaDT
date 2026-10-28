@@ -17,6 +17,8 @@ The run is the first of the configuration forced by observed and analysed fields
 3. an observation of the circulation inside the harbours, where the model is at present untested, through drifter releases or the HF radar surface currents near the harbour mouths;
 4. the extents of the planned breakwaters and of the new pier at Msida, for the geometry experiments.
 
+**Interactive maps.** The surface fields of the working configuration over 22 July to 1 August 2025, namely water level, sea surface temperature and currents drawn as moving particles, are published on the EDITO platform at <https://minio.dive.edito.eu/oidc-cmartinsjr/malta-hindcast/index.html>, with the series at the BLUE buoy and at the harbour stations. The eight scenarios of the long-wave sweep, one for each direction of arrival of the pressure disturbance ([longwave_sweep.md](longwave_sweep.md)), are published in the same form at <https://minio.dive.edito.eu/oidc-cmartinsjr/malta-longwave/index.html>.
+
 ## 1. Window and configuration
 
 The validation window is 25 July to 1 August 2025, preceded by three days of spin-up from 22 July. Among the seven-day windows of late May to mid-September 2025 with all variables of the buoy present for at least 98 per cent of the time, it holds the strongest wind, a mean of 8.4 m/s with 95 per cent below 12.7 m/s, a mean current of 16.6 cm/s and a fall of 4.6 °C in sea temperature.
