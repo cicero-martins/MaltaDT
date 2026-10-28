@@ -4,9 +4,26 @@
 
 The run is the first of the configuration forced by observed and analysed fields rather than by an idealised disturbance. It serves to test the chain from CMEMS and ERA5 to the open boundary and the surface of domain B, and to set the configuration against the only observation of the harbour approach available for 2025, the BLUE buoy ([blue_buoy_dataset.md](blue_buoy_dataset.md)). No public tide gauge recorded the window, since Senglea is offline from December 2024.
 
+## Summary
+
+**Work carried out.** The chain from CMEMS and ERA5 to domain B on mesh v03 is in place, with the Riemann boundary forced by half the CMEMS sea surface height (Section 2). Over the validation week the modelled level stays within 1 to 2 cm of CMEMS, and ERA5 reproduces the wind and pressure of the buoy at correlations of 0.93 and 0.99 (Section 3). Four three-dimensional cases were run, with sigma layers of equal or stretched thickness and with or without the CMEMS current at the boundary (Sections 4 and 5). The working configuration, 20 stretched sigma layers with the top one 1 per cent of the column and the daily CMEMS current at the boundary, removes the bias of the daily current at the buoy, from +0.12 and −0.14 m/s in the eastward and northward components of the reference case to +0.01 and −0.02 m/s. The surface heat fluxes agree with those of ERA5 within 11 to 32 W/m² (Section 6), and a week costs some 5.3 hours on 12 cores of simit-server (Section 8).
+
+**Matters left open.** The top layer remains some 1.4 °C colder than the buoy after the wind of 27 July, independently of the boundary velocity and of the surface fluxes, and spurious top-layer currents above 1 m/s persist on 43 faces of the slope southwest of Malta (Section 7). Both lie outside the harbours and are not expected to bear on the questions of circulation and renewal, and their diagnosis is deferred (Section 9). The comparison of currents depends on the depth of measurement of the buoy, which is not stated in the file supplied.
+
+**Further work and its requirements.** The configuration is intended for the runs of circulation and renewal of the harbours, the principal question of the study, with passive tracers or water age released by inlet, and for the geometry experiments that follow them. These runs require
+
+1. the depth of the current and temperature sensors of the BLUE buoy, from the group, to settle the comparison of Sections 4 and 5;
+2. windows longer than one week, at about 21 hours of simit-server for 40 days, and storage beyond the home partition of the server, since map output at 30 minutes occupies some 16 GB per 10 days;
+3. an observation of the circulation inside the harbours, where the model is at present untested, through drifter releases or the HF radar surface currents near the harbour mouths;
+4. the extents of the planned breakwaters and of the new pier at Msida, for the geometry experiments.
+
 ## 1. Window and configuration
 
 The validation window is 25 July to 1 August 2025, preceded by three days of spin-up from 22 July. Among the seven-day windows of late May to mid-September 2025 with all variables of the buoy present for at least 98 per cent of the time, it holds the strongest wind, a mean of 8.4 m/s with 95 per cent below 12.7 m/s, a mean current of 16.6 cm/s and a fall of 4.6 °C in sea temperature.
+
+![Mesh v03 over domain B and the points of reference](../figures/hindcast_week_map.png)
+
+*Mesh v03 over domain B, shaded by bed depth, with the Riemann open boundary, the offshore stations and the area of the spurious surface currents of Section 7 (left), and the harbours with the BLUE buoy and the stations of the harbour inlets (right). The stations are placed at the nearest cell whose nodes all lie below −1 m. The BLUE station lies over 104 m, the plateau stations over 144 m (north edge) and the mouth of the Grand Harbour over 21 m.*
 
 | Element | Setting |
 |---|---|
