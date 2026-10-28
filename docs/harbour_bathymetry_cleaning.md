@@ -88,7 +88,16 @@ The breakwaters are closed by thin dams, which in D-Flow FM close every flow lin
 
 Peaks in units of the static response.
 
-The thin dams close 6 links at St Elmo and 7 at Ricasoli on both meshes, and in a run with map output the normal velocity on the 12 edges closed by D-Flow FM is zero throughout, against up to 0.96 m/s on the open edges nearby. In the scenario of largest response of the sweep ([longwave_sweep.md](longwave_sweep.md)) the peaks change by 2 per cent or less and the 22.5-minute oscillation of the Grand Harbour is unchanged, so the area that the leak added to the entrance did not bear on the long-wave response. The spectrum at the head of Msida Creek holds peaks of nearly equal height at 16.4 and 27.7 minutes, and their order exchanges between the two runs. The thin dams bear more on the circulation and the renewal, since a leak across a breakwater opens a path for exchange that the structure closes, and they are part of every run from here on.
+The thin dams close 6 links at St Elmo and 7 at Ricasoli on both meshes, and in a run with map output the normal velocity on the 12 edges closed by D-Flow FM is zero throughout, against up to 0.96 m/s on the open edges nearby. In the scenario of largest response of the sweep ([longwave_sweep.md](longwave_sweep.md)) the peaks, reached while the disturbance crosses the harbours, change by 2 per cent or less, and the period of the oscillation of the Grand Harbour stays at 22.5 minutes. The oscillation that follows the passage changes more.
+
+| Spectral amplitude with thin dams against without, after the sixth hour | 36 min | 27.7 min | 22.5 min | 16.4 min | Standard deviation of the level, cm |
+|---|---|---|---|---|---|
+| Senglea | 1.05 | 1.08 | 1.04 | 0.65 | 2.43 to 2.64 |
+| Grand Harbour mouth | 1.04 | 1.07 | 1.00 | 0.60 | 0.94 to 1.01 |
+| Marsamxett mouth | 1.00 | 0.98 | 0.50 | 0.78 | 0.80 to 0.76 |
+| Head of Msida Creek | 1.00 | 0.98 | 0.49 | 0.79 | 1.34 to 1.21 |
+
+The two harbours are coupled through their common approach, the mouth of Marsamxett lying some 700 m from the St Elmo breakwater. The leak acted as a further opening of the Grand Harbour facing northwest, toward Marsamxett, through which the 22.5-minute mode of the Grand Harbour radiated into the neighbouring basin. With the breakwaters closed, that component falls by half at the mouth of Marsamxett and at the head of Msida Creek, the oscillation of 27.7 minutes becomes the largest there, and the components of 27.7 and 36 minutes, which belong to the shelf and the coast, are unchanged. Inside the Grand Harbour the oscillation loses less energy by radiation, and the standard deviation of the level at Senglea after the passage rises by 8 per cent. The thin dams bear also on the circulation and the renewal, since a leak across a breakwater opens a path for exchange that the structure closes, and they are part of every run from here on.
 
 The pontoons of the Msida marina are taken as floating and are left open, a working assumption to be confirmed with the group.
 
