@@ -177,7 +177,8 @@ def stations(net: Path, heading: float):
 
 
 def write_case(mesh: str, heading: float, speed: float, dt_max: float = DT_MAX,
-               tag: str = "", map_interval: float = 600.0) -> tuple[Path, str, float]:
+               tag: str = "", map_interval: float = 600.0,
+               thin_dams: bool = True) -> tuple[Path, str, float]:
     name = f"malta_{mesh}"
     src = ROOT / "data" / "processed" / f"mesh_{mesh}"
     case = f"{mesh}_h{heading:03.0f}_u{speed:02.0f}{tag}"
@@ -187,6 +188,11 @@ def write_case(mesh: str, heading: float, speed: float, dt_max: float = DT_MAX,
     d.mkdir(parents=True)
     shutil.copy(src / f"{name}_net.nc", d)
     shutil.copy(src / f"{name}_bnd.pli", d)
+    # thin dams of build_breakwater_thindams.py, closing the links through the breakwaters
+    thin_dams = thin_dams and (src / f"{name}_thd.pli").exists()
+    if thin_dams:
+        shutil.copy(src / f"{name}_thd.pli", d)
+    thd_line = f"thinDamFile           = {name}_thd.pli\n" if thin_dams else ""
     st, bounds = stations(d / f"{name}_net.nc", heading)
     with open(d / "stations_obs.xyn", "w") as f:
         for key, (lon, lat, moved) in st.items():
@@ -196,7 +202,8 @@ def write_case(mesh: str, heading: float, speed: float, dt_max: float = DT_MAX,
     (d / "scenario.json").write_text(json.dumps(dict(
         mesh=mesh, heading=heading, speed=speed, rise=P_RISE, ramp=RAMP,
         track_half=TRACK_HALF, sigma_along=SIGMA_ALONG, sigma_across=SIGMA_ACROSS,
-        t_track=2 * TRACK_HALF / speed, t_stop=t_stop, dt_max=dt_max), indent=2))
+        t_track=2 * TRACK_HALF / speed, t_stop=t_stop, dt_max=dt_max, thin_dams=thin_dams),
+        indent=2))
 
     npts = int((d / f"{name}_bnd.pli").read_text().splitlines()[1].split()[0])
     with open(d / f"{name}_bnd.bc", "w") as f:
@@ -224,7 +231,7 @@ pathsRelativeToParent = 0
 
 [Geometry]
 netFile               = {name}_net.nc
-bedLevType            = 3
+{thd_line}bedLevType           = 3
 waterLevIni           = 0.0
 kmx                   = 0
 angLat                = 36.0
@@ -309,6 +316,8 @@ def main(argv=None) -> int:
     ap.add_argument("--out", default=str(OUT), help="directory of the cases")
     ap.add_argument("--discard-inputs", action="store_true",
                     help="remove the pressure file and the mesh copy after the run")
+    ap.add_argument("--no-thin-dams", action="store_true",
+                    help="leave the breakwaters open even where a thin dam file exists")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args(argv)
     P_RISE, RAMP, TRACK_HALF = args.rise, args.ramp, args.track_half
@@ -317,7 +326,7 @@ def main(argv=None) -> int:
     print(f"static response {P_RISE / (RHO * G) * 100:.2f} cm, track of "
           f"{2 * TRACK_HALF / 1e3:.0f} km in {t_track / 3600:.2f} h, run of {t_stop / 3600:.2f} h")
     d, case, t_stop = write_case(args.mesh, args.heading, args.speed, args.dt_max, args.tag,
-                                 args.map_interval)
+                                 args.map_interval, not args.no_thin_dams)
     print(f"written {d}")
     if args.no_run:
         return 0

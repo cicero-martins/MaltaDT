@@ -294,6 +294,8 @@ def vertical_keys(args) -> tuple[str, str]:
 
 def write_mdu(d: Path, case: str, args, start, stop, three_d: bool, ext_old: bool) -> None:
     vert_geom, vert_num = vertical_keys(args) if three_d else ("kmx                   = 0\n", "")
+    thd_line = (f"thinDamFile           = {NAME}_thd.pli\n"
+                if (d / f"{NAME}_thd.pli").exists() else "")
     physics_3d = f"""salinity              = 1
 temperature           = 5
 iniWithNudge          = 2
@@ -317,7 +319,7 @@ pathsRelativeToParent = 0
 
 [Geometry]
 netFile               = {NAME}_net.nc
-bedLevType            = 3
+{thd_line}bedLevType           = 3
 waterLevIni           = 0.0
 {vert_geom}angLat                = 36.0
 angLon                = 14.5
@@ -406,6 +408,8 @@ def main(argv=None) -> int:
     ap.add_argument("--parallel", type=int, default=1, help="number of MPI domains")
     ap.add_argument("--boundary-velocity", action="store_true",
                     help="prescribe the CMEMS current as advection velocity at the boundary (3D)")
+    ap.add_argument("--no-thin-dams", action="store_true",
+                    help="leave the breakwaters open even where a thin dam file exists")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args(argv)
     MESH_VERSION = args.mesh
@@ -422,6 +426,10 @@ def main(argv=None) -> int:
     d.mkdir(parents=True)
     for f in (f"{NAME}_net.nc", f"{NAME}_bnd.pli"):
         shutil.copy(MESH / f, d)
+    # thin dams of build_breakwater_thindams.py, closing the links through the breakwaters
+    thin_dams = (MESH / f"{NAME}_thd.pli").exists() and not args.no_thin_dams
+    if thin_dams:
+        shutil.copy(MESH / f"{NAME}_thd.pli", d)
 
     offset = write_riemann(d, start, stop, args.riemann_factor)
     print(f"Riemann boundary from CMEMS zos, offset removed {offset:+.3f} m")
@@ -439,7 +447,7 @@ def main(argv=None) -> int:
     write_mdu(d, case, args, start, stop, three_d, three_d)
     (d / "case.json").write_text(json.dumps(dict(
         case=case, start=str(start), stop=str(stop), kmx=args.kmx, vertical=args.vertical,
-        zos_offset=offset, boundary_velocity=args.boundary_velocity,
+        zos_offset=offset, boundary_velocity=args.boundary_velocity, thin_dams=thin_dams,
         tidal_forcing=args.tidal_forcing, pavbnd=args.pavbnd, riemann_factor=args.riemann_factor,
         refdate=str(REFDATE),
         stations={k: v[:2] for k, v in st.items()}), indent=2))
