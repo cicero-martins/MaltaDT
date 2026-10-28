@@ -67,13 +67,39 @@ The six faces that remain at or above zero lie on the outer shore of Sliema and 
 
 *Face bed level, the mean of the node levels as computed under bedLevType = 3, in Marsamxett (top), the Grand Harbour (centre) and at the Manoel Island bridge (bottom) for version 02 (left) and version 03 (right). Faces at or above zero in grey. The coastline drawn is the opened one.*
 
-## 4. Consequences for the results to date
+## 4. Breakwaters at the Grand Harbour mouth
+
+The mesh is cut from the coastline by deleting the faces whose circumcentre lies on land. A structure narrower than a face therefore leaves the faces on both sides wet, and the flow links between them pass through it. The St Elmo breakwater is a detached polygon of 5 775 m² over some 380 m, about 15 m wide on average, and the Ricasoli breakwater an arm of the mainland polygon some 95 m long, while the faces at the harbour mouth measure 35 to 45 m. Over the harbours and their approaches, 195 of some 17 900 wet links of version 03 cross land by more than 2 m and 29 by more than 10 m. Those that cross the two breakwaters carry the flow through them, which appears in the interactive maps as currents passing across the St Elmo breakwater. The remainder lie on the pontoons of the Msida marina, on the coast of St Julian's outside the harbours and at single corners of the shore.
+
+The breakwaters are closed by thin dams, which in D-Flow FM close every flow link crossing a polyline over all layers without refining the mesh. `scripts/build_breakwater_thindams.py` takes as each thin dam the boundary of the land within a box drawn around one structure. A link crosses that boundary only where it passes through land inside the box, so the thin dams close the links through the breakwaters and leave the gap of some 40 m between the St Elmo breakwater and the shore, under the bridge, open. They are written as `malta_v03_thd.pli` and `malta_outer03_thd.pli` beside the networks, and `build_hindcast_v02.py` and `build_longwave_scenario.py` declare them in the MDU whenever the file is present, `--no-thin-dams` leaving them out.
+
+![Thin dams at the Grand Harbour mouth](../figures/breakwater_thindams.png)
+
+*Mesh version 03 at the mouth of the Grand Harbour, with the coastline, the thin dams and the flow links they close, the links being drawn between face centres. Drawn by `build_breakwater_thindams.py --figure`.*
+
+| Disturbance from the northeast at 130 km/h, 15 km long, outer03 | Peak without thin dams | Peak with thin dams |
+|---|---|---|
+| Offshore, 4 km | 5.8 | 5.8 |
+| Grand Harbour mouth | 7.9 | 8.0 |
+| Senglea | 13.9 | 14.1 |
+| Marsa | 18.5 | 18.6 |
+| Marsamxett mouth | 8.4 | 8.3 |
+| Head of Msida Creek | 12.9 | 12.8 |
+
+Peaks in units of the static response.
+
+The thin dams close 6 links at St Elmo and 7 at Ricasoli on both meshes, and in a run with map output the normal velocity on the 12 edges closed by D-Flow FM is zero throughout, against up to 0.96 m/s on the open edges nearby. In the scenario of largest response of the sweep ([longwave_sweep.md](longwave_sweep.md)) the peaks change by 2 per cent or less and the 22.5-minute oscillation of the Grand Harbour is unchanged, so the area that the leak added to the entrance did not bear on the long-wave response. The spectrum at the head of Msida Creek holds peaks of nearly equal height at 16.4 and 27.7 minutes, and their order exchanges between the two runs. The thin dams bear more on the circulation and the renewal, since a leak across a breakwater opens a path for exchange that the structure closes, and they are part of every run from here on.
+
+The pontoons of the Msida marina are taken as floating and are left open, a working assumption to be confirmed with the group.
+
+## 5. Consequences for the results to date
 
 The sweep of the long wave ([longwave_sweep.md](longwave_sweep.md)) and the interactive maps were computed on outer01, with the marina basin at the head of Msida Creek and the shipyard basin at Marsa dry, Lazzaretto Creek closed at its head, and the station at the head of Msida Creek placed 261 m from the intended point. The responses at Marsa and at the heads of Msida and Pietà Creeks are expected to change on outer03, and the sweep is to be repeated before those values are used. The response at Senglea and off the harbours, where the bed is unchanged, is not expected to change materially.
 
-## 5. Matters open
+## 6. Matters open
 
 1. Confirmation of the limits of Section 1 against the pontoons mapped in imagery or in OpenStreetMap.
 2. The depth of the shipyard basin at Marsa beneath the moored vessels.
 3. The span and depth of the passage under the Manoel Island bridge, and whether other bridges in the harbours close water in the supplied coastline.
 4. The removed cells mark the footprint of pontoons and moored vessels at the time of the survey, and serve as a first map of the floating structures, whose effect on the surface flow can be represented in D-Flow FM through a forced ice cover of prescribed thickness and area fraction (User Manual, Sections 12.14 and 16). The fixed piers on piles can be represented by the rigid vegetation model of cylinders (Section 13.4).
+5. Whether the pontoons of the Msida marina are floating, as taken in Section 4, and whether the links crossing the coast at St Julian's mark a structure that the supplied coastline draws too narrow for the mesh.
