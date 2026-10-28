@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "model" / "tests" / "longwave_portal_runs"
 OUT = ROOT / "outputs" / "longwave_portal"
 TABLE = ROOT / "data" / "processed" / "longwave_sweep_response.csv"
+MESH = "outer03"                 # with the breakwater thin dams, declared by default
 SIGMA_KM = 15
 T_TOTAL = 6 * 3600.0
 MAP_INTERVAL = 240.0
@@ -47,7 +48,7 @@ def selection():
     for h in ORDER:
         r = best.loc[h]
         speed = int(r.speed)
-        rows.append(dict(heading=h, speed=speed, case=f"outer01_h{h:03d}_u{speed:02d}_s{SIGMA_KM:02d}",
+        rows.append(dict(heading=h, speed=speed, case=f"{MESH}_h{h:03d}_u{speed:02d}_s{SIGMA_KM:02d}",
                          offshore=float(r.offshore_4km), senglea=float(r.senglea),
                          marsa=float(r.marsa_head), msida=float(r.msida_head)))
     return rows
@@ -61,7 +62,7 @@ def build_one(sc: dict) -> tuple[str, int, float]:
     with open(log, "w") as f:
         rc = subprocess.call(
             [sys.executable, str(Path(__file__).with_name("build_longwave_scenario.py")),
-             "--mesh", "outer01", "--heading", str(sc["heading"]), "--speed", str(sc["speed"]),
+             "--mesh", MESH, "--heading", str(sc["heading"]), "--speed", str(sc["speed"]),
              "--sigma-along", str(SIGMA_KM * 1e3), "--tag", f"_s{SIGMA_KM:02d}",
              "--t-total", str(T_TOTAL), "--map-interval", str(MAP_INTERVAL), "--out", str(RUNS)],
             stdout=f, stderr=subprocess.STDOUT)

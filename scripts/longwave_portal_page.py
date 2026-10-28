@@ -146,7 +146,8 @@ Msida Creek.</p>
 reproduces no particular event. A pressure rise of 2 hPa, 15 km long and 50 km wide, crosses the
 Sicily Channel on a straight track of 400 km through the harbours at constant speed, and the
 model computes the response of the sea in two dimensions over a domain of 419 by 361 km, with
-cells of 15 m inside the harbours. A sweep of 96 such scenarios, over six speeds, eight
+cells of 15 m inside the harbours and the two breakwaters at the mouth of the Grand Harbour
+closed to the flow. A sweep of 96 such scenarios, over six speeds, eight
 directions and two lengths, gives the response of the harbours as a function of the disturbance.
 The eight maps are the scenarios of largest response for each direction.</p>
 
