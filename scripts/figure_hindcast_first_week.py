@@ -1,7 +1,10 @@
 """Figures of the first hindcast week on mesh v03 against CMEMS, ERA5 and BLUE.
 
-Three figures are written to figures/:
+Four figures are written to figures/:
 
+- hindcast_week_map.png: mesh and bed depth of domain B, the open boundary,
+  the stations and the area of the spurious surface currents, with the
+  harbours and the BLUE buoy in a second panel;
 - hindcast_week_level_forcing.png: water level at the BLUE station against the
   CMEMS sea surface height, less the offset removed at the boundary, and ERA5
   wind speed and pressure against the buoy;
@@ -12,7 +15,7 @@ Three figures are written to figures/:
   from the open plateau to the mouth of the Grand Harbour.
 
 Usage:
-    python figure_hindcast_first_week.py [model/hindcast/v03_3d20_0722_0801]
+    python figure_hindcast_first_week.py [model/hindcast/v03_3d20_0722_0801] [--map-only]
 """
 
 from __future__ import annotations
@@ -60,15 +63,103 @@ def layer_series(st, name, depth):
     return pd.Series(st[name].values[np.arange(len(k)), k], index=st["time"].values)
 
 
+def plot_map(case, meta, plt):
+    """Mesh, bed level and the points of reference of the document."""
+    import math
+
+    import geopandas as gpd
+    import xugrid as xu
+    from matplotlib.collections import LineCollection, PolyCollection
+    from matplotlib.patches import Rectangle
+
+    uds = xu.open_dataset(next(case.glob("*_net.nc")))
+    g = uds.grid
+    zn = uds["mesh2d_node_z"].values
+    fn = g.face_node_connectivity
+    polys = [np.c_[g.node_x[r[r >= 0]], g.node_y[r[r >= 0]]] for r in fn]
+    zf = np.array([zn[r[r >= 0]].mean() for r in fn])
+    segs = np.c_[g.node_x, g.node_y][g.edge_node_connectivity]
+    coast = gpd.read_file(ROOT / "data" / "processed" / "malta_coastline_wgs84_open.gpkg")
+    bnd = np.loadtxt(next(case.glob("*_bnd.pli")), skiprows=2)
+    st = meta["stations"]
+    offshore = {"blue_buoy": "BLUE buoy", "plateau_north": "plateau, north edge",
+                "plateau_east": "plateau, east", "offshore_4km": "offshore, 4 km"}
+    harbour = {"blue_buoy": "BLUE buoy", "offshore_4km": "offshore, 4 km",
+               "gh_mouth": "Grand Harbour mouth", "mx_mouth": "Marsamxett mouth",
+               "senglea": "Senglea", "french_creek": "French Creek",
+               "dockyard_creek": "Dockyard Creek", "marsa_head": "Marsa",
+               "sliema_creek": "Sliema Creek", "msida_head": "Msida Creek",
+               "pieta_head": "Pietà Creek"}
+    slope_box = (14.25, 35.76, 14.34, 35.83)        # spurious currents of Section 7
+    harbour_box = (14.480, 35.872, 14.560, 35.936)
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 6.2), gridspec_kw=dict(width_ratios=[1.45, 1]))
+    for ax, box, lw in ((axes[0], None, 0.12), (axes[1], harbour_box, 0.15)):
+        pc = ax.add_collection(PolyCollection(polys, array=-zf, cmap="Blues", clim=(0, 1200),
+                                              linewidths=0))
+        ax.add_collection(LineCollection(segs, colors="#52514e", linewidths=lw, alpha=0.6))
+        coast.plot(ax=ax, color="#e7e6e1", edgecolor="#8a8984", linewidth=0.5)
+        ax.set_aspect(1 / math.cos(math.radians(36.0)))
+        for side in ("top", "right"):
+            ax.spines[side].set_visible(False)
+    ax = axes[0]
+    ax.plot(bnd[:, 0], bnd[:, 1], color=C_CMEMS, lw=2.0, label="open boundary, Riemann")
+    ax.add_patch(Rectangle(slope_box[:2], slope_box[2] - slope_box[0], slope_box[3] - slope_box[1],
+                           fill=False, ec="#c0392b", lw=1.4, ls="--"))
+    ax.annotate("spurious surface\ncurrents, Section 7", (slope_box[2], slope_box[1]),
+                xytext=(4, 0), textcoords="offset points", ha="left", va="bottom",
+                fontsize=8, color="#c0392b")
+    ax.add_patch(Rectangle(harbour_box[:2], harbour_box[2] - harbour_box[0],
+                           harbour_box[3] - harbour_box[1], fill=False, ec=INK, lw=1.0))
+    for name, label in offshore.items():
+        if name == "offshore_4km":
+            continue
+        x, y = st[name]
+        ax.plot(x, y, "o", ms=6, mfc="#f2c14e" if name == "blue_buoy" else "white", mec=INK, mew=1.0)
+        ax.annotate(label, (x, y), xytext=(6, 4), textcoords="offset points", fontsize=8.5,
+                    color=INK)
+    ax.set_xlim(14.00, 15.06)
+    ax.set_ylim(35.66, 36.34)
+    ax.set_title("Domain B, mesh v03 and bed depth", fontsize=10, loc="left")
+    ax.legend(frameon=False, fontsize=8.5, loc="lower right")
+    ax = axes[1]
+    # label offsets chosen by hand to keep the names clear of one another
+    offsets = {"blue_buoy": (6, 6), "offshore_4km": (6, -10), "gh_mouth": (6, -2),
+               "mx_mouth": (6, 8), "senglea": (-6, 0), "french_creek": (6, -8),
+               "dockyard_creek": (6, 2), "marsa_head": (-6, -8), "sliema_creek": (-6, -7),
+               "msida_head": (-6, 0), "pieta_head": (-6, -6)}
+    for name, label in harbour.items():
+        x, y = st[name]
+        dx, dy = offsets[name]
+        ax.plot(x, y, "o", ms=5.5, mfc="#f2c14e" if name == "blue_buoy" else "white",
+                mec=INK, mew=1.0)
+        ax.annotate(label, (x, y), xytext=(dx, dy), textcoords="offset points", fontsize=8,
+                    ha="left" if dx > 0 else "right", va="center", color=INK)
+    ax.set_xlim(harbour_box[0], harbour_box[2])
+    ax.set_ylim(harbour_box[1], harbour_box[3])
+    ax.set_title("Valletta harbours and the BLUE buoy", fontsize=10, loc="left")
+    fig.colorbar(pc, ax=axes, label="bed depth, m", shrink=0.75)
+    fig.savefig(ROOT / "figures" / "hindcast_week_map.png", dpi=150, facecolor=SURFACE,
+                bbox_inches="tight")
+    plt.close(fig)
+
+
 def main(argv=None) -> int:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
 
+    argv = list(argv or [])
+    map_only = "--map-only" in argv
+    argv = [a for a in argv if a != "--map-only"]
     case = Path(argv[0]) if argv else CASE
     case = case if case.is_absolute() else ROOT / case
     meta = json.loads((case / "case.json").read_text())
+    plot_map(case, meta, plt)
+    if map_only:
+        print("figure written to", ROOT / "figures" / "hindcast_week_map.png")
+        return 0
     his = ah.open_his(case)
     t0, t1 = pd.Timestamp(meta["start"]), pd.Timestamp(meta["stop"])
     blue = pd.read_csv(ah.BLUE_CSV, parse_dates=["timestamp"], index_col="timestamp")[t0:t1]
