@@ -16,7 +16,9 @@ in the page:
    centres at the stretched sigma written by FM rather than at uniform sigma;
 4. the link back, to the map of the hindcast beside which the pages are written;
 5. the lengths of the arrows, scaled from a lagoon some 10 km long and 2 m deep
-   to harbours some 4 km long and 30 m deep.
+   to harbours some 4 km long and 30 m deep;
+6. the camera on opening, from the southwest, which looks up both harbours
+   from their heads toward the mouths.
 
 The frames are thinned to one an hour by default, which keeps the payload of
 three days near the size of the Stagnone pages.
@@ -60,6 +62,13 @@ ARROW_SCALES = [("S.av[i], null, 0.30,", "S.av[i], null, 0.12,"),
                 ("s.aw[i], 0.22,", "s.aw[i], 0.10,"),
                 ("DZMAX = 0.25, DZREF = 0.12;", "DZMAX = 3.0, DZREF = 1.5;")]
 
+# The opening camera and the preset that returns to it, both in the
+# normalised scene box, set to the southwest preset of the page.
+OPENING_CAMERA = [("camera:{eye:{x:0.95 * ZOOM, y:-0.40 * ZOOM, z:0.45 * ZOOM}",
+                   "camera:{eye:{x:-0.62 * ZOOM, y:-0.72 * ZOOM, z:0.45 * ZOOM}"),
+                  ("['Initial', {eye:{x:0.95, y:-0.40, z:0.45}, up:UP}],",
+                   "['Initial', {eye:{x:-0.62, y:-0.72, z:0.45}, up:UP}],")]
+
 STAGNONE_LABELS = "const SECTION_LABEL = {ns_axis:'N–S section', ew_centre:'E–W section'};"
 STAGNONE_BACK = '<a href="../../index.html">&larr; WetWise portal</a>'
 UNIFORM_LAYERS = """// layer centres sit at sigma = (k + 1/2) / nk
@@ -99,6 +108,10 @@ def adapt(template: str) -> str:
             out = out.replace(old, new)
         elif "function arrows(" in out:
             raise SystemExit(f"Stagnone page changed: {old} not found")
+    for old, new in OPENING_CAMERA:
+        if old not in out:
+            raise SystemExit(f"Stagnone page changed: {old} not found")
+        out = out.replace(old, new)
     if labels not in out or "Valletta hindcast map" not in out:
         raise SystemExit("Stagnone page changed: labels or link not found")
     return out
