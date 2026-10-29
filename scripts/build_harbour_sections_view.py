@@ -20,12 +20,16 @@ in the page:
 6. the camera on opening, from the southwest, which looks up both harbours
    from their heads toward the mouths.
 
-The frames are thinned to one an hour by default, which keeps the payload of
-three days near the size of the Stagnone pages.
+The default window is the validation week, which holds calm days on either
+side of the northwesterly wind of 26 to 31 July, strongest from 27 to 29 July. The map output at 30 minutes
+is thinned to one frame an hour, since the browser downloads and parses the
+whole payload before drawing, and the week takes some 42 and 58 MB hourly
+against 82 and 115 MB at 30 minutes. Elevations and surface speeds are
+rounded to centimetres and cm/s.
 
 Usage:
     python build_harbour_sections_view.py v03_3d20s_0722_0801_uv_thd
-        [--start 2025-07-26T12:00] [--stop 2025-07-29T12:00] [--every 2]
+        [--start 2025-07-25T00:00] [--stop 2025-08-01T00:00] [--every 2]
 """
 
 from __future__ import annotations
@@ -83,6 +87,13 @@ function layerAt(F, i0, i1, al, p, sig, nk) {
   const t = Math.max(0, Math.min(1, (sig - SIGC[k]) / (SIGC[k + 1] - SIGC[k])));"""
 
 
+def coarsen(a, nd: int):
+    """Nested list rounded to nd decimals, None kept."""
+    if isinstance(a, list):
+        return [coarsen(x, nd) for x in a]
+    return None if a is None else round(a, nd)
+
+
 def read_coast(_path=None) -> dict:
     """Outlines of the land polygons near the harbours, in the form of _read_ldb."""
     land = gpd.read_file(COAST).clip(box(14.47, 35.86, 14.55, 35.93))
@@ -122,7 +133,7 @@ def main(argv=None) -> int:
     ap.prog = "build_harbour_sections_view.py"
     ap.add_argument("case")
     ap.add_argument("--every", type=int, default=2, help="keep one frame in N")
-    ap.set_defaults(cache=None, start="2025-07-26T12:00", stop="2025-07-29T12:00",
+    ap.set_defaults(cache=None, start="2025-07-25T00:00", stop="2025-08-01T00:00",
                     title="Valletta harbours, vertical sections")
     for a in ap._actions:
         if a.dest == "cache":
@@ -143,6 +154,13 @@ def main(argv=None) -> int:
 
     payload = vw.build_payload(ds, args)
     payload["sigma"] = [round(float(s), 5) for s in sigma]
+    # the Stagnone payload keeps millimetres and mm/s; centimetres of elevation
+    # and cm/s of surface speed are below what the scene resolves, and halve
+    # the largest fields
+    payload["mesh"]["z"] = coarsen(payload["mesh"]["z"], 2)
+    payload["mesh"]["speed"] = coarsen(payload["mesh"]["speed"], 2)
+    for sec in payload["sections"].values():
+        sec["z"] = coarsen(sec["z"], 2)
     vw.write_page(payload, adapt(vw.TEMPLATE), out / "index.html", args.title)
     pv.add_particle_fields(ds, payload)
     vw.write_page(payload, adapt(pv.TEMPLATE), out / "particles.html", args.title)

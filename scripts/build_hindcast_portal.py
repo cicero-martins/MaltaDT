@@ -59,7 +59,7 @@ PAGE_TEXT = (
      '        <div class="s3-r"><a href="sections/v04AE/particles.html">Particles</a>'
      '<a href="sections/v04AE/index.html">Arrows</a></div>',
      '<div class="s3-m">Axis and central cross section of the Grand Harbour and of Marsamxett, '
-     '26 to 29 July 2025, hourly</div>\n'
+     '25 July to 1 August 2025, hourly</div>\n'
      '        <div class="s3-r"><a href="sections/particles.html">Particles</a>'
      '<a href="sections/index.html">Arrows</a></div>'),
 )
