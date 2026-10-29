@@ -50,6 +50,18 @@ PAGE_TEXT = (
     ("zoom in for lagoon detail", "zoom in for harbour detail"),
     ("water level (m)", "water level (cm)"),
     ("yaxis:{...ax,title:{text:'m',font:{size:9}}}", "yaxis:{...ax,title:{text:'cm',font:{size:9}}}"),
+    # the sections of the lagoon members give way to those of the harbours,
+    # written to sections/ beside the page by build_harbour_sections_view.py
+    ('<div class="s3-m">WV- &middot; waves and canopy, fixed bed, stratified initial state</div>\n'
+     '        <div class="s3-r"><a href="sections/WV-/particles.html">Particles</a>'
+     '<a href="sections/WV-/index.html">Arrows</a></div>\n'
+     '        <div class="s3-m">v04AE &middot; uniform initial state, outside the Paper 1 ensemble</div>\n'
+     '        <div class="s3-r"><a href="sections/v04AE/particles.html">Particles</a>'
+     '<a href="sections/v04AE/index.html">Arrows</a></div>',
+     '<div class="s3-m">Axis and central cross section of the Grand Harbour and of Marsamxett, '
+     '26 to 29 July 2025, hourly</div>\n'
+     '        <div class="s3-r"><a href="sections/particles.html">Particles</a>'
+     '<a href="sections/index.html">Arrows</a></div>'),
 )
 
 
