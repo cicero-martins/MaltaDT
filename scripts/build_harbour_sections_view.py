@@ -73,7 +73,35 @@ OPENING_CAMERA = [("camera:{eye:{x:0.95 * ZOOM, y:-0.40 * ZOOM, z:0.45 * ZOOM}",
                   ("['Initial', {eye:{x:0.95, y:-0.40, z:0.45}, up:UP}],",
                    "['Initial', {eye:{x:-0.62, y:-0.72, z:0.45}, up:UP}],")]
 
-STAGNONE_LABELS = "const SECTION_LABEL = {ns_axis:'N–S section', ew_centre:'E–W section'};"
+# The dark theme of the hindcast map, which opens dark, in place of the theme
+# of the operating system that the Stagnone pages follow.
+DARK_TOKENS = ":root { --bg:#0d1117; --ink:#e6edf3; --muted:#9aa7b4; --line:#1f2937; }"
+THEME = [(":root { --bg:#ffffff; --ink:#1b1b1b; --muted:#6b6b6b; --line:#e3e2de; }", DARK_TOKENS),
+         (":root { --bg:#16171a; --ink:#ececec; --muted:#a0a0a0; --line:#33343a; }", DARK_TOKENS),
+         ("const dark = matchMedia('(prefers-color-scheme: dark)').matches;", "const dark = true;"),
+         ("const BG = dark ? '#16171a' : '#ffffff';", "const BG = '#0d1117';")]
+
+# Every redraw passes layout.scene.camera, which the Stagnone pages update only
+# from the relayout event at the end of a drag, so a redraw during the drag,
+# every 50 ms in the particle view and every frame while playing, returns the
+# camera to where it stood before. The camera is read from the scene before
+# each redraw, and redraws wait while the mouse button is held.
+LIVE_CAMERA = """const el = document.getElementById('scene');
+let DRAG = false;
+el.addEventListener('mousedown', () => { DRAG = true; }, true);
+window.addEventListener('mouseup', () => { DRAG = false; }, true);
+function liveCamera() {
+  const s = el._fullLayout && el._fullLayout.scene && el._fullLayout.scene._scene;
+  if (s && s.getCamera) layout.scene.camera = s.getCamera();
+}"""
+CAMERA = [("const el = document.getElementById('scene');", LIVE_CAMERA),
+          ("function show(i) { Plotly.react(el",
+           "function show(i) { if (DRAG) return; liveCamera(); Plotly.react(el"),
+          ("function show(i) {\n  busy = true; shown = i;",
+           "function show(i) {\n  liveCamera();\n  busy = true; shown = i;"),
+          ("  if (busy) return;", "  if (busy || DRAG) return;")]
+
+STAGNONE_LABELS ="const SECTION_LABEL = {ns_axis:'N–S section', ew_centre:'E–W section'};"
 STAGNONE_BACK = '<a href="../../index.html">&larr; WetWise portal</a>'
 UNIFORM_LAYERS = """// layer centres sit at sigma = (k + 1/2) / nk
 function layerAt(F, i0, i1, al, p, sig, nk) {
@@ -123,6 +151,15 @@ def adapt(template: str) -> str:
         if old not in out:
             raise SystemExit(f"Stagnone page changed: {old} not found")
         out = out.replace(old, new)
+    for old, new in THEME + CAMERA:
+        out = out.replace(old, new)
+    particles = "function tick()" in out
+    for marker in ["const dark = true;", DARK_TOKENS, "liveCamera(); ", "let DRAG"] + \
+            (["const BG = '#0d1117';", "if (busy || DRAG) return;"] if particles else []):
+        if marker not in out and not (marker == "liveCamera(); " and particles):
+            raise SystemExit(f"Stagnone page changed: {marker} not applied")
+    if particles and "  liveCamera();\n  busy = true;" not in out:
+        raise SystemExit("Stagnone page changed: camera of the particle view not applied")
     if labels not in out or "Valletta hindcast map" not in out:
         raise SystemExit("Stagnone page changed: labels or link not found")
     return out
