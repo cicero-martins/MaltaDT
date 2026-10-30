@@ -19,6 +19,11 @@ set -euo pipefail
 
 CASE="$(realpath "$1")"
 N="$2"
+# ~/MaltaDT/model/hindcast links to the data disk, mounted with nofail, so a
+# disk absent at boot leaves /storage an empty directory rather than an error.
+if [[ "$CASE" == /storage/* ]] && ! mountpoint -q /storage; then
+    echo "ERROR: /storage is not mounted"; exit 3
+fi
 # build_hindcast_v02.py names the MDU after the case directory. A pattern on
 # the partition suffix _NNNN.mdu would also match a case named after its dates.
 MDU="${3:-$(basename "$CASE").mdu}"
