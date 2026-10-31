@@ -383,6 +383,9 @@ wrimap_velocity_magnitude = 0
 wrimap_waterlevel_s0  = 0
 wrimap_numlimdt       = 0
 rstInterval           = 0.0
+# Volumes, fluxes and vertical diffusivity for D-Water Quality run offline,
+# averaged over the interval, so that the transport conserves mass
+waqInterval           = {args.waq_interval:.1f}
 """)
 
 
@@ -404,6 +407,8 @@ def main(argv=None) -> int:
                     help="smoothing time of the boundary signal at the start, s")
     ap.add_argument("--dt-max", type=float, default=30.0)
     ap.add_argument("--map-interval", type=float, default=3600.0)
+    ap.add_argument("--waq-interval", type=float, default=0.0,
+                    help="interval of the hydrodynamics written for D-WAQ, s, 0 for none")
     ap.add_argument("--secchi", type=float, default=10.0, help="working value, m")
     ap.add_argument("--parallel", type=int, default=1, help="number of MPI domains")
     ap.add_argument("--boundary-velocity", action="store_true",
@@ -449,7 +454,7 @@ def main(argv=None) -> int:
         case=case, start=str(start), stop=str(stop), kmx=args.kmx, vertical=args.vertical,
         zos_offset=offset, boundary_velocity=args.boundary_velocity, thin_dams=thin_dams,
         tidal_forcing=args.tidal_forcing, pavbnd=args.pavbnd, riemann_factor=args.riemann_factor,
-        refdate=str(REFDATE),
+        waq_interval=args.waq_interval, refdate=str(REFDATE),
         stations={k: v[:2] for k, v in st.items()}), indent=2))
     print(f"written {d}")
     if args.no_run:
