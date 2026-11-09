@@ -7,7 +7,8 @@ polyline and shifted by one uniform offset, its mean over the run along the
 boundary, since the CMEMS height is referred to the state of rest of NEMO and
 the bathymetry to a surface near mean sea level, and no tide gauge records the
 window to fix the relation between the two. In three dimensions salinity and
-temperature enter at the boundary from the daily CMEMS reanalysis and the
+temperature enter at the boundary from the daily CMEMS fields, of the
+reanalysis to 2025 and of the analysis-forecast product in 2026, and the
 initial three-dimensional fields are those of the first day, read through the
 nudging file with iniWithNudge = 2, which initialises without nudging.
 
@@ -25,6 +26,8 @@ MIN_STATION_DEPTH.
 Usage:
     python build_hindcast_v02.py --kmx 0 --start 2025-07-22 --stop 2025-07-24 --tag tf0
     python build_hindcast_v02.py --kmx 20 --start 2025-07-22 --stop 2025-08-01
+    python build_hindcast_v02.py --kmx 20 --vertical sigma_stretched --boundary-velocity \\
+        --start 2026-05-17 --stop 2026-05-22 --forcing 2026-05 --tag _uv_thd_2026
 """
 
 from __future__ import annotations
@@ -390,7 +393,7 @@ waqInterval           = {args.waq_interval:.1f}
 
 
 def main(argv=None) -> int:
-    global MESH_VERSION, MESH, NAME
+    global MESH_VERSION, MESH, NAME, CMEMS, ERA5, REFDATE
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--mesh", default=MESH_VERSION, help="v02 or v03")
     ap.add_argument("--kmx", type=int, default=0, help="number of layers, 0 for 2D")
@@ -398,6 +401,8 @@ def main(argv=None) -> int:
     ap.add_argument("--start", default="2025-07-22")
     ap.add_argument("--stop", default="2025-07-24")
     ap.add_argument("--tag", default="")
+    ap.add_argument("--forcing", default="2025-07",
+                    help="label of the forcing directories, data/raw/cmems_<label> and era5_<label>")
     ap.add_argument("--tidal-forcing", type=int, default=0)
     ap.add_argument("--riemann-factor", type=float, default=0.5,
                     help="factor on the CMEMS height prescribed as the incoming Riemann signal")
@@ -417,6 +422,10 @@ def main(argv=None) -> int:
                     help="leave the breakwaters open even where a thin dam file exists")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args(argv)
+    CMEMS = ROOT / "data" / "raw" / f"cmems_{args.forcing}"
+    ERA5 = ROOT / "data" / "raw" / f"era5_{args.forcing}"
+    # the first day of the month of the start, 2025-07-01 for the cases of July 2025
+    REFDATE = pd.Timestamp(args.start).to_period("M").start_time
     MESH_VERSION = args.mesh
     MESH = ROOT / "data" / "processed" / f"mesh_{MESH_VERSION}"
     NAME = f"malta_{MESH_VERSION}"
