@@ -47,7 +47,19 @@ A deployment is a bracket of time within which a unit was at sea, read from the 
 
 In May the two units were released together some 500 m off the north coast of Malta, drifted eastward away from it to some 3.7 km offshore and then southeastward back to it, at a median of 0.14 m/s, to within 50 m of the shore after 26 hours and some 10 km from the release point. Both then show temperatures rising to 29 to 36 °C and positions moving at road speed, the recovery of the units. The first fix of the deployment follows a gap of 5.7 days in transmission, so the time of release is not known more closely than that fix.
 
+![Deployment of 20 to 21 May 2026 inside domain B](../figures/drifters_2026_may.png)
+
+*Drifting tracks of units 9 and 11 from 20 May 07:58 to 21 May 09:57 UTC over the bed levels of mesh v03, with the elapsed time marked every 6 hours (a), the speed of each unit from fix to fix with the wind at the BLUE buoy (b), and the temperature of the sensors (c). Drawn by `scripts/figure_drifters_2026.py`.*
+
+The two units remain within 50 m of each other in the median and 560 m at most, so that the May deployment amounts to one trajectory sampled twice. Their speed rises from 0.1 to 0.26 m/s overnight as they turn south toward the coast, while the wind at the buoy falls from 9 to 3 m/s.
+
 In July the units left Marsa, at the head of the Grand Harbour, aboard a vessel shortly after 06:20 UTC. Unit 11 drifts from 36.17 N and unit 9 from some 11 km to the south-southwest 30 minutes later. Both drifted southeastward, passed 8 to 13 km east of the harbour mouths and crossed the southern boundary of domain B after 55 to 57 hours, at a median of 0.25 to 0.27 m/s. They continued across the Ionian Sea into the Gulf of Sirte, where unit 11 grounded on 10 September and unit 9 was carried at vessel speed on 18 September. Within domain B the two July tracks run 6 to 12 km apart.
+
+![Deployment of 6 to 8 July 2026 inside domain B](../figures/drifters_2026_jul.png)
+
+*Drifting tracks of units 9 and 11 from 6 July 08:21 UTC to their crossing of the southern boundary of domain B on 8 July, as in the figure of May, with the BLUE buoy.*
+
+The speed of both units varies between 0.1 and 0.56 m/s with maxima some 21 hours apart, on the morning of 7 July and early on 8 July, which coincide with the maxima of the wind at the buoy and lie close to the inertial period of 20.5 hours at this latitude, so that the record alone does not separate the two. The temperature of the sensors rises from 26 to 29 and 30 °C around midday of 6 July under a wind of 1 to 2 m/s and returns to 25.5 °C as the wind rises, a diurnal warming of the surface layer under calm conditions which suggests that the sensor lies within the uppermost decimetres of the water.
 
 Unit 12 transmitted from land and from aboard a vessel between 16 and 19 July and from 21 July held a fixed point at 36.006 N, 14.431 E, some 5 km off the north coast. Its positions span 60 to 70 m over three months, consistent with a mooring, and its temperature falls smoothly from 29 to 22 °C over August to October with a diurnal range of 0.7 °C in the median. It records the sea surface temperature at a fixed point rather than transport.
 
