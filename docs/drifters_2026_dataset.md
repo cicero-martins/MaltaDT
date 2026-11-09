@@ -1,6 +1,6 @@
 # The drifter record of 2026
 
-*Received 9 November 2026 from Prof. Adam Gauci of the Oceanography Malta Research Group as three files, `SST_DATA_9.csv`, `SST_DATA_11.csv` and `SST_DATA_12.csv`, held at `data/raw/drifters/` and not versioned. Classified by `scripts/prepare_drifters_2026.py`, which writes `data/processed/drifters_2026.csv` and the figure `figures/drifters_2026_overview.png`.*
+*Received 31 October 2026 from Prof. Adam Gauci of the Oceanography Malta Research Group as three files, `SST_DATA_9.csv`, `SST_DATA_11.csv` and `SST_DATA_12.csv`, held at `data/raw/drifters/` and not versioned. Classified by `scripts/prepare_drifters_2026.py`, which writes `data/processed/drifters_2026.csv` and the figure `figures/drifters_2026_overview.png`.*
 
 The three units transmit position and the temperature of their sensor at about 30 minutes. Two of them were released twice off the north and northeast coasts of Malta, on 20 May and on 6 July 2026, and are the first observation of Lagrangian transport available in the domain of the model. The third was held at a fixed point off the north coast from 21 July to the end of the record.
 
@@ -69,11 +69,22 @@ The two deployments test the surface currents of the model in conditions that di
 
 The temperature of the drifting units and of unit 12 provides a measure of sea surface temperature in 2026, when the temperature sensor of the BLUE buoy is out of operation, and bears on the cold bias of 1.4 °C of the top layer found in the hindcast of 2025.
 
-### Proposed run
+### Runs for the deployments
 
-A single three-dimensional run from 17 May to 9 July 2026 would cover both deployments with three days of spin-up before the first, in the working configuration of the hindcast (mesh v03, 20 stretched sigma layers, daily CMEMS current at the boundary, breakwaters closed by thin dams). At 0.38 h of simit-server per simulated day the 53 days cost about 20 hours on 12 cores, with some 85 GB of map output at 30 minutes. The same run would serve as the run of about two months required for the renewal of the harbours ([harbour_renewal_particles.md](harbour_renewal_particles.md), Section 9), with the drifters as a test of the Lagrangian transport on which the renewal estimate rests, and the BLUE record of current, wind, waves and pressure covers the window. The alternative, two short runs of 17 to 22 May and 3 to 9 July at some 2 hours each, would test the drifter tracks alone.
+Each deployment is covered by its own three-dimensional run in the working configuration of the hindcast (mesh v03, 20 stretched sigma layers, daily CMEMS current at the boundary, breakwaters closed by thin dams), with three days of spin-up before the first drifting fix.
 
-The run requires changes to the forcing chain. The CMEMS Mediterranean reanalysis does not extend to 2026, and the three-dimensional boundary fields would come from the analysis and forecast product, `cmems_mod_med_phy-{cur,sal,temp}_anfc_4.2km_P1D-m`, which the download script does not yet select. ERA5 covers the window.
+| Run | Window (UTC) | Simulated days | FM on simit-server, 12 cores |
+|---|---|---|---|
+| May | 17 May 00:00 to 22 May 00:00, 2026 | 5 | about 2 h |
+| July | 3 July 00:00 to 9 July 00:00, 2026 | 6 | about 2.3 h |
+
+*Costs at 0.38 h of simit-server per simulated day, measured on the working configuration when the server is otherwise idle.*
+
+The CMEMS Mediterranean reanalysis does not extend to 2026, so the boundary fields come from the analysis and forecast product, the sea surface height at 15 minutes and the daily currents, salinity and temperature (`cmems_mod_med_phy-{cur,sal,tem}_anfc_4.2km_P1D-m`), selected in `scripts/download_cmems_hindcast.py` by `--product anfc`. The hourly surface currents of the same product (`cmems_mod_med_phy-cur_anfc_4.2km-2D_PT1H-m`) are downloaded with `--surface-hourly` as the reference field of the evaluation. ERA5 covers both windows, and the BLUE record of current, wind, waves and pressure covers both.
+
+The runs of the renewal of the harbours, in winter and in summer, are separate and longer ([harbour_renewal_particles.md](harbour_renewal_particles.md), Section 9).
+
+### Evaluation
 
 The evaluation would follow the drifter validation of the model of the Stagnone di Marsala lagoon in western Sicily (StagnoneDT), on which the present configuration is built, with OpenDrift advecting particles in the top-layer currents of the model, interpolated onto a regular grid over the tracks, released at each observed position and scored against the observed track by separation distance and by the skill score of Liu and Weisberg (2011), the cumulative separation normalised by the cumulative length of the observed track. Releases repeated every 6 hours along each track would give some 14 scored segments of 24 hours, two in May and twelve in July. The same computation on the CMEMS surface currents alone would show whether the model improves on the field that forces its boundary. Since the drogue of the units is not known, a fraction of the wind speed added to the drift would be tested between 0 and 3 per cent, the range over which the drifter skill of StagnoneDT varied by deployment.
 

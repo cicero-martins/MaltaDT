@@ -10,7 +10,7 @@ The renewal of the water of the Grand Harbour and of Marsamxett is the principal
 
 **Results.** After seven days 26 to 34 per cent of the volume of Marsamxett and 48 to 55 per cent of that of the Grand Harbour remain in the harbour of release (Section 6). Marsamxett reaches the e-folding fraction of 1/e after 5.6 to 6.3 days, and the Grand Harbour does not reach it within the week. An exponential fitted after the first day gives e-folding times of 8 to 10 days for Marsamxett and of 11 to 26 days for the Grand Harbour, and extrapolated, 95 per cent renewal after some 22 to 25 and 31 to 70 days respectively. The decay proceeds in episodes separated by days of near constancy, which places the uncertainty of the extrapolation at about a factor of two. The heads of the inlets retain their water through the week, among them Marsa, French Creek and Dockyard Creek in the Grand Harbour and Msida Creek and Pietà Creek in Marsamxett (Section 8), and the exchange between the two harbours is 2 per cent of the volume of Marsamxett or less (Section 7).
 
-**Requirements of the renewal run.** A hydrodynamic run of about two months would measure the e-folding time of both harbours directly and allow releases repeated every ten days, at some 24 hours of simit-server on 12 cores and about 100 GB of map output (Section 9). The vertical diffusivity of the turbulence model, written to the map output, would replace the two bounds used here.
+**Requirements of the renewal runs.** Runs of about two months, one in winter and one in summer, would measure the e-folding time of both harbours directly in each season and allow releases repeated every ten days, at some 24 hours of simit-server on 12 cores and about 100 GB of map output each (Section 9). The vertical diffusivity of the turbulence model, written to the map output, would replace the two bounds used here.
 
 ## 1. Measures of renewal
 
@@ -164,7 +164,18 @@ The e-folding time of the Grand Harbour, 11 to 26 days in the fit, exceeds the w
 
 The particle computation is small beside the hydrodynamics. The extraction of the currents takes about one minute per simulated week on simit-server and writes about 0.8 GB per week, and OpenDrift takes about 16 minutes per simulated week and per value of Kz for 10 870 particles on a workstation, so that four releases of 30 days at one Kz take some 4 to 5 hours and run in parallel.
 
-The run requires the CMEMS boundary fields and the ERA5 surface fields of the chosen window. A window from June to July 2025 keeps the BLUE record of sea temperature and salinity, available until 8 November 2025 ([blue_buoy_dataset.md](blue_buoy_dataset.md)), for the validation of the stratification that controls the vertical structure of the renewal.
+Renewal depends on the stratification of the water column and on the sequence of wind, both of which differ between the seasons, so the renewal is to be computed in two runs of about two months, one in winter and one in summer, each in the working configuration.
+
+| Run | Proposed window | Simulated days with spin-up | FM on simit-server, 12 cores | Map output at 30 min |
+|---|---|---|---|---|
+| Winter | 1 January to 1 March 2026 | 62 | about 24 h | about 100 GB |
+| Summer | 15 July to 15 September 2026 | 65 | about 25 h | about 105 GB |
+
+*Costs as in the table above. The windows are proposed and their cost is subject to approval.*
+
+The winter window holds the passage of storm Harry, with a significant wave height of 8.6 m at the BLUE buoy on 20 January 2026, and a water column expected to be mixed over the depth of the harbours, in which the two bounds of the vertical diffusivity of Section 3 would be expected to converge. The summer window lies within the stratified season, when the temperature recorded by the drifters reaches 29 °C ([drifters_2026_dataset.md](drifters_2026_dataset.md)). The BLUE record of current, wind, waves and pressure covers both windows, while its temperature and salinity end on 8 November 2025 ([blue_buoy_dataset.md](blue_buoy_dataset.md)). In summer the unit held at a fixed point off the north coast from 21 July 2026 records the sea surface temperature in their place. Both windows lie in 2026, beyond the reanalysis, so the boundary fields come from the CMEMS analysis and forecast product, as for the runs of the drifter deployments.
+
+The drifter deployments of May and July 2026 are covered by two short runs of their own, which test the surface currents on which the particle trajectories of the renewal rest ([drifters_2026_dataset.md](drifters_2026_dataset.md), Section 4).
 
 ## 10. Matters open
 
