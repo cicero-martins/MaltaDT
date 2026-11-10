@@ -8,7 +8,7 @@ The three units transmit position and the temperature of their sensor at about 3
 
 | | |
 |---|---|
-| Units | 9, 11 and 12, satellite surface drifters by Satlink acquired by the University of Malta for the TecMAReco project (Ernst 2026), of the thin, undrogued Stokes type |
+| Units | 9, 11 and 12, surface drifters by Satlink acquired by the University of Malta for the TecMAReco project (Ernst 2026), identified from the photograph of that announcement as the OceanWave buoy of Xeos by Satlink (Xeos 2025), a solar-powered hull of 37.4 cm diameter, 22.7 cm height and 6.5 kg without drogue, which measures waves and sea surface temperature; the identification awaits confirmation by the group |
 | Variables | latitude, longitude, temperature of the sensor, time in UTC and in local time |
 | Sampling | 30 minutes, with about 1 per cent of intervals near 60 minutes |
 | Span | unit 11 from 14 April, unit 9 from 14 May and unit 12 from 16 July, all three to the last transmission, 15 September, 22 September and 31 October 2026 |
@@ -90,7 +90,7 @@ The runs of the renewal of the harbours, in winter and in summer, are separate a
 
 The evaluation follows the drifter validation of the model of the Stagnone di Marsala lagoon in western Sicily (StagnoneDT), on which the present configuration is built, and is carried out by `scripts/drifter_skill_2026.py`. The top-layer currents of each run, merged from the partitioned map output by `scripts/extract_surface_map.py`, and the hourly surface currents of the CMEMS analysis-forecast product are interpolated onto one regular grid, of 0.001° (about 100 m) for May and 0.002° (about 200 m) over domain B for July, with the land mask of mesh v03 for both, so that the two sources differ in the current alone. The 10 m wind of ERA5 is interpolated onto the same grid.
 
-OpenDrift advects one particle from each release, at an observed fix every 6 hours along each track, for 24 hours, with a fourth-order Runge-Kutta step of 300 s and no random walk. This gives 14 segments, one for each unit in May and six for each unit in July. Each segment is scored on the output times of OpenDrift, at 15 minutes, against the observed fixes interpolated linearly in time, by the separation from the observed position after 6, 12 and 24 hours and by the skill score of Liu and Weisberg (2011). That score is one minus the sum over the segment of the separation divided by the length of the observed track travelled to that time, set to zero where the sum exceeds one, so that 1 is a perfect track and 0 a track that departs as fast as the drifter moves. A fraction of the wind speed (windage) is added to the drift at 0, 1, 2 and 3 per cent. The units are thin, undrogued drifters of the Stokes type, built to expose little above the water and to follow the uppermost centimetres of the sea, so that a windage of 0 to 1 per cent is the plausible range and the drift of the units includes the Stokes drift of the surface waves, which neither field carries. The metrics of every segment are written to `data/processed/drifter_skill_2026.csv`.
+OpenDrift advects one particle from each release, at an observed fix every 6 hours along each track, for 24 hours, with a fourth-order Runge-Kutta step of 300 s and no random walk. This gives 14 segments, one for each unit in May and six for each unit in July. Each segment is scored on the output times of OpenDrift, at 15 minutes, against the observed fixes interpolated linearly in time, by the separation from the observed position after 6, 12 and 24 hours and by the skill score of Liu and Weisberg (2011). That score is one minus the sum over the segment of the separation divided by the length of the observed track travelled to that time, set to zero where the sum exceeds one, so that 1 is a perfect track and 0 a track that departs as fast as the drifter moves. A fraction of the wind speed (windage) is added to the drift at 0, 1, 2 and 3 per cent. An undrogued hull some 23 cm high with a solar panel on its upper face follows the uppermost decimetres of the sea and carries part of its height above the water, so that the windage is not small a priori and the range of 0 to 3 per cent is retained. The drift of such a hull includes the Stokes drift of the surface waves, which neither field carries. The metrics of every segment are written to `data/processed/drifter_skill_2026.csv`.
 
 ### Skill by deployment
 
@@ -146,7 +146,7 @@ The shelf current of CMEMS enters the model through the sea level, by the weakly
 
 ## 6. Matters for the group
 
-1. The model of the units and the depth of the temperature sensor, which sets the layer of the model to which the temperature compares.
+1. The model of the units, their draft and the depth of the temperature sensor, which set the windage to be applied and the layer of the model to which the temperature compares. If the units are OceanWave buoys, their records of wave height, period and direction along the tracks, which would give the Stokes drift where the units drift.
 2. The exact time of release on 20 May, since the record resumes at 07:58 UTC after a gap of 5.7 days.
 3. Whether further deployments are planned, in particular inside the harbours, where the circulation of the model remains untested.
 
@@ -155,3 +155,5 @@ The shelf current of CMEMS enters the model through the sea level, by the weakly
 Ernst, L. (ed.) (2026). University of Malta tracks marine debris with Satlink drifters. Environment Coastal and Offshore (ECO) Magazine, 24 September 2026. https://ecomagazine.com/news/research/university-of-malta-tracks-marine-debris-with-satlink-drifters/
 
 Liu, Y. and Weisberg, R. H. (2011). Evaluation of trajectory modeling in different dynamic regions using normalized cumulative Lagrangian separation. Journal of Geophysical Research 116, C09013.
+
+Xeos by Satlink (2025). OceanWave Buoy, small wave monitoring buoy for accurate wave data. Product brochure. https://xeostech.com/sites/default/files/2025-03/OceanWave%20Brochure.pdf
