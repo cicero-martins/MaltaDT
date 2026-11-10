@@ -8,7 +8,9 @@ not exist, and from the analysis-forecast product (--product anfc) in 2026,
 which the reanalysis does not reach. Dataset identifiers and the split between
 the two products follow the StagnoneDT hindcasts of July 2025. With
 --surface-hourly the hourly surface currents of the analysis-forecast product
-are added, the reference field against which the drifter tracks are scored.
+are added, the reference field against which the drifter tracks are scored,
+and with --waves-hourly the hourly surface Stokes drift and the bulk wave
+parameters of the Mediterranean wave analysis-forecast product.
 
 Credentials are read from the .env of the StagnoneDT repository and are not
 printed. Each variable is written to its own file, cmems_<var>_<start>_<end>.nc,
@@ -58,6 +60,9 @@ DATASETS = {
 }
 # hourly surface currents, written under a prefix the forcing chain does not read
 SURFACE_HOURLY = ("cmems_mod_med_phy-cur_anfc_4.2km-2D_PT1H-m", ("uo", "vo"), "cmems-surface-1h")
+# hourly surface Stokes drift and bulk wave parameters (MEDSEA_ANALYSISFORECAST_WAV_006_017)
+WAVES_HOURLY = ("cmems_mod_med_wav_anfc_4.2km_PT1H-i",
+                ("VSDX", "VSDY", "VHM0", "VTPK", "VMDR"), "cmems-waves-1h")
 
 
 def load_env(path: Path) -> None:
@@ -80,6 +85,8 @@ def main() -> int:
                     help="source of the daily three-dimensional fields")
     ap.add_argument("--surface-hourly", action="store_true",
                     help="add the hourly surface currents of the analysis-forecast product")
+    ap.add_argument("--waves-hourly", action="store_true",
+                    help="add the hourly Stokes drift and wave parameters of the wave product")
     args = ap.parse_args()
 
     load_env(ENV)
@@ -94,6 +101,9 @@ def main() -> int:
                 for dataset, var in DATASETS[args.product]]
     if args.surface_hourly:
         dataset, variables, prefix = SURFACE_HOURLY
+        requests.append((dataset, list(variables), f"{prefix}_{args.start}_{args.end}.nc"))
+    if args.waves_hourly:
+        dataset, variables, prefix = WAVES_HOURLY
         requests.append((dataset, list(variables), f"{prefix}_{args.start}_{args.end}.nc"))
     for dataset, variables, name in requests:
         if (out / name).exists():
