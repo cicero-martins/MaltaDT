@@ -9,8 +9,11 @@ model. Both fields are interpolated onto the same regular grid, with the land
 mask of the model mesh, so that the two sources differ in the current alone.
 Points off the water take the values of the nearest wet point, as in
 extract_harbour_currents_3d.py. The 10 m wind of ERA5 enters as a fraction of
-the wind speed added to the drift, tested over WINDAGES since the drogue of
-the units is not known.
+the wind speed added to the drift, tested over WINDAGES since the draft and
+the exposed height of the units are not confirmed. With --stokes the hourly
+surface Stokes drift of the CMEMS Mediterranean wave product is added to both
+fields through a second reader, the sources being labelled model_stokes and
+cmems_stokes; neither current field carries that drift.
 
 Each particle is deterministic, with no random walk, as in the drifter
 validation of StagnoneDT, where the diffusivity set was not applied by
@@ -21,7 +24,7 @@ and Weisberg (2011), one minus the sum of the separations normalised by the
 cumulative length of the observed track, floored at zero.
 
 Usage:
-    python drifter_skill_2026.py [--month may jul] [--figure]
+    python drifter_skill_2026.py [--month may jul] [--stokes] [--figure]
 """
 
 from __future__ import annotations
@@ -170,12 +173,35 @@ def build_readers(month: str) -> dict[str, Path]:
     return paths
 
 
-def simulate(reader: Path, seg: pd.DataFrame, windage: float, out: Path) -> Path:
+def stokes_reader(month: str) -> Path:
+    """Hourly surface Stokes drift of CMEMS, land cells filled with the nearest sea cell."""
+    path = OUT / f"{month}_stokes.nc"
+    if path.exists():
+        return path
+    src = sorted((ROOT / "data" / "raw" / f"cmems_{MONTHS[month]['forcing']}").glob("cmems-waves-1h_*.nc"))[0]
+    ds = xr.open_dataset(src)[["VSDX", "VSDY", "VHM0"]].load()
+    for var in ds.data_vars:
+        values = ds[var].values
+        for i in range(values.shape[0]):
+            ok = np.isfinite(values[i])
+            _, (jy, jx) = distance_transform_edt(~ok, return_indices=True)
+            values[i] = values[i][jy, jx]
+        ds[var].values = values.astype(np.float32)
+    ds.to_netcdf(path)
+    print(f"{month} stokes: {ds.time.size} hourly fields from {src.name}")
+    return path
+
+
+def simulate(reader: Path, seg: pd.DataFrame, windage: float, out: Path,
+             stokes: Path | None = None) -> Path:
     from opendrift.models.oceandrift import OceanDrift
     from opendrift.readers import reader_netCDF_CF_generic
 
     o = OceanDrift(loglevel=50)
     o.add_reader(reader_netCDF_CF_generic.Reader(str(reader)))
+    if stokes is not None:
+        o.add_reader(reader_netCDF_CF_generic.Reader(str(stokes)))
+    # drift:stokes_drift is on by default, and without a wave reader its fallback of zero applies
     for key, value in {"general:use_auto_landmask": False,
                        "general:coastline_action": "previous",
                        "drift:advection_scheme": "runge-kutta4",
@@ -293,6 +319,16 @@ def along_track(month: str, record: pd.DataFrame) -> pd.DataFrame:
         ok = np.isfinite(u)
         rows.append(dict(source=source, n=int(ok.sum()), u=u[ok].mean(), v=v[ok].mean(),
                          speed=np.hypot(u[ok], v[ok]).mean()))
+    stokes = OUT / f"{month}_stokes.nc"
+    if stokes.exists():
+        with xr.open_dataset(stokes) as ds:
+            pts = {k: xr.DataArray(o[c].values, dims="p")
+                   for k, c in (("time", "time"), ("longitude", "lon"), ("latitude", "lat"))}
+            u, v = ds.VSDX.interp(**pts).values, ds.VSDY.interp(**pts).values
+            hs = ds.VHM0.interp(**pts).values
+        ok = np.isfinite(u)
+        rows.append(dict(source="stokes", n=int(ok.sum()), u=u[ok].mean(), v=v[ok].mean(),
+                         speed=np.hypot(u[ok], v[ok]).mean(), hs=hs[ok].mean()))
     return pd.DataFrame(rows)
 
 
@@ -334,6 +370,8 @@ def field_figure(month: str, record: pd.DataFrame) -> Path:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--month", nargs="+", choices=tuple(MONTHS), default=list(MONTHS))
+    ap.add_argument("--stokes", action="store_true",
+                    help="add the CMEMS surface Stokes drift to both fields")
     ap.add_argument("--figure", action="store_true")
     args = ap.parse_args(argv)
     record = pd.read_csv(RECORD, parse_dates=["time"])
@@ -342,15 +380,19 @@ def main(argv=None) -> int:
     for month in args.month:
         seg = segments(record, month)
         print(f"{month}: {len(seg)} segments of {SEGMENT_HOURS} h")
-        for source, reader in build_readers(month).items():
+        stokes = stokes_reader(month) if args.stokes else None
+        for field, reader in build_readers(month).items():
+            source = f"{field}_stokes" if args.stokes else field
             for w in WINDAGES:
-                sim = simulate(reader, seg, w, OUT / f"{month}_{source}_w{w:.2f}.nc")
+                sim = simulate(reader, seg, w, OUT / f"{month}_{source}_w{w:.2f}.nc", stokes)
                 for r in score(sim, seg, record):
                     rows.append(dict(month=month, source=source, windage=w, **r))
     metrics = pd.DataFrame(rows)
     if METRICS.exists():
         old = pd.read_csv(METRICS, parse_dates=["t0"])
-        metrics = pd.concat([old[~old.month.isin(args.month)], metrics], ignore_index=True)
+        # rows of the same months and sources are replaced, the others kept
+        keep = ~(old.month.isin(args.month) & old.source.isin(metrics.source.unique()))
+        metrics = pd.concat([old[keep], metrics], ignore_index=True)
     metrics.to_csv(METRICS, index=False, float_format="%.4f")
     summary = metrics.groupby(["month", "source", "windage"]).agg(
         n=("lw", "size"), lw=("lw", "mean"), sep_6h=("sep_6h_km", "mean"),
