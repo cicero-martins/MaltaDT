@@ -73,22 +73,76 @@ The temperature of the drifting units and of unit 12 provides a measure of sea s
 
 Each deployment is covered by its own three-dimensional run in the working configuration of the hindcast (mesh v03, 20 stretched sigma layers, daily CMEMS current at the boundary, breakwaters closed by thin dams), with three days of spin-up before the first drifting fix.
 
-| Run | Window (UTC) | Simulated days | FM on simit-server, 12 cores |
-|---|---|---|---|
-| May | 17 May 00:00 to 22 May 00:00, 2026 | 5 | about 2 h |
-| July | 3 July 00:00 to 9 July 00:00, 2026 | 6 | about 2.3 h |
+| Run | Case | Window (UTC) | Simulated days | FM on simit-server, 12 cores |
+|---|---|---|---|---|
+| May | `v03_3d20s_0517_0522_uv_thd_2026` | 17 May 00:00 to 22 May 00:00, 2026 | 5 | 2.42 h |
+| July | `v03_3d20s_0703_0709_uv_thd_2026` | 3 July 00:00 to 9 July 00:00, 2026 | 6 | 1.87 h |
 
-*Costs at 0.38 h of simit-server per simulated day, measured on the working configuration when the server is otherwise idle.*
+*Wall-clock times of the two runs made side by side on the first socket, with a run of 8 cores of another project on the second, against 0.38 h per simulated day measured on the working configuration with the server otherwise idle. The map output at 30 minutes occupies 7.6 and 9.1 GB.*
 
 The CMEMS Mediterranean reanalysis does not extend to 2026, so the boundary fields come from the analysis and forecast product, the sea surface height at 15 minutes and the daily currents, salinity and temperature (`cmems_mod_med_phy-{cur,sal,tem}_anfc_4.2km_P1D-m`), selected in `scripts/download_cmems_hindcast.py` by `--product anfc`. The hourly surface currents of the same product (`cmems_mod_med_phy-cur_anfc_4.2km-2D_PT1H-m`) are downloaded with `--surface-hourly` as the reference field of the evaluation. ERA5 covers both windows, and the BLUE record of current, wind, waves and pressure covers both.
 
 The runs of the renewal of the harbours, in winter and in summer, are separate and longer ([harbour_renewal_particles.md](harbour_renewal_particles.md), Section 9).
 
-### Evaluation
+## 5. Skill of the surface currents
 
-The evaluation would follow the drifter validation of the model of the Stagnone di Marsala lagoon in western Sicily (StagnoneDT), on which the present configuration is built, with OpenDrift advecting particles in the top-layer currents of the model, interpolated onto a regular grid over the tracks, released at each observed position and scored against the observed track by separation distance and by the skill score of Liu and Weisberg (2011), the cumulative separation normalised by the cumulative length of the observed track. Releases repeated every 6 hours along each track would give some 14 scored segments of 24 hours, two in May and twelve in July. The same computation on the CMEMS surface currents alone would show whether the model improves on the field that forces its boundary. Since the drogue of the units is not known, a fraction of the wind speed added to the drift would be tested between 0 and 3 per cent, the range over which the drifter skill of StagnoneDT varied by deployment.
+### Method
 
-## 5. Matters for the group
+The evaluation follows the drifter validation of the model of the Stagnone di Marsala lagoon in western Sicily (StagnoneDT), on which the present configuration is built, and is carried out by `scripts/drifter_skill_2026.py`. The top-layer currents of each run, merged from the partitioned map output by `scripts/extract_surface_map.py`, and the hourly surface currents of the CMEMS analysis-forecast product are interpolated onto one regular grid, of 0.001° (about 100 m) for May and 0.002° (about 200 m) over domain B for July, with the land mask of mesh v03 for both, so that the two sources differ in the current alone. The 10 m wind of ERA5 is interpolated onto the same grid.
+
+OpenDrift advects one particle from each release, at an observed fix every 6 hours along each track, for 24 hours, with a fourth-order Runge-Kutta step of 300 s and no random walk. This gives 14 segments, one for each unit in May and six for each unit in July. Each segment is scored on the output times of OpenDrift, at 15 minutes, against the observed fixes interpolated linearly in time, by the separation from the observed position after 6, 12 and 24 hours and by the skill score of Liu and Weisberg (2011). That score is one minus the sum over the segment of the separation divided by the length of the observed track travelled to that time, set to zero where the sum exceeds one, so that 1 is a perfect track and 0 a track that departs as fast as the drifter moves. A fraction of the wind speed (windage) is added to the drift at 0, 1, 2 and 3 per cent, since the drogue of the units is not known. The metrics of every segment are written to `data/processed/drifter_skill_2026.csv`.
+
+### Skill by deployment
+
+| Deployment | Field | Windage 0 | 1 % | 2 % | 3 % | Separation at 24 h, 1 % (km) | Simulated over observed path, 1 % |
+|---|---|---|---|---|---|---|---|
+| May, 2 segments | model | 0.61 | **0.64** | 0.50 | 0.18 | 3.6 | 0.49 |
+| | CMEMS | 0.43 | **0.67** | 0.37 | 0.00 | 2.6 | 0.60 |
+| July, 12 segments | model | 0.28 | **0.31** | 0.31 | 0.30 | 15.2 | 0.55 |
+| | CMEMS | 0.55 | **0.56** | 0.51 | 0.42 | 6.4 | 0.85 |
+
+*Mean Liu-Weisberg skill over the segments of each deployment, with the separation at 24 hours and the ratio of the simulated to the observed path length, both as means over the segments at a windage of 1 per cent. The observed tracks cover 13.3 km in 24 hours in May and 26.9 km in July, in the mean.*
+
+![Segments and skill, May 2026](../figures/drifter_skill_2026_may.png)
+
+*Observed tracks of units 9 and 11 on 20 and 21 May, with the segments of 24 hours simulated in the currents of the model and of CMEMS at the windage of best mean skill for the model (a), and the mean and range of the Liu-Weisberg skill over the segments against the windage (b).*
+
+In May the two fields score alike at 1 per cent, 0.64 for the model and 0.67 for CMEMS. Neither carries the units away from the coast to the north-east and back, and the simulated particles reach the shore 3 to 4 km west of the grounding point of the units. Without wind the model scores 0.61 and CMEMS 0.43. Two segments of one track sampled twice support no more than this comparison.
+
+![Segments and skill, July 2026](../figures/drifter_skill_2026_jul.png)
+
+*As for May, for units 9 and 11 from 6 to 8 July.*
+
+In July the model scores 0.31 at 1 per cent and CMEMS 0.56, the model falling below CMEMS in 10 of the 12 segments and equal to it, at zero, in one, and the separation after 24 hours is 15 km for the model against 6 km for CMEMS. The windage changes the skill of the model by 0.03 at most, so that the departure lies in the current and not in the treatment of the wind.
+
+### Velocity along the tracks
+
+| Deployment | Source | Fix intervals | Mean eastward (m/s) | Mean northward (m/s) | Mean speed (m/s) |
+|---|---|---|---|---|---|
+| May | observed | 104 | 0.08 | −0.07 | 0.15 |
+| | model, top layer | 104 | 0.00 | −0.02 | 0.06 |
+| | CMEMS | 104 | 0.00 | −0.04 | 0.06 |
+| July | observed | 225 | 0.09 | −0.24 | 0.29 |
+| | model, top layer | 222 | 0.05 | −0.06 | 0.11 |
+| | CMEMS | 222 | 0.06 | −0.19 | 0.24 |
+
+*Velocity of the units from fix to fix, at 30 minutes, against the current of each field interpolated to the midpoint of each interval in space and time. Three intervals of July lie south of the grid.*
+
+In July the units drift southward at 0.24 m/s in the mean, which CMEMS reproduces at 0.19 m/s, while the top layer of the model carries 0.06 m/s southward and a mean speed of 0.11 m/s, some two fifths of the observed. In May both fields carry less than half of the observed speed, and a windage of 1 per cent of the mean eastward wind of 3.7 m/s supplies about half of the observed eastward drift.
+
+![Mean surface current, July 2026](../figures/drifter_skill_2026_jul_field.png)
+
+*Mean surface current from 6 July 08:21 to 8 July 17:21 UTC, the drifting part of the July deployment, in the top layer of the model (a) and in the hourly surface field of CMEMS (b), with the observed tracks in red.*
+
+Over the drifting part of the July deployment CMEMS carries a south-eastward current of 0.3 to 0.4 m/s along the north of Malta and Gozo that turns south east of Malta, where the units drift, and a southward current of similar strength west of Malta. The top layer of the model holds a weaker eastward current north of the islands and less than 0.1 m/s over most of the area east and south-east of Malta. West and south-west of Malta it holds currents above 0.4 m/s in a chequered pattern over the slope, the spurious top-layer currents on refinement transitions found in the hindcast of 2025 ([hindcast_v03_first_week.md](hindcast_v03_first_week.md)).
+
+![Mean surface current, May 2026](../figures/drifter_skill_2026_may_field.png)
+
+*As for July, over the drifting part of the May deployment, 20 May 07:58 to 21 May 09:57 UTC.*
+
+The shelf current of CMEMS enters the model through the sea level, by the weakly reflective (Riemann) boundary, and through the daily current as an advective velocity at the boundary, and the comparison suggests that the interior of domain B retains little of it at the surface in July. Whether the loss lies in the forcing at the boundary, in the three days of spin-up from rest, or in the vertical structure of the top layer of 1 per cent of the column is not resolved by these two runs. The renewal of the harbours rests on the currents inside and next to the harbours rather than on the shelf flow east of Malta, which the drifters sample, so that the result bears on the renewal runs through their exchange with the shelf at the mouths.
+
+## 6. Matters for the group
 
 1. The make and model of the units, the presence and depth of a drogue, and the depth of the temperature sensor, which set the windage to be applied and the layer of the model to which the temperature compares.
 2. The purpose of the fixed position of unit 12 from 21 July, whether attached to a mooring or to a fish farm, and whether its record is intended as a temperature station.
