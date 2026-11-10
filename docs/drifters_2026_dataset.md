@@ -125,12 +125,28 @@ In July the model scores 0.31 at 1 per cent and CMEMS 0.56, the model falling be
 | July | observed | 225 | 0.09 | −0.24 | 0.29 |
 | | model, top layer | 222 | 0.05 | −0.06 | 0.11 |
 | | CMEMS | 222 | 0.06 | −0.19 | 0.24 |
+| | Stokes drift, CMEMS waves | 225 | 0.03 | −0.02 | 0.04 |
 
-*Velocity of the units from fix to fix, at 30 minutes, against the current of each field interpolated to the midpoint of each interval in space and time. Three intervals of July lie south of the grid.*
+*Velocity of the units from fix to fix, at 30 minutes, against the current of each field interpolated to the midpoint of each interval in space and time. Three intervals of July lie south of the grid of the currents. The Stokes drift is that of the surface in the hourly wave product of CMEMS, a significant height of 0.56 m in the mean along the tracks in May and 0.47 m in July. In May it is 0.03 m/s eastward and 0.05 m/s southward.*
 
 In July the units drift southward at 0.24 m/s in the mean, which CMEMS reproduces at 0.19 m/s, while the top layer of the model carries 0.06 m/s southward and a mean speed of 0.11 m/s, some two fifths of the observed. In May both fields carry less than half of the observed speed, and a windage of 1 per cent of the mean eastward wind of 3.7 m/s supplies about half of the observed eastward drift.
 
-The southward excess of 0.05 m/s of the units over CMEMS in July is of the order of the surface Stokes drift of the sea recorded at the BLUE buoy over the deployment, a significant height of 0.55 m and a peak period of 4.5 s from the north, for which a monochromatic estimate gives some 2 to 5 cm/s southward at the surface. The wind blew from the west-north-west, so that a windage cannot stand in for that drift. The southward current of 0.15 m/s in the mean recorded by the buoy itself below the surface places most of the drift in the current, and the Stokes drift accounts at most for a part of the departure of CMEMS and for none of the departure of the model from CMEMS, since both fields omit it.
+The excess of the units over CMEMS in July, 0.03 m/s eastward and 0.05 m/s southward, compares with a surface Stokes drift of 0.03 m/s eastward and 0.02 m/s southward along the tracks, so that the waves account for the eastward part of the excess and for about half of the southward part. The southward current of 0.15 m/s in the mean recorded below the surface by the BLUE buoy over the same days places most of the drift in the current.
+
+### Stokes drift of the surface waves
+
+The hourly surface Stokes drift of the Mediterranean wave analysis-forecast product of CMEMS (MEDSEA_ANALYSISFORECAST_WAV_006_017, 4.2 km) is added to the drift of the particles in both fields through a second reader of OpenDrift, the segments and the scoring being otherwise unchanged (`drifter_skill_2026.py --stokes`). The drift of the units includes the Stokes drift, which neither current field carries.
+
+| Deployment | Field | Without Stokes drift, windage 0 | 1 % | With Stokes drift, windage 0 | 1 % | Separation at 24 h, with Stokes drift, windage 0 (km) |
+|---|---|---|---|---|---|---|
+| May, 2 segments | model | 0.61 | 0.64 | 0.62 | 0.44 | 3.6 |
+| | CMEMS | 0.43 | 0.67 | 0.60 | 0.46 | 4.2 |
+| July, 12 segments | model | 0.28 | 0.31 | 0.34 | 0.34 | 14.1 |
+| | CMEMS | 0.55 | 0.56 | 0.56 | 0.52 | 6.2 |
+
+*Mean Liu-Weisberg skill over the segments, without and with the surface Stokes drift of CMEMS added to the current, at windages of 0 and 1 per cent.*
+
+With the Stokes drift added, the best skill of each field is reached without windage and lies close to the best skill reached before with a windage of 1 per cent, in May 0.62 for the model and 0.60 for CMEMS against 0.64 and 0.67, in July 0.34 and 0.56 against 0.31 and 0.56. The Stokes drift therefore takes the place of the windage in both deployments rather than adding to it, which is consistent with a hull that carries little wind drift beyond that of the waves. In July the model gains 0.06 and the separation after 24 hours falls from 15.2 to 14.1 km, while CMEMS stays at 0.56 and 6.2 km, so that the departure of the model from CMEMS is unchanged by the waves.
 
 ![Mean surface current, July 2026](../figures/drifter_skill_2026_jul_field.png)
 
@@ -142,7 +158,7 @@ Over the drifting part of the July deployment CMEMS carries a south-eastward cur
 
 *As for July, over the drifting part of the May deployment, 20 May 07:58 to 21 May 09:57 UTC.*
 
-The shelf current of CMEMS enters the model through the sea level, by the weakly reflective (Riemann) boundary, and through the daily current as an advective velocity at the boundary, and the comparison suggests that the interior of domain B retains little of it at the surface in July. Whether the loss lies in the forcing at the boundary, in the three days of spin-up from rest, or in the vertical structure of the top layer of 1 per cent of the column is not resolved by these two runs. The renewal of the harbours rests on the currents inside and next to the harbours rather than on the shelf flow east of Malta, which the drifters sample, so that the result bears on the renewal runs through their exchange with the shelf at the mouths.
+The shelf current of CMEMS enters the model through the sea level, by the weakly reflective (Riemann) boundary, and through the daily current as an advective velocity at the boundary, and the comparison suggests that the interior of domain B retains little of it at the surface in July. The horizontal resolution of the model does not account for the loss, since the July tracks cross cells of 480 to 1920 m, 1920 m at most fixes, over depths of 67 to 157 m, finer than the 4.2 km of CMEMS, and the top layer of 1 per cent of the column is some 1.3 m thick at the median depth of 132 m, close to the uppermost level of CMEMS near 1 m. Whether the loss lies in the forcing at the boundary, in the three days of spin-up from rest, or in the vertical structure of the upper layers is not resolved by these two runs. The renewal of the harbours rests on the currents inside and next to the harbours rather than on the shelf flow east of Malta, which the drifters sample, so that the result bears on the renewal runs through their exchange with the shelf at the mouths.
 
 ## 6. Matters for the group
 
