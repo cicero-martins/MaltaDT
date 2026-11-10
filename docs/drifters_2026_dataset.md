@@ -61,7 +61,7 @@ In July the units left Marsa, at the head of the Grand Harbour, aboard a vessel 
 
 The speed of both units varies between 0.1 and 0.56 m/s with maxima some 21 hours apart, on the morning of 7 July and early on 8 July, which coincide with the maxima of the wind at the buoy and lie close to the inertial period of 20.5 hours at this latitude, so that the record alone does not separate the two. The temperature of the sensors rises from 26 to 29 and 30 °C around midday of 6 July under a wind of 1 to 2 m/s and returns to 25.5 °C as the wind rises, a diurnal warming of the surface layer under calm conditions which suggests that the sensor lies within the uppermost decimetres of the water.
 
-Unit 12 transmitted from land and from aboard a vessel between 16 and 19 July and from 21 July held a fixed point at 36.006 N, 14.431 E, some 5 km off the north coast. Its positions span 60 to 70 m over three months, consistent with a mooring, and its temperature falls smoothly from 29 to 22 °C over August to October with a diurnal range of 0.7 °C in the median. It records the sea surface temperature at a fixed point rather than transport.
+Unit 12 transmitted from land and from aboard a vessel between 16 and 19 July and from 21 July held a fixed point at 36.006 N, 14.431 E, some 5 km off the north coast. Its positions span 60 to 70 m over three months, consistent with a mooring, and its temperature falls smoothly from 29 to 22 °C over August to October with a diurnal range of 0.7 °C in the median. The unit was moored there by the group as a temperature station (A. Gauci, personal communication), and its record is a series of sea surface temperature at a fixed point rather than a measure of transport.
 
 ## 4. Use for the validation of the model
 
@@ -145,9 +145,8 @@ The shelf current of CMEMS enters the model through the sea level, by the weakly
 ## 6. Matters for the group
 
 1. The make and model of the units, the presence and depth of a drogue, and the depth of the temperature sensor, which set the windage to be applied and the layer of the model to which the temperature compares.
-2. The purpose of the fixed position of unit 12 from 21 July, whether attached to a mooring or to a fish farm, and whether its record is intended as a temperature station.
-3. The exact time of release on 20 May, since the record resumes at 07:58 UTC after a gap of 5.7 days.
-4. Whether further deployments are planned, in particular inside the harbours, where the circulation of the model remains untested.
+2. The exact time of release on 20 May, since the record resumes at 07:58 UTC after a gap of 5.7 days.
+3. Whether further deployments are planned, in particular inside the harbours, where the circulation of the model remains untested.
 
 ## References
 
