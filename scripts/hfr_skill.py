@@ -28,9 +28,13 @@ mean vectors, the bias of each component, the root mean square of the vector
 difference and the complex correlation of Kundu (1976) on the demeaned series,
 whose modulus measures the agreement of the fluctuations and whose phase the
 mean veering of the model from the radar, positive anticlockwise. They are
-computed over all cells and hours pooled, cell by cell, and for the series
-averaged over the box north-east of Malta (NE_BOX) where the July drifters
-departed from the model.
+computed over all cells and hours pooled, cell by cell, and over the corridor
+of the drifter tracks of the same month, the radar cells within CORRIDOR_KM of
+any drifting fix inside domain B, both pooled and as the series averaged over
+the corridor at each hour. The window of 2025 has no drifters and takes the
+corridor of July 2026, so that the two summers are scored over the same water.
+The direct comparison with the drifters, fix by fix, is made by
+hfr_drifter_collocation.py.
 
 Usage:
     python hfr_skill.py [--window may26 jul26 jul25] [--figure]
@@ -63,7 +67,9 @@ WINDOWS = {
 }
 SITE = "BARK"
 SPINUP_HOURS = 72
-NE_BOX = (14.52, 14.68, 35.90, 36.10)          # lon0, lon1, lat0, lat1
+DRIFTERS = ROOT / "data" / "processed" / "drifters_2026.csv"
+TRACKS = {"may26": "may", "jul26": "jul", "jul25": "jul"}
+CORRIDOR_KM = 5.0
 RADIAL_TESTS = ("OWTR_QC", "CSPD_QC", "MDFL_QC", "RDCT_QC", "POSITION_QC")
 COLOURS = {"hfr": "k", "model": "#2a78d6", "cmems": "#eb6834"}
 LABELS = {"hfr": "HF radar", "model": "model, top layer", "cmems": "CMEMS, hourly surface"}
@@ -176,13 +182,29 @@ def scalar_stats(ro, rm) -> dict:
                 std_ratio=rm.std() / ro.std())
 
 
-def in_box(lon, lat) -> np.ndarray:
-    lon0, lon1, lat0, lat1 = NE_BOX
-    return (lon >= lon0) & (lon <= lon1) & (lat >= lat0) & (lat <= lat1)
+def tracks(window: str) -> pd.DataFrame:
+    rec = pd.read_csv(DRIFTERS, parse_dates=["time"])
+    return rec[(rec.status == "drifting") & rec.in_domain_b
+               & rec.deployment.fillna("").str.endswith(TRACKS[window])]
+
+
+def in_box(window: str, lon, lat) -> np.ndarray:
+    """True for radar cells within CORRIDOR_KM of a drifting fix of the month."""
+    from scipy.spatial import cKDTree
+    fx = tracks(window)
+    k = np.cos(np.radians(36.0))
+    tree = cKDTree(np.c_[fx.lon.values * 111.32 * k, fx.lat.values * 110.57])
+    d, _ = tree.query(np.c_[np.asarray(lon) * 111.32 * k, np.asarray(lat) * 110.57])
+    return d <= CORRIDOR_KM
+
+
+def draw_tracks(ax, window: str) -> None:
+    for _, g in tracks(window).groupby("deployment"):
+        ax.plot(g.lon, g.lat, color="#e8402e", lw=1.2)
 
 
 def box_series(u, v, sel, min_cells: int = 5):
-    """Mean over the box at each hour, only hours with at least min_cells radar cells."""
+    """Mean over the corridor at each hour, only hours with at least min_cells radar cells."""
     ok = np.isfinite(u[:, sel])
     n = ok.sum(1)
     with np.errstate(invalid="ignore"):
@@ -211,19 +233,19 @@ def run(window: str, figure: bool) -> list[dict]:
     mask = np.isfinite(tot["u"])
     for s in fields:
         fields[s] = tuple(np.where(mask, f, np.nan) for f in fields[s])
-    box = in_box(tot["lon"], tot["lat"])
+    box = in_box(window, tot["lon"], tot["lat"])
     print(f"{window}: {len(tot['times'])} hours after spin-up, {tot['lon'].size} total cells in domain B, "
-          f"{mask.sum()} good values, {box.sum()} cells in the north-east box")
+          f"{mask.sum()} good values, {box.sum()} cells in the track corridor")
     for s in fields:
         if s == "hfr":
             continue
-        for region, sel in (("domain B", slice(None)), ("north-east box", box)):
+        for region, sel in (("domain B", slice(None)), ("track corridor", box)):
             st = vector_stats(fields["hfr"][0][:, sel].ravel(), fields["hfr"][1][:, sel].ravel(),
                               fields[s][0][:, sel].ravel(), fields[s][1][:, sel].ravel())
             rows.append(dict(window=window, product="total", source=s, region=region, **st))
         bo, bm = box_series(*fields["hfr"], box), box_series(*fields[s], box)
         st = vector_stats(bo[0], bo[1], bm[0], bm[1])
-        rows.append(dict(window=window, product="total", source=s, region="north-east box mean", **st))
+        rows.append(dict(window=window, product="total", source=s, region="track corridor mean", **st))
 
     rad = radials(window, area, t_ok)
     if not rad:
@@ -239,12 +261,12 @@ def run(window: str, figure: bool) -> list[dict]:
     if cfg["cmems"]:
         uc, vc = cmems_at(cfg["cmems"], rad["times"], rad["lon"], rad["lat"])
         rfields["cmems"] = uc * np.sin(th) + vc * np.cos(th)
-    rbox = in_box(rad["lon"], rad["lat"])
+    rbox = in_box(window, rad["lon"], rad["lat"])
     print(f"  radials {SITE}: {rad['lon'].size} bins in domain B, {np.isfinite(rad['r']).sum()} good values")
     for s in rfields:
         if s == "hfr":
             continue
-        for region, sel in (("domain B", slice(None)), ("north-east box", rbox)):
+        for region, sel in (("domain B", slice(None)), ("track corridor", rbox)):
             st = scalar_stats(rad["r"][:, sel].ravel(), rfields[s][:, sel].ravel())
             rows.append(dict(window=window, product=f"radial {SITE}", source=s, region=region, **st))
 
@@ -259,7 +281,6 @@ def field_figure(window: str, tot: dict, fields: dict) -> Path:
     """Mean current over the hours after spin-up and the complex correlation by cell."""
     import geopandas as gpd
     import matplotlib.pyplot as plt
-    from matplotlib.patches import Rectangle
 
     coast = gpd.read_file(COAST)
     sources = list(fields)
@@ -295,8 +316,7 @@ def field_figure(window: str, tot: dict, fields: dict) -> Path:
         fig.colorbar(sc3, ax=axs[1, 1:], shrink=0.7, label="|ρ| (Kundu)")
     for ax in axs.ravel():
         coast.plot(ax=ax, color="#d9d4c7", edgecolor="#8c8678", linewidth=0.5)
-        b0, b1, c0, c1 = NE_BOX
-        ax.add_patch(Rectangle((b0, c0), b1 - b0, c1 - c0, fill=False, ec="#e8402e", lw=1.2))
+        draw_tracks(ax, window)
         ax.set(xlim=(lon0, lon1), ylim=(lat0, lat1), aspect=1 / np.cos(np.radians((lat0 + lat1) / 2)))
     for ax in axs[:, 0]:
         ax.set_ylabel("Latitude (°N)")
@@ -324,20 +344,18 @@ def series_figure(window: str, tot: dict, fields: dict, box) -> Path:
         ax.set_ylabel(f"{comp} (m/s)")
         ax.grid(alpha=0.3)
     axs[0].legend(fontsize=8, ncol=3)
-    lon0, lon1, lat0, lat1 = NE_BOX
-    axs[0].set_title(f"Mean over the radar cells of {lon0}–{lon1} °E, {lat0}–{lat1} °N, "
-                     f"{WINDOWS[window]['title']}", loc="left", fontsize=10)
-    path = Path(str(FIGURE).format(f"{window}_ne"))
+    axs[0].set_title(f"Mean over the radar cells within {CORRIDOR_KM:g} km of the drifter tracks of "
+                     f"{TRACKS[window]} 2026, {WINDOWS[window]['title']}", loc="left", fontsize=10)
+    path = Path(str(FIGURE).format(f"{window}_corridor"))
     fig.savefig(path, dpi=150)
     plt.close(fig)
     return path
 
 
 def radial_figure(window: str, rad: dict, rfields: dict, box) -> Path:
-    """Bins of the station in domain B and the radial velocity averaged over those in the box."""
+    """Bins of the station in domain B and the radial velocity averaged over those in the track corridor."""
     import geopandas as gpd
     import matplotlib.pyplot as plt
-    from matplotlib.patches import Rectangle
 
     coast = gpd.read_file(COAST)
     t = pd.to_datetime(rad["times"])
@@ -347,8 +365,7 @@ def radial_figure(window: str, rad: dict, rfields: dict, box) -> Path:
     frac = good.mean(0)
     sc = ax.scatter(rad["lon"], rad["lat"], c=frac, s=6, vmin=0, vmax=1, cmap="Greys")
     coast.plot(ax=ax, color="#d9d4c7", edgecolor="#8c8678", linewidth=0.5)
-    b0, b1, c0, c1 = NE_BOX
-    ax.add_patch(Rectangle((b0, c0), b1 - b0, c1 - c0, fill=False, ec="#e8402e", lw=1.2))
+    draw_tracks(ax, window)
     ax.set(xlim=(14.30, 14.95), ylim=(35.75, 36.25), aspect=1 / np.cos(np.radians(36.0)),
            xlabel="Longitude (°E)", ylabel="Latitude (°N)")
     ax.set_title(f"(a) bins of {SITE}, fraction of good hours", loc="left", fontsize=10)
@@ -357,13 +374,13 @@ def radial_figure(window: str, rad: dict, rfields: dict, box) -> Path:
         x = np.where(good[:, box], f[:, box], np.nan)
         n = np.isfinite(x).sum(1)
         with np.errstate(invalid="ignore"):
-            m = np.where(n >= 20, np.nanmean(x, 1), np.nan)
+            m = np.where(n >= 10, np.nanmean(x, 1), np.nan)
         bx.plot(t, m, color=COLOURS[s], lw=1.4 if s == "hfr" else 1.1, label=LABELS[s])
     bx.axhline(0, color="0.6", lw=0.6)
     bx.set_ylabel("Radial velocity away from the antenna (m/s)")
     bx.grid(alpha=0.3)
     bx.legend(fontsize=8, ncol=3)
-    bx.set_title(f"(b) mean over the bins in the box, {WINDOWS[window]['title']}", loc="left", fontsize=10)
+    bx.set_title(f"(b) mean over the bins in the track corridor, {WINDOWS[window]['title']}", loc="left", fontsize=10)
     path = Path(str(FIGURE).format(f"{window}_radial"))
     fig.savefig(path, dpi=150)
     plt.close(fig)
