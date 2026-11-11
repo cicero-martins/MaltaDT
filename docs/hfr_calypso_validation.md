@@ -33,7 +33,7 @@ The three windows are those of the runs in the working configuration (20 stretch
 | 2 to 10 July 2026 | `v03_3d20s_0703_0709_uv_thd_2026` | 216 | 216 | 2 | 214 | record ends 12 Feb 2026 | 1042 |
 | 21 July to 2 August 2025 | `v03_3d20s_0722_0801_uv_thd` | 312 | 312 | 311 | 197 | 308 | 1164 |
 
-The record of Ta' Sopu ends on 12 February 2026, and in 2026 either Ta' Ċenċ or Ta' Barkat is absent from each window. The totals of 2026 therefore lack the overlap of two Maltese stations on which the coverage along the north and north-east coasts depends. Capodici et al. (2019) found the totals most reliable where the contributing stations are balanced and the drifter separations largest where the geometry is suboptimal. In May no total falls within some 15 km of the north-east coast, and in July none falls south of 36.03 N there (Figures 1 and 6). In 2025 the four stations operate together and the totals reach within one or two cells of the coast from Gozo to the south-east of Malta (Figure 4).
+The record of Ta' Sopu ends on 12 February 2026, and in 2026 either Ta' Ċenċ or Ta' Barkat is absent from each window. The totals of 2026 therefore lack the overlap of two Maltese stations on which the coverage along the north and north-east coasts depends. Capodici et al. (2019) found the totals most reliable where the contributing stations are balanced and the drifter separations largest where the geometry is suboptimal. In May no total falls within some 15 km of the north-east coast, and in July none falls south of 36.03 N there (Figures 2 and 7). In 2025 the four stations operate together and the totals reach within one or two cells of the coast from Gozo to the south-east of Malta (Figure 5).
 
 ## 3. Quality control and the convention of the radials
 
@@ -57,9 +57,19 @@ The statistics for the totals are listed below.
 - The complex correlation of Kundu (1976) on the demeaned series. Its modulus measures the agreement of the fluctuations, and its phase the mean veering of the model from the radar, positive anticlockwise.
 - The ratio of the standard deviations.
 
+The complex correlation treats each current vector as a complex number w = u + iv, so that a rotation of the vector by an angle θ becomes a multiplication by e^(iθ). With w′ the series less its mean, the correlation of the model with the radar is
+
+ρ = ⟨w′_radar* w′_model⟩ / (⟨|w′_radar|²⟩ ⟨|w′_model|²⟩)^(1/2),
+
+where the asterisk denotes the complex conjugate and the brackets the mean over the hours. The modulus |ρ|, between 0 and 1, measures how closely the fluctuations of the two vectors follow each other once any constant rotation between them is allowed for, and the phase gives that rotation. A model equal to the radar rotated by 30 degrees returns |ρ| = 1 and a phase of +30 degrees, where the correlations of u and v taken separately would both fall (Figure 1). The amplitude of the fluctuations does not enter ρ, which is why the ratio of the standard deviations is reported beside it, and the mean does not enter either, which is why the mean vectors and the root mean square difference are reported as well.
+
+![Complex correlation of two vector series](../figures/complex_correlation_schematic.png)
+
+*Figure 1. Complex correlation on synthetic series (`scripts/plot_complex_correlation_schematic.py`). (a) An hourly current standing for the radar, with a mean southward drift, an inertial rotation and a wind pulse, and a series standing for the model, formed from it by a rotation of 30 degrees anticlockwise, an amplitude of 0.6 and added noise. (b) The fluctuations of both series about their means in the plane of the components, with the vector at one hour in each, rotated by 30 degrees and shortened. (c) The complex correlation of each variant with the reference series in the complex plane, the distance from the origin being |ρ| and the angle from the real axis the phase. Rotation and change of amplitude leave |ρ| at 1, noise reduces it to 0.93, and an unrelated series falls near the origin. The star marks the value of the top layer of the model over the corridor of the drifter tracks in 2025 (Section 5.1), 0.74 at 21 degrees clockwise.*
+
 For the radials they are the bias, the root mean square difference and the Pearson correlation.
 
-The comparison is made over all of domain B and over the corridor of the drifter tracks, the radar cells within 5 km of any drifting fix of the month inside domain B (Figure 7). For the totals, the series averaged over the corridor is formed at hours with at least five good cells. For the radials, it is formed at hours with at least ten good bins. The window of 2025 has no drifters and takes the corridor of July 2026, so that the two summers are scored over the same water. Within the corridor the totals of July 2026 cover only the stretch north of 36.03 N, at the start of both tracks, while the radials of Ta' Barkat cover the stretch along the coast as well.
+The comparison is made over all of domain B and over the corridor of the drifter tracks, the radar cells within 5 km of any drifting fix of the month inside domain B (Figure 8). For the totals, the series averaged over the corridor is formed at hours with at least five good cells. For the radials, it is formed at hours with at least ten good bins. The window of 2025 has no drifters and takes the corridor of July 2026, so that the two summers are scored over the same water. Within the corridor the totals of July 2026 cover only the stretch north of 36.03 N, at the start of both tracks, while the radials of Ta' Barkat cover the stretch along the coast as well.
 
 ### 4.2 Drifters
 
@@ -112,31 +122,31 @@ Over all the bins of the station in domain B, the correlation is 0.36 for the mo
 
 ![Mean currents and complex correlation by cell, July 2026](../figures/hfr_skill_jul26_field.png)
 
-*Figure 1. Surface current from 6 to 9 July 2026, after 72 h of spin-up, at the total cells of the CALYPSO network inside domain B with a good value in at least half the hours. (a to c) Mean current of the radar, of the top layer of the model and of the hourly CMEMS surface current. (d) Fraction of hours with a good total. (e, f) Modulus of the complex correlation with the radar, cell by cell. The red lines are the drifter tracks of 6 to 8 July.*
+*Figure 2. Surface current from 6 to 9 July 2026, after 72 h of spin-up, at the total cells of the CALYPSO network inside domain B with a good value in at least half the hours. (a to c) Mean current of the radar, of the top layer of the model and of the hourly CMEMS surface current. (d) Fraction of hours with a good total. (e, f) Modulus of the complex correlation with the radar, cell by cell. The red lines are the drifter tracks of 6 to 8 July.*
 
 ![Series averaged over the corridor, July 2026](../figures/hfr_skill_jul26_corridor.png)
 
-*Figure 2. Eastward and northward current averaged over the total cells within 5 km of the July tracks, 6 to 9 July 2026. Hours with fewer than five good cells are left blank.*
+*Figure 3. Eastward and northward current averaged over the total cells within 5 km of the July tracks, 6 to 9 July 2026. Hours with fewer than five good cells are left blank.*
 
 ![Radials of Ta' Barkat, July 2026](../figures/hfr_skill_jul26_radial.png)
 
-*Figure 3. (a) Bins of the station at Ta' Barkat inside domain B, shaded by the fraction of hours with a good radial, 6 to 9 July 2026, with the drifter tracks. (b) Radial velocity averaged over the bins within 5 km of the tracks, positive away from the antenna, so that a southward current north-east of the station is negative.*
+*Figure 4. (a) Bins of the station at Ta' Barkat inside domain B, shaded by the fraction of hours with a good radial, 6 to 9 July 2026, with the drifter tracks. (b) Radial velocity averaged over the bins within 5 km of the tracks, positive away from the antenna, so that a southward current north-east of the station is negative.*
 
 ![Mean currents and complex correlation by cell, July–August 2025](../figures/hfr_skill_jul25_field.png)
 
-*Figure 4. As Figure 1, for 25 July to 1 August 2025 without CMEMS, with the tracks of July 2026.*
+*Figure 5. As Figure 2, for 25 July to 1 August 2025 without CMEMS, with the tracks of July 2026.*
 
 ![Series averaged over the corridor, July–August 2025](../figures/hfr_skill_jul25_corridor.png)
 
-*Figure 5. As Figure 2, for 25 July to 1 August 2025, over the corridor of the July 2026 tracks.*
+*Figure 6. As Figure 3, for 25 July to 1 August 2025, over the corridor of the July 2026 tracks.*
 
 ![Mean currents and complex correlation by cell, May 2026](../figures/hfr_skill_may26_field.png)
 
-*Figure 6. As Figure 1, for 20 to 22 May 2026, when Ta' Barkat holds two hours and the tracks along the north coast lie outside the coverage of the totals.*
+*Figure 7. As Figure 2, for 20 to 22 May 2026, when Ta' Barkat holds two hours and the tracks along the north coast lie outside the coverage of the totals.*
 
 ### 5.2 Drifters
 
-In May no radar value, total or radial, falls on the tracks. In July, 18 of the 110 drifter hours fall in a cell with a good total, 14 of them within the first 12 hours north of 36.04 N, and 23 fall in a good bin of Ta' Barkat (Figure 7). Ta' Ċenċ holds no data on those days, and Għar Lapsi holds one bin on the tracks.
+In May no radar value, total or radial, falls on the tracks. In July, 18 of the 110 drifter hours fall in a cell with a good total, 14 of them within the first 12 hours north of 36.04 N, and 23 fall in a good bin of Ta' Barkat (Figure 8). Ta' Ċenċ holds no data on those days, and Għar Lapsi holds one bin on the tracks.
 
 **Velocity components against the drifters, July 2026.**
 
@@ -161,7 +171,7 @@ In May, over 50 drifter hours along the north coast, the components correlate at
 
 ![Drifters against the radar, the model and CMEMS, July 2026](../figures/hfr_drifter_jul26.png)
 
-*Figure 7. (a) Tracks of units 9 and 11 inside domain B, 6 to 8 July 2026, with the hours at which a good radar total falls on the track. (b to e) Hourly velocity of each unit, from the positions half an hour either side, against the radar total in the same cell, the top layer of the model and the hourly CMEMS surface current at the same point.*
+*Figure 8. (a) Tracks of units 9 and 11 inside domain B, 6 to 8 July 2026, with the hours at which a good radar total falls on the track. (b to e) Hourly velocity of each unit, from the positions half an hour either side, against the radar total in the same cell, the top layer of the model and the hourly CMEMS surface current at the same point.*
 
 ## 6. Interpretation
 
@@ -169,9 +179,9 @@ Capodici et al. (2019) report correlations of 0.62 to 0.70 and rms differences o
 
 Pooled over all cells, the complex correlation of the totals is low for CMEMS as well as for the model, 0.23 to 0.53, so the pooled value reflects the variability of individual total cells at the margin of the coverage as much as either field. The corridor of the tracks and the drifters themselves discriminate between the fields.
 
-In the 2025 window, after 72 hours of spin-up, the top layer of the model reproduces the series averaged over the corridor of the July tracks. The complex correlation is 0.74, the veering 21 degrees clockwise, the ratio of standard deviations 0.96 and the mean northward current −0.19 m/s against −0.16 m/s observed (Figure 5). The southward pulse of −0.45 to −0.50 m/s on 26 and 27 July is reproduced, as are the oscillations of about one day that follow it. The radials of Ta' Barkat in the corridor correlate at 0.77.
+In the 2025 window, after 72 hours of spin-up, the top layer of the model reproduces the series averaged over the corridor of the July tracks. The complex correlation is 0.74, the veering 21 degrees clockwise, the ratio of standard deviations 0.96 and the mean northward current −0.19 m/s against −0.16 m/s observed (Figure 6). The southward pulse of −0.45 to −0.50 m/s on 26 and 27 July is reproduced, as are the oscillations of about one day that follow it. The radials of Ta' Barkat in the corridor correlate at 0.77.
 
-In July 2026, the radar records a southward current of −0.35 to −0.38 m/s over the corridor in the mornings of 7 and 8 July, during the wind maxima, and the drifters −0.39 to −0.50 m/s. CMEMS carries −0.30 to −0.32 m/s at its minima and the model −0.17 to −0.20 m/s (Figures 2 and 7). Along the tracks the model reproduces neither component, correlations of 0.08 and 0.11, where CMEMS reaches 0.47 and 0.45, and the projection on the radials of Ta' Barkat isolates the same contrast, 0.88 for CMEMS against −0.01 for the model. CMEMS underestimates the variance, with slopes of 0.34 to 0.50, and its mean eastward current of 0.22 m/s over the corridor is not recorded by the radar.
+In July 2026, the radar records a southward current of −0.35 to −0.38 m/s over the corridor in the mornings of 7 and 8 July, during the wind maxima, and the drifters −0.39 to −0.50 m/s. CMEMS carries −0.30 to −0.32 m/s at its minima and the model −0.17 to −0.20 m/s (Figures 3 and 8). Along the tracks the model reproduces neither component, correlations of 0.08 and 0.11, where CMEMS reaches 0.47 and 0.45, and the projection on the radials of Ta' Barkat isolates the same contrast, 0.88 for CMEMS against −0.01 for the model. CMEMS underestimates the variance, with slopes of 0.34 to 0.50, and its mean eastward current of 0.22 m/s over the corridor is not recorded by the radar.
 
 The two runs share the configuration and differ in season and in the length of the scored window. The 2025 run is scored from its fourth to its tenth day and the July 2026 run from its fourth to its sixth day. The agreement in 2025 and the departure in 2026 over the same water are consistent with a spin-up longer than three days for the surface flow off the north-east coast, one of the three causes left open by the drifter comparison, and do not establish it, since the forcing of the two summers also differs. The summer renewal run started in mid-June 2026 would score July 2026 after some three weeks of spin-up against the same drifters, radials and totals, and separates the two explanations.
 
