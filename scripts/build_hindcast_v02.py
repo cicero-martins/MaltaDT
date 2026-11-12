@@ -81,8 +81,63 @@ def sec(t: pd.Timestamp) -> float:
     return (t - REFDATE).total_seconds()
 
 
-def write_riemann(d: Path, start: pd.Timestamp, stop: pd.Timestamp, factor: float = 0.5) -> float:
-    """Riemann boundary from the CMEMS sea surface height; returns the offset removed."""
+def normal_current(d: Path, pts: np.ndarray, times, hourly: bool = False) -> np.ndarray:
+    """Depth-mean CMEMS current normal to the boundary, inward, times sqrt(H/g); (time, node), m.
+
+    FM closes the Riemann boundary as zeta = 2 zeta_b - zeta_0 - sqrt(H/g) u_n, with
+    u_n the inward normal velocity, so that a level zeta beside a steady current
+    u_n through the boundary asks for zeta_b = (zeta + sqrt(H/g) u_n) / 2. The term
+    returned is that addition to the level, to be scaled by the same factor. The
+    current is averaged over the CMEMS levels above the bed of the model at the
+    node, H being the depth of the nearest node of the network, and the inward
+    normal is the perpendicular to the polyline that points to its centroid.
+    """
+    if hourly:
+        cur = xr.open_dataset(next(CMEMS.glob("cmems-currents-1h_*.nc")))
+        uo, vo = cur.uo, cur.vo
+    else:
+        uo = xr.open_dataset(next(CMEMS.glob("cmems_uo_*.nc"))).uo
+        vo = xr.open_dataset(next(CMEMS.glob("cmems_vo_*.nc"))).vo
+    net = xr.open_dataset(d / f"{NAME}_net.nc")
+    nx, ny, nz = net.mesh2d_node_x.values, net.mesh2d_node_y.values, net.mesh2d_node_z.values
+    scale = np.cos(np.radians(pts[:, 1].mean()))
+    near = (((pts[:, :1] - nx[None]) * scale) ** 2 + (pts[:, 1:2] - ny[None]) ** 2).argmin(1)
+    depth = np.maximum(-nz[near], 5.0)
+    # inward normal, the perpendicular to the local tangent turned to the centroid
+    x, y = pts[:, 0] * scale, pts[:, 1]
+    tx, ty = np.gradient(x), np.gradient(y)
+    norm = np.hypot(tx, ty)
+    nxn, nyn = -ty / norm, tx / norm
+    flip = nxn * (x.mean() - x) + nyn * (y.mean() - y) < 0
+    nxn, nyn = np.where(flip, -nxn, nxn), np.where(flip, -nyn, nyn)
+    nodes = dict(longitude=xr.DataArray(pts[:, 0], dims="p"), latitude=xr.DataArray(pts[:, 1], dims="p"))
+    z = uo.depth.values
+    edges = np.r_[0.0, 0.5 * (z[1:] + z[:-1]), z[-1]]
+    # thickness of each CMEMS level above the bed of the model, by node
+    thick = np.clip(np.minimum(edges[None, 1:], depth[:, None]) - edges[None, :-1], 0, None)
+    mean = []
+    for da in (uo, vo):
+        da = da.interpolate_na("longitude", fill_value="extrapolate").interpolate_na(
+            "latitude", fill_value="extrapolate")
+        a = da.interp(**nodes).transpose("time", "p", "depth").values
+        w = np.where(np.isfinite(a), thick[None], 0.0)
+        mean.append(np.nansum(a * w, 2) / w.sum(2))
+    un = mean[0] * nxn[None] + mean[1] * nyn[None]
+    if np.isnan(un).any():
+        raise RuntimeError("current missing at boundary nodes")
+    un = xr.DataArray(un, dims=("time", "p"), coords=dict(time=uo.time.values)).interp(
+        time=times, kwargs=dict(fill_value="extrapolate")).values
+    return un * np.sqrt(depth / 9.81)[None]
+
+
+def write_riemann(d: Path, start: pd.Timestamp, stop: pd.Timestamp, factor: float = 0.5,
+                  current: bool = False, hourly: bool = False) -> float:
+    """Riemann boundary from the CMEMS sea surface height; returns the offset removed.
+
+    With current set, the depth-mean CMEMS current normal to the boundary enters
+    the value through normal_current, so that the transport through the boundary
+    is prescribed beside the level.
+    """
     pts = np.loadtxt(d / f"{NAME}_bnd.pli", skiprows=2)
     ds = xr.open_dataset(next(CMEMS.glob("cmems_zos_*.nc")))
     zos = ds.zos.sel(time=slice(start - pd.Timedelta(hours=1), stop + pd.Timedelta(hours=1)))
@@ -95,6 +150,11 @@ def write_riemann(d: Path, start: pd.Timestamp, stop: pd.Timestamp, factor: floa
         raise RuntimeError("sea surface height missing at boundary nodes")
     offset = float(zb.sel(time=slice(start, stop)).mean())
     zb = factor * (zb - offset)
+    if current:
+        add = factor * normal_current(d, pts, zb.time.values, hourly)
+        print(f"Riemann value, term of the normal current: mean {add.mean():+.3f} m, "
+              f"std {add.std():.3f} m, range {add.min():+.3f} to {add.max():+.3f} m")
+        zb = zb + add
     minutes = (pd.to_datetime(zb.time.values) - REFDATE).total_seconds() / 60.0
     with open(d / f"{NAME}_bnd.bc", "w") as f:
         f.write("[General]\nfileVersion = 1.01\nfileType    = boundConds\n\n")
@@ -428,6 +488,8 @@ def main(argv=None) -> int:
                     help="prescribe the CMEMS current as advection velocity at the boundary (3D)")
     ap.add_argument("--boundary-velocity-hourly", action="store_true",
                     help="as --boundary-velocity, from the hourly CMEMS currents")
+    ap.add_argument("--riemann-current", action="store_true",
+                    help="add the depth-mean CMEMS current normal to the boundary to the Riemann value")
     ap.add_argument("--no-thin-dams", action="store_true",
                     help="leave the breakwaters open even where a thin dam file exists")
     ap.add_argument("--no-run", action="store_true")
@@ -456,7 +518,8 @@ def main(argv=None) -> int:
     if thin_dams:
         shutil.copy(MESH / f"{NAME}_thd.pli", d)
 
-    offset = write_riemann(d, start, stop, args.riemann_factor)
+    offset = write_riemann(d, start, stop, args.riemann_factor, args.riemann_current,
+                           args.boundary_velocity_hourly)
     print(f"Riemann boundary from CMEMS zos, offset removed {offset:+.3f} m")
     blocks = [f"[Boundary]\nquantity     = riemannbnd\nlocationFile = {NAME}_bnd.pli\n"
               f"forcingFile  = {NAME}_bnd.bc\n"]
@@ -475,6 +538,7 @@ def main(argv=None) -> int:
         zos_offset=offset, boundary_velocity=args.boundary_velocity,
         boundary_velocity_hourly=args.boundary_velocity_hourly, thin_dams=thin_dams,
         tidal_forcing=args.tidal_forcing, pavbnd=args.pavbnd, riemann_factor=args.riemann_factor,
+        riemann_current=args.riemann_current,
         waq_interval=args.waq_interval, refdate=str(REFDATE),
         stations={k: v[:2] for k, v in st.items()}), indent=2))
     print(f"written {d}")
