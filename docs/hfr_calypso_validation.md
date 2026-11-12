@@ -173,6 +173,52 @@ In May, over 50 drifter hours along the north coast, the components correlate at
 
 *Figure 8. (a) Tracks of units 9 and 11 inside domain B, 6 to 8 July 2026, with the hours at which a good radar total falls on the track. (b to e) Hourly velocity of each unit, from the positions half an hour either side, against the radar total in the same cell, the top layer of the model and the hourly CMEMS surface current at the same point.*
 
+### 5.3 Agreement by day of run
+
+The comparison over the corridor is repeated without the exclusion of the first 72 hours and split by day counted from the start of each run, the model starting from rest (`scripts/hfr_skill_by_day.py`). The run of 2025 starts on 22 July and that of 2026 on 3 July.
+
+| Day of run | Date | Radar v (m/s) | Model v (m/s) | Rms vector difference (m/s) | Radials of Ta' Barkat, R |
+|---|---|---|---|---|---|
+| 1 | 22 Jul 2025 | −0.19 | −0.15 | 0.21 | 0.49 |
+| 2 | 23 Jul | −0.02 | −0.07 | 0.11 | 0.20 |
+| 3 | 24 Jul | −0.06 | −0.03 | 0.13 | −0.28 |
+| 4 | 25 Jul | −0.03 | 0.01 | 0.14 | −0.49 |
+| 5 | 26 Jul | −0.12 | −0.07 | 0.13 | 0.67 |
+| 6 | 27 Jul | −0.25 | −0.31 | 0.16 | 0.86 |
+| 7 | 28 Jul | −0.22 | −0.25 | 0.14 | 0.87 |
+| 8 | 29 Jul | −0.16 | −0.25 | 0.14 | 0.82 |
+| 9 | 30 Jul | −0.14 | −0.21 | 0.11 | 0.68 |
+| 10 | 31 Jul | −0.15 | −0.20 | 0.12 | 0.49 |
+
+*Run of 2025 by day. Mean northward current of the radar totals and of the top layer of the model averaged over the corridor, rms vector difference of the two hourly series, and correlation of the radials of Ta' Barkat with the model over the bins and hours of the corridor.*
+
+| Day of run | Date | Radar v (m/s) | Model v (m/s) | CMEMS v (m/s) | Rms, model (m/s) | Rms, CMEMS (m/s) | Radials, R, model | Radials, R, CMEMS |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 3 Jul 2026 | −0.23 | −0.10 | −0.19 | 0.25 | 0.27 | 0.66 | 0.70 |
+| 2 | 4 Jul | −0.19 | −0.08 | −0.10 | 0.23 | 0.27 | 0.25 | 0.28 |
+| 3 | 5 Jul | −0.13 | −0.02 | −0.10 | 0.24 | 0.29 | −0.59 | 0.04 |
+| 4 | 6 Jul | −0.13 | 0.00 | −0.10 | 0.22 | 0.21 | −0.43 | 0.36 |
+| 5 | 7 Jul | −0.17 | −0.11 | −0.20 | 0.24 | 0.31 | 0.50 | 0.73 |
+| 6 | 8 Jul | −0.18 | −0.11 | −0.24 | 0.20 | 0.27 | 0.73 | 0.75 |
+
+*Run of July 2026 by day, as above, with the hourly CMEMS surface current.*
+
+![Agreement with the radar by day of run](../figures/hfr_skill_by_day.png)
+
+*Figure 9. (a, b) Northward current averaged over the corridor of the July tracks from the start of each run, for the radar totals, the top layer of the model and, in 2026, CMEMS. (c, d) Rms vector difference from the radar of the series averaged over the corridor, by day of run. (e, f) Correlation with the radials of Ta' Barkat over the bins of the corridor, by day of run. The first 72 hours, excluded from Sections 5.1 and 5.2, are shaded.*
+
+In both runs the correlation with the radials falls below zero on the third and fourth days and recovers on the fifth, to 0.67 to 0.87 in 2025 and to 0.50 and 0.73 in 2026, where CMEMS holds 0.73 and 0.75. From its first day the model carries an oscillation of some 0.1 m/s in the northward current at a period close to one day, the inertial period being 20.4 hours at this latitude, which runs out of phase with the oscillation recorded by the radar until the fourth day and in phase with it from the fifth (Figure 9a, b). In 2025 the correlation does not rise further after the sixth day.
+
+The drifters of July 2026 were released on the fourth day of the run. At their positions the model stays short of the southward drift on each of the three days.
+
+| Day of run | Date | Drifter hours | Drifter v (m/s) | Model v (m/s) | CMEMS v (m/s) | Rms, model (m/s) | Rms, CMEMS (m/s) |
+|---|---|---|---|---|---|---|---|
+| 4 | 6 Jul 2026 | 29 | −0.22 | −0.07 | −0.14 | 0.21 | 0.21 |
+| 5 | 7 Jul | 48 | −0.22 | −0.04 | −0.20 | 0.31 | 0.13 |
+| 6 | 8 Jul | 33 | −0.29 | −0.07 | −0.20 | 0.31 | 0.26 |
+
+*Mean northward velocity of units 9 and 11 and of each field at their positions, with the rms vector difference from the drifter, by day of the run of July 2026.*
+
 ## 6. Interpretation
 
 Capodici et al. (2019) report correlations of 0.62 to 0.70 and rms differences of 10 to 14 cm/s between the radials of Ta' Barkat and drogued drifters in the deployment with the longest record, and 0.75 and 0.86 with rms differences of 12.6 and 9.8 cm/s for the components of the totals over all four deployments. Against the units of 2026, the radials of the same station give 0.93 and 5.9 cm/s over 23 hours, with a slope of 0.87 whose limits include one. The sample is short and confined to the stretch north-east of the station on 6 and 7 July, and it supports no general statement on the accuracy of the radar. It does indicate that the 2026 units and the radar sample a current that agrees at the hourly scale, which the drogue at 15 m of the earlier study, against the first metre sampled by the radar, would not lead to expect. The totals agree less well with the drifters, 0.45 and 0.63 over 18 hours at the start of the tracks. These are the hours at the southern margin of the coverage of 2026, where only Ta' Barkat contributes from the Maltese side.
@@ -183,7 +229,7 @@ In the 2025 window, after 72 hours of spin-up, the top layer of the model reprod
 
 In July 2026, the radar records a southward current of −0.35 to −0.38 m/s over the corridor in the mornings of 7 and 8 July, during the wind maxima, and the drifters −0.39 to −0.50 m/s. CMEMS carries −0.30 to −0.32 m/s at its minima and the model −0.17 to −0.20 m/s (Figures 3 and 8). Along the tracks the model reproduces neither component, correlations of 0.08 and 0.11, where CMEMS reaches 0.47 and 0.45, and the projection on the radials of Ta' Barkat isolates the same contrast, 0.88 for CMEMS against −0.01 for the model. CMEMS underestimates the variance, with slopes of 0.34 to 0.50, and its mean eastward current of 0.22 m/s over the corridor is not recorded by the radar.
 
-The two runs share the configuration and differ in season and in the length of the scored window. The 2025 run is scored from its fourth to its tenth day and the July 2026 run from its fourth to its sixth day. The agreement in 2025 and the departure in 2026 over the same water are consistent with a spin-up longer than three days for the surface flow off the north-east coast, one of the three causes left open by the drifter comparison, and do not establish it, since the forcing of the two summers also differs. The summer renewal run started in mid-June 2026 would score July 2026 after some three weeks of spin-up against the same drifters, radials and totals, and separates the two explanations.
+The two runs share the configuration and start from rest, and the split by day of run (Section 5.3) shows the same course in both. The agreement with the radials is lost on the third and fourth days and returns on the fifth, while an oscillation near the inertial period, present in the model from the start, comes into phase with the recorded one. That course is consistent with a transient of the cold start lasting some four days, longer than the 72 hours excluded, and the release of 6 July 2026 fell on the fourth day of its run. A transient of that length does not account for the whole departure of July 2026. On the fifth and sixth days the model correlates with the radials of the corridor as CMEMS does and carries two thirds of the southward current of the totals, yet at the positions of the drifters, by then south and east of the coverage of the totals, it carries −0.04 to −0.07 m/s against −0.22 to −0.29 m/s. In 2025 the southward pulse of 27 July fell on the sixth day and was reproduced in full. The deficit that remains along the tracks in 2026 is therefore left between the two other causes of the drifter comparison, the response of the upper layers to the wind and the boundary forcing, the latter prescribed as the daily CMEMS current, which smooths maxima lasting some hours. A repetition of the short run of July 2026 with the hourly CMEMS current at the boundary tests the second in isolation, and the summer renewal run started in mid-June 2026 scores the same days after some three weeks.
 
 ## 7. Open items
 
@@ -192,4 +238,5 @@ The two runs share the configuration and differ in season and in the length of t
 3. The draft and exposed height of the 2026 units, on which the agreement of the drifters with the radar near the surface bears.
 4. The coverage of 2026, with Ta' Sopu out since February and Ta' Ċenċ and Ta' Barkat absent in turn, which limits the totals along the north-east coast. The radials of Ta' Barkat cover that stretch on their own.
 5. The radar totals as a third field in `drifter_skill_2026.py`, scored by the separation of virtual drifters as in the 12-hour reseeding of Capodici et al. (2019), where the separation averaged 4.5 km at 6 hours, to bound the Lagrangian skill attainable from an observed surface field.
-6. The comparison over the full summer of 2026 once the renewal run is available, and an hourly CMEMS current for 2025 should that window be scored against CMEMS.
+6. The short run of July 2026 repeated with the hourly CMEMS current at the boundary, and a spin-up of at least 96 hours before any window is scored.
+7. The comparison over the full summer of 2026 once the renewal run is available, and an hourly CMEMS current for 2025 should that window be scored against CMEMS.
