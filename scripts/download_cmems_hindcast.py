@@ -60,6 +60,8 @@ DATASETS = {
 }
 # hourly surface currents, written under a prefix the forcing chain does not read
 SURFACE_HOURLY = ("cmems_mod_med_phy-cur_anfc_4.2km-2D_PT1H-m", ("uo", "vo"), "cmems-surface-1h")
+# hourly currents over the column, for the boundary velocity of build_hindcast_v02.py
+CURRENTS_HOURLY = ("cmems_mod_med_phy-cur_anfc_4.2km-3D_PT1H-m", ("uo", "vo"), "cmems-currents-1h")
 # hourly surface Stokes drift and bulk wave parameters (MEDSEA_ANALYSISFORECAST_WAV_006_017)
 WAVES_HOURLY = ("cmems_mod_med_wav_anfc_4.2km_PT1H-i",
                 ("VSDX", "VSDY", "VHM0", "VTPK", "VMDR"), "cmems-waves-1h")
@@ -85,6 +87,8 @@ def main() -> int:
                     help="source of the daily three-dimensional fields")
     ap.add_argument("--surface-hourly", action="store_true",
                     help="add the hourly surface currents of the analysis-forecast product")
+    ap.add_argument("--currents-hourly", action="store_true",
+                    help="add the hourly currents over the column of the analysis-forecast product")
     ap.add_argument("--waves-hourly", action="store_true",
                     help="add the hourly Stokes drift and wave parameters of the wave product")
     args = ap.parse_args()
@@ -101,6 +105,9 @@ def main() -> int:
                 for dataset, var in DATASETS[args.product]]
     if args.surface_hourly:
         dataset, variables, prefix = SURFACE_HOURLY
+        requests.append((dataset, list(variables), f"{prefix}_{args.start}_{args.end}.nc"))
+    if args.currents_hourly:
+        dataset, variables, prefix = CURRENTS_HOURLY
         requests.append((dataset, list(variables), f"{prefix}_{args.start}_{args.end}.nc"))
     if args.waves_hourly:
         dataset, variables, prefix = WAVES_HOURLY

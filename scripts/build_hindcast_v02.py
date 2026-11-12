@@ -131,8 +131,12 @@ def write_ts_boundary(d: Path, start: pd.Timestamp, stop: pd.Timestamp) -> list[
     return blocks
 
 
-def write_uv_boundary(d: Path, start: pd.Timestamp, stop: pd.Timestamp) -> str:
-    """Advection velocity at the boundary from the daily CMEMS currents; returns the ext block.
+def write_uv_boundary(d: Path, start: pd.Timestamp, stop: pd.Timestamp, hourly: bool = False) -> str:
+    """Advection velocity at the boundary from the CMEMS currents; returns the ext block.
+
+    The daily means are read by default. With hourly set, the hourly means of
+    the analysis-forecast product (download_cmems_hindcast.py --currents-hourly)
+    are read instead, since a daily mean smooths current maxima lasting hours.
 
     The vector part of dfmt.cmems_nc_to_bc fails against hydrolib-core 1.0, so
     the t3d file is written here in the layout of the scalar files, with the
@@ -143,8 +147,12 @@ def write_uv_boundary(d: Path, start: pd.Timestamp, stop: pd.Timestamp) -> str:
     from dfm_tools.xarray_helpers import interpolate_na_multidim
 
     pts = np.loadtxt(d / f"{NAME}_bnd.pli", skiprows=2)
-    uo = xr.open_dataset(next(CMEMS.glob("cmems_uo_*.nc"))).uo
-    vo = xr.open_dataset(next(CMEMS.glob("cmems_vo_*.nc"))).vo
+    if hourly:
+        cur = xr.open_dataset(next(CMEMS.glob("cmems-currents-1h_*.nc")))
+        uo, vo = cur.uo, cur.vo
+    else:
+        uo = xr.open_dataset(next(CMEMS.glob("cmems_uo_*.nc"))).uo
+        vo = xr.open_dataset(next(CMEMS.glob("cmems_vo_*.nc"))).vo
     window = slice(start.floor("D"), stop.ceil("D"))
     nodes = dict(longitude=xr.DataArray(pts[:, 0], dims="p"),
                  latitude=xr.DataArray(pts[:, 1], dims="p"))
@@ -418,10 +426,13 @@ def main(argv=None) -> int:
     ap.add_argument("--parallel", type=int, default=1, help="number of MPI domains")
     ap.add_argument("--boundary-velocity", action="store_true",
                     help="prescribe the CMEMS current as advection velocity at the boundary (3D)")
+    ap.add_argument("--boundary-velocity-hourly", action="store_true",
+                    help="as --boundary-velocity, from the hourly CMEMS currents")
     ap.add_argument("--no-thin-dams", action="store_true",
                     help="leave the breakwaters open even where a thin dam file exists")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args(argv)
+    args.boundary_velocity = args.boundary_velocity or args.boundary_velocity_hourly
     CMEMS = ROOT / "data" / "raw" / f"cmems_{args.forcing}"
     ERA5 = ROOT / "data" / "raw" / f"era5_{args.forcing}"
     # the first day of the month of the start, 2025-07-01 for the cases of July 2025
@@ -452,7 +463,7 @@ def main(argv=None) -> int:
     if three_d:
         blocks += write_ts_boundary(d, start, stop)
         if args.boundary_velocity:
-            blocks.append(write_uv_boundary(d, start, stop))
+            blocks.append(write_uv_boundary(d, start, stop, args.boundary_velocity_hourly))
         (d / "initial.ext").write_text(write_initial_ts(d, start))
     blocks += write_meteo(d, start, stop, three_d)
     (d / "forcing.ext").write_text("[General]\nfileVersion = 2.01\nfileType    = extForce\n\n"
@@ -461,7 +472,8 @@ def main(argv=None) -> int:
     write_mdu(d, case, args, start, stop, three_d, three_d)
     (d / "case.json").write_text(json.dumps(dict(
         case=case, start=str(start), stop=str(stop), kmx=args.kmx, vertical=args.vertical,
-        zos_offset=offset, boundary_velocity=args.boundary_velocity, thin_dams=thin_dams,
+        zos_offset=offset, boundary_velocity=args.boundary_velocity,
+        boundary_velocity_hourly=args.boundary_velocity_hourly, thin_dams=thin_dams,
         tidal_forcing=args.tidal_forcing, pavbnd=args.pavbnd, riemann_factor=args.riemann_factor,
         waq_interval=args.waq_interval, refdate=str(REFDATE),
         stations={k: v[:2] for k, v in st.items()}), indent=2))
